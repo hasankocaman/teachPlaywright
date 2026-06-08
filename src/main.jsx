@@ -1,6 +1,7 @@
 import React from 'react'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+import { HashRouter } from 'react-router-dom'
 import App from './App.jsx'
 import './index.css'
 import './dark-overrides.css'
@@ -39,9 +40,11 @@ async function enableMocking() {
 enableMocking().catch(console.error).finally(() => {
     createRoot(document.getElementById('root')).render(
         <StrictMode>
-            <LanguageProvider>
-                <App />
-            </LanguageProvider>
+            <HashRouter>
+                <LanguageProvider>
+                    <App />
+                </LanguageProvider>
+            </HashRouter>
         </StrictMode>,
     )
 })
