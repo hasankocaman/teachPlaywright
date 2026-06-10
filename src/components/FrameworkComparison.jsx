@@ -12,7 +12,7 @@ function FrameworkComparison({ darkMode }) {
                 <h2 className={`text-3xl font-bold mb-6 ${darkMode ? 'text-indigo-300' : 'text-indigo-900'}`}>1. Genel Bakış</h2>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div className="p-6 bg-gradient-to-br from-green-50 to-green-100 border-2 border-green-300 rounded-xl">
+                    <div className="hover-card p-6 bg-gradient-to-br from-green-50 to-green-100 border-2 border-green-300 rounded-xl">
                         <h3 className="text-xl font-bold text-green-900 mb-3">🌲 Cypress</h3>
                         <ul className="text-sm text-green-800 space-y-2">
                             <li>• Node.js tabanlı, JavaScript/TypeScript</li>
@@ -22,7 +22,7 @@ function FrameworkComparison({ darkMode }) {
                         </ul>
                     </div>
 
-                    <div className="p-6 bg-gradient-to-br from-orange-50 to-orange-100 border-2 border-orange-300 rounded-xl">
+                    <div className="hover-card p-6 bg-gradient-to-br from-orange-50 to-orange-100 border-2 border-orange-300 rounded-xl">
                         <h3 className="text-xl font-bold text-orange-900 mb-3">🔶 Selenium</h3>
                         <ul className="text-sm text-orange-800 space-y-2">
                             <li>• Çoklu dil desteği (Java, Python, C#, JS vb.)</li>
@@ -32,7 +32,7 @@ function FrameworkComparison({ darkMode }) {
                         </ul>
                     </div>
 
-                    <div className="p-6 bg-gradient-to-br from-blue-50 to-blue-100 border-2 border-blue-300 rounded-xl">
+                    <div className="hover-card p-6 bg-gradient-to-br from-blue-50 to-blue-100 border-2 border-blue-300 rounded-xl">
                         <h3 className="text-xl font-bold text-blue-900 mb-3">🎭 Playwright</h3>
                         <ul className="text-sm text-blue-800 space-y-2">
                             <li>• Microsoft geliştiricisi</li>
@@ -307,7 +307,7 @@ function FrameworkComparison({ darkMode }) {
                 <h2 className="text-3xl font-bold text-indigo-900 mb-6">8. Ne Zaman Hangi Aracı Kullanmalı?</h2>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div className="p-6 bg-green-50 border-2 border-green-300 rounded-xl">
+                    <div className="hover-card p-6 bg-green-50 border-2 border-green-300 rounded-xl">
                         <h3 className="text-xl font-bold text-green-900 mb-4">🌲 Cypress Seçin Eğer:</h3>
                         <ul className="text-sm text-green-800 space-y-2 list-disc list-inside">
                             <li>Frontend odaklı proje (React, Vue, Angular)</li>
@@ -317,7 +317,7 @@ function FrameworkComparison({ darkMode }) {
                         </ul>
                     </div>
 
-                    <div className="p-6 bg-orange-50 border-2 border-orange-300 rounded-xl">
+                    <div className="hover-card p-6 bg-orange-50 border-2 border-orange-300 rounded-xl">
                         <h3 className="text-xl font-bold text-orange-900 mb-4">🔶 Selenium Seçin Eğer:</h3>
                         <ul className="text-sm text-orange-800 space-y-2 list-disc list-inside">
                             <li>Çoklu dil desteği gerekiyorsa</li>
@@ -327,7 +327,7 @@ function FrameworkComparison({ darkMode }) {
                         </ul>
                     </div>
 
-                    <div className="p-6 bg-blue-50 border-2 border-blue-300 rounded-xl">
+                    <div className="hover-card p-6 bg-blue-50 border-2 border-blue-300 rounded-xl">
                         <h3 className="text-xl font-bold text-blue-900 mb-4">🎭 Playwright Seçin Eğer:</h3>
                         <ul className="text-sm text-blue-800 space-y-2 list-disc list-inside">
                             <li>Modern web uygulamaları</li>

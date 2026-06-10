@@ -52,113 +52,141 @@ textarea {
   @apply text-lg font-semibold mb-3 mt-4;
 }
 
-/* ─────────────────────────────────────────────────────────────
-   Smooth Hover Scale — Yumuşak Büyüme Efekti
-   Tüm metin linkleri, butonlar ve kart elementleri için.
-   transition: 0.3s ease-in-out / scale(1.04)
-   ───────────────────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   SMOOTH HOVER SCALE — Yumuşak Büyüme Efekti (Proje Geneli)
+   transition: transform 0.3s ease-in-out | scale(1.04)
+   Tüm <a> linkleri, <button>lar ve kart elementleri için.
+   ═══════════════════════════════════════════════════════════════ */
 
-/* ── Metin linkleri (a etiketleri, buton olmayan) ────────── */
-a:not(.no-hover-scale) {
+/* ── Temel animasyon değişkenleri ─────────────────────────────── */
+:root {
+  --hover-scale: 1.04;
+  --hover-scale-sm: 1.02;
+  --hover-scale-lg: 1.06;
+  --hover-duration: 0.3s;
+  --hover-ease: ease-in-out;
+}
+
+/* ── Metin & Nav Linkleri (<a>) ───────────────────────────────── */
+a:not([class*="hover:scale"]):not(.no-hover-scale) {
   display: inline-block;
-  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out !important;
+  transition:
+    transform var(--hover-duration) var(--hover-ease),
+    opacity 0.2s ease !important;
   will-change: transform;
   backface-visibility: hidden;
 }
 
-a:not(.no-hover-scale):hover {
-  transform: scale(1.04);
+a:not([class*="hover:scale"]):not(.no-hover-scale):hover {
+  transform: scale(var(--hover-scale));
 }
 
-/* ── Butonlar ─────────────────────────────────────────────── */
-button:not(.no-hover-scale) {
-  transition: transform 0.3s ease-in-out,
-              box-shadow 0.3s ease-in-out,
-              background-color 0.2s ease,
-              opacity 0.2s ease !important;
+/* Flex/grid/list içindeki linklerin layout bozmaması için */
+.flex > a,
+.grid > a,
+li > a,
+p > a,
+nav a,
+header a {
+  display: inline-block;
+}
+
+/* ── Butonlar ─────────────────────────────────────────────────── */
+button:not([class*="hover:scale"]):not(.no-hover-scale) {
+  transition:
+    transform var(--hover-duration) var(--hover-ease),
+    box-shadow var(--hover-duration) var(--hover-ease),
+    background-color 0.2s ease,
+    color 0.2s ease !important;
   will-change: transform;
   backface-visibility: hidden;
 }
 
-button:not(.no-hover-scale):hover {
-  transform: scale(1.04);
+button:not([class*="hover:scale"]):not(.no-hover-scale):hover {
+  transform: scale(var(--hover-scale));
 }
 
-button:not(.no-hover-scale):active {
-  transform: scale(0.97);
+/* Tıklama geri bildirimi */
+button:not([class*="active:scale"]):not(.no-hover-scale):active {
+  transform: scale(0.97) !important;
+  transition-duration: 0.1s !important;
 }
 
-/* ── Kart elementleri (section/div bazlı kartlar) ────────── */
-.section-card:not(.no-hover-scale),
-[class*="rounded-xl"]:not(button):not(a):not(pre):not(code):not(textarea):not(table):not(tr):not(td):not(th).hover-card {
-  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out !important;
+/* ── Tailwind hover:scale-* sınıfı olan elementler ───────────── */
+/* Tailwind JIT hover:scale-102, hover:scale-105 vb. kullananlar
+   kendi transition'larını yönetiyor; sadece süreyi standartlaştırıyoruz */
+[class*="hover:scale-"] {
+  transition:
+    transform var(--hover-duration) var(--hover-ease),
+    box-shadow var(--hover-duration) var(--hover-ease),
+    background-color 0.2s ease !important;
+}
+
+/* ── Kart Elementleri (.hover-card sınıfıyla işaretlenenler) ─── */
+.hover-card {
+  transition:
+    transform var(--hover-duration) var(--hover-ease),
+    box-shadow var(--hover-duration) var(--hover-ease) !important;
   will-change: transform;
+  cursor: pointer;
+}
+
+.hover-card:hover {
+  transform: scale(var(--hover-scale-sm));
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.18) !important;
+  z-index: 1;
+  position: relative;
+}
+
+/* .section-card için küçük efekt */
+.section-card:not(.no-hover-scale) {
+  transition:
+    transform var(--hover-duration) var(--hover-ease),
+    box-shadow var(--hover-duration) var(--hover-ease) !important;
 }
 
 .section-card:not(.no-hover-scale):hover {
-  transform: scale(1.02);
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.15);
+  transform: scale(var(--hover-scale-sm));
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.15) !important;
 }
 
-/* ── Tailwind hover:scale-105 ile çakışmayı önle ─────────── */
-/* Tailwind'in kendi hover:scale-* sınıfları önceliklidir,
-   bu kurallar sadece o sınıf yoksa devreye girer. */
-[class*="hover:scale-"]:hover {
-  /* Tailwind'e bırak */
-  transform: none;
-}
-
-/* Tailwind hover:scale- kullanan elementlerde kendi animasyonumuz çalışmasın */
-[class*="hover:scale-"] {
-  transition: transform 0.3s ease-in-out,
-              box-shadow 0.3s ease-in-out !important;
-}
-
-/* ── Kaydırma sırasında sabit kalması gereken elementler ─── */
-/* Sticky header ve modal gibi şeylerin büyümemesi için */
-header a,
-header button,
-.sticky a:not([class]),
-nav a,
-nav button {
-  /* Genel link kuralını ezme — Tailwind sınıfları olan nav butonları
-     zaten hover:scale-105 alıyor; a etiketleri için küçük bir efekt yeterli */
-}
-
-/* ── inline-block gerektiren özel durumlar ───────────────── */
-/* Flex/grid container içindeki linklerin düzeni bozulmaması için */
-.flex a,
-.grid a,
-li a,
-p a {
-  display: inline-block;
-}
-
-/* ── Bazı elementlerde büyüme istemiyoruz ────────────────── */
-/* Örn: kod blokları, tablolar, inputlar */
+/* ── İstisnalar: Bu elementler HİÇBİR ZAMAN büyümemeli ──────── */
 pre,
 code,
 textarea,
 input,
 select,
 table,
-tbody,
 thead,
+tbody,
+tfoot,
 tr,
 td,
 th,
 img,
-.carousel,
-[data-dismiss],
+svg,
+canvas,
+video,
+iframe,
+[role="dialog"],
+[role="modal"],
 .modal,
-.modal * {
+.modal *,
+.carousel,
+.carousel *,
+[data-dismiss],
+.no-hover-scale,
+.no-hover-scale * {
   transform: none !important;
-  transition: none !important;
-  will-change: auto !important;
+  /* transition sıfırlama — sadece transform'u etkiler, renk vb. kalır */
+  transition-property: background-color, color, border-color, opacity, box-shadow !important;
 }
 
-/* img özel: sadece içinde bulunduğu kart ölçeklensin */
+/* Özel: img üst öğelerinde (kart vb.) scale çalışabilir,
+   ama img'nin kendisi sabit kalır */
 img {
   transform: none !important;
   transition: none !important;
+  display: block;
+  max-width: 100%;
 }
