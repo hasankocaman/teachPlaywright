@@ -126,382 +126,971 @@ print(sys.version)                 # print Python version`,
     ],
   },
 
+
   // ── 2. FOUNDATIONS ──────────────────────────────────────────────────────────
   {
-    title: '🟢 Level 1: Python Foundations',
+    title: '🟢 Python Foundations',
     blocks: [
-      { type: 'heading', text: 'Variables and Data Types', difficulty: '🟢 Beginner' },
-      {
-        type: 'code',
-        code: `# Python has dynamic typing — no need to declare types
-name    = "Alice"          # str  (string)
-age     = 28               # int  (integer)
-score   = 98.5             # float (decimal)
-passed  = True             # bool (True or False)
-nothing = None             # NoneType (absence of value)
 
-# Check the type of any variable:
-print(type(name))          # <class 'str'>
-print(type(age))           # <class 'int'>
-print(type(passed))        # <class 'bool'>
+      // ═══════════════════════════════════════════════════════════════════════
+      // W3Schools Topic 1 — Python Syntax
+      // ═══════════════════════════════════════════════════════════════════════
+      { type: 'heading', text: 'Python Syntax', difficulty: '🟢 Beginner' },
+      { type: 'simple-box', emoji: '📐', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: 'Python kodu yazmak, cümle yazmak gibi. Süslü parantez yok, noktalı virgül yok. Sadece düzgün hizalama (girinti) gerekiyor — sanki bir liste hazırlıyorsun.', en: 'Writing Python is like writing sentences. No curly braces, no semicolons. Just proper indentation — like writing a neat outline.' } },
+      { type: 'text', content: { tr: "Java\'da bloklar {} ile açılır-kapanır ve her satır \";\" ile biter. Python\'da bunların hiçbiri yok. Bloklar \":\" (iki nokta) ile başlar, girintileme ile devam eder.", en: 'In Java, blocks open/close with {} and every statement ends with ";". Python has neither. Blocks start with ":" and continue by indentation.' } },
+      { type: 'code', language: 'python', code: `# Python Syntax Basics
+# NO semicolons, NO curly braces
+name = "Alice"              # Variable — no type declaration
+age = 30                    # Integer
 
-# Type conversion:
-str_age = str(age)         # "28"  (int to str)
-int_str = int("42")        # 42    (str to int)
-flt_str = float("3.14")    # 3.14  (str to float)`,
-        expected: `<class 'str'>\n<class 'int'>\n<class 'bool'>`
-      },
-      { type: 'heading', text: 'Strings and F-Strings', difficulty: '🟢 Beginner' },
-      {
-        type: 'code',
-        code: `test_name = "Login Test"
-status    = "FAILED"
-duration  = 2.347
+if age >= 18:               # Colon starts block
+    print("Adult")          # 4-space indent = inside block
+    print("Name:", name)    # Still inside block
 
-# f-strings (Python 3.6+) — the preferred way:
-msg = f"{test_name} {status} in {duration:.2f}s"
-print(msg)
+for i in range(3):          # Loop
+    print("Count:", i)      # Loop body (indented)
 
-# Common string methods:
-print(test_name.upper())              # "LOGIN TEST"
-print(test_name.lower())              # "login test"
-print("  hello  ".strip())            # "hello"
-print(test_name.replace("Login", "Logout"))  # "Logout Test"
-print(test_name.startswith("Login")) # True
-print(", ".join(["pass", "fail", "skip"])) # "pass, fail, skip"
+print("Done")               # Back to top level (no indent)` },
+      { type: 'editor', lang: 'python', defaultCode: `# Edit and run this code!
+name = "QA Engineer"
+experience = 3
 
-# String slicing:
-url = "https://example.com/login"
-print(url[8:])       # "example.com/login"
-print(url[-5:])      # "login"`,
-        expected: `Login Test FAILED in 2.35s\nLOGIN TEST\nlogin test\nhello\nLogout Test\nTrue\npass, fail, skip\nexample.com/login\nlogin`
-      },
-      { type: 'heading', text: 'Lists', difficulty: '🟢 Beginner' },
-      {
-        type: 'code',
-        code: `# Lists: ordered, mutable collections
-test_cases = ["login", "signup", "checkout", "logout"]
+if experience >= 2:
+    print("Senior:", name)
+    print("Years:", experience)
+else:
+    print("Junior:", name)
 
-print(test_cases[0])    # "login"   — index 0
-print(test_cases[-1])   # "logout"  — last item
+for skill in ["Python", "pytest", "Selenium"]:
+    print("Skill:", skill)` },
+      { type: 'comparison', title: { tr: 'Java ile Karşılaştırma', en: 'Java vs Python — Syntax' }, columns: ['Java', 'Python'], rows: [
+        { concept: { tr: 'Blok açma', en: 'Open block' }, java: 'if (x > 0) {', python: 'if x > 0:' },
+        { concept: { tr: 'Blok kapama', en: 'Close block' }, java: '}', python: '(dedent — no symbol needed)' },
+        { concept: { tr: 'Satır sonu', en: 'Statement end' }, java: 'int x = 5;', python: 'x = 5' },
+        { concept: { tr: 'Koşul parantezi', en: 'Condition parens' }, java: 'if (x > 0)', python: 'if x > 0:' },
+      ]},
+      { type: 'quiz', question: { tr: "Python\'da bir kod bloğunun sonu nasıl anlaşılır?", en: 'How does Python mark the end of a code block?' }, options: [{ id: 'a', text: '}' }, { id: 'b', text: 'end' }, { id: 'c', text: 'Dedenting (going back to outer indentation level)' }, { id: 'd', text: ';' }], correct: 'c', explanation: { tr: "Python, girintinin azalmasıyla bloğun bittiğini anlar. Süslü parantez ya da \"end\" keyword\'ü yoktur.", en: 'Python detects block end by dedenting — moving back to the outer indentation level. No closing symbol needed.' } },
 
-test_cases.append("profile")      # add to end
-test_cases.insert(1, "home")      # insert at index 1
-test_cases.remove("signup")       # remove by value
-popped = test_cases.pop()         # remove and return last item
+      // ═══════════════════════════════════════════════════════════════════════
+      // W3Schools Topic 2 — Comments
+      // ═══════════════════════════════════════════════════════════════════════
+      { type: 'heading', text: 'Comments', difficulty: '🟢 Beginner' },
+      { type: 'simple-box', emoji: '💬', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: 'Yorum, kodun içine "not" bırakmak gibi. Python bu satırları çalıştırmaz — sadece sen ve ekibindekiler okur.', en: "A comment is like a sticky note inside your code. Python ignores it completely — it\'s just for humans to read." } },
+      { type: 'text', content: { tr: "Java\'da // tek satır, /* */ çok satır yorum. Python\'da # tek satır, \"\"\" \"\"\" (docstring) çok satır yorum için kullanılır. Teknik terim değişmez ama sözdizimi farklı.", en: 'Java uses // for single-line and /* */ for multi-line comments. Python uses # for single-line and triple quotes """ for multi-line (docstrings).' } },
+      { type: 'code', language: 'python', code: `# Single-line comment — Python ignores this
+name = "Alice"  # Inline comment — also ignored
 
-print(len(test_cases))            # count
-print("login" in test_cases)      # True — membership check
-test_cases.sort()                  # sort alphabetically in-place
-print(test_cases)
+"""
+Multi-line comment (docstring).
+Often used to document functions and classes.
+Python ignores this at runtime.
+"""
 
-# Slicing [start:stop:step]:
-first_two = test_cases[:2]        # first 2 items`,
-        expected: `login\nlogout\n4\nTrue\n['checkout', 'home', 'login', 'logout']`
-      },
-      { type: 'heading', text: 'Dictionaries', difficulty: '🟢 Beginner' },
-      {
-        type: 'code',
-        code: `# Dictionaries: key-value pairs (like a JSON object)
-test_result = {
-    "id":       "TC-001",
-    "name":     "Login Test",
-    "status":   "PASS",
-    "duration": 1.23,
-    "tags":     ["smoke", "auth"]
-}
+def greet(name):
+    """This is a function docstring — documents what greet() does."""
+    return f"Hello, {name}!"` },
+      { type: 'editor', lang: 'python', defaultCode: `# Try adding your own comments!
+# This calculates a test pass rate
 
-# Access values:
-print(test_result["status"])              # "PASS"
-print(test_result.get("browser", "N/A")) # "N/A" — safe, no KeyError
+total_tests = 100       # How many tests were run
+passed_tests = 87       # How many passed
 
-# Modify:
-test_result["status"] = "FAIL"            # update value
-test_result["retry"]  = True              # add new key
+pass_rate = (passed_tests / total_tests) * 100
+print("Pass rate:", pass_rate, "%")` },
+      { type: 'comparison', title: { tr: 'Java ile Karşılaştırma', en: 'Java vs Python — Comments' }, columns: ['Java', 'Python'], rows: [
+        { concept: { tr: 'Tek satır yorum', en: 'Single-line comment' }, java: '// comment', python: '# comment' },
+        { concept: { tr: 'Çok satır yorum', en: 'Multi-line comment' }, java: '/* comment */', python: '"""comment"""' },
+        { concept: { tr: 'Dokümantasyon yorumu', en: 'Doc comment' }, java: '/** Javadoc */', python: '"""docstring"""' },
+      ]},
+      { type: 'quiz', question: { tr: "Python\'da çok satırlı yorum için hangi sözdizimi kullanılır?", en: 'Which syntax creates a multi-line comment in Python?' }, options: [{ id: 'a', text: '/* ... */' }, { id: 'b', text: '// ...' }, { id: 'c', text: '"""..."""' }, { id: 'd', text: '#! ...' }], correct: 'c', explanation: { tr: "Python\'da üçlü tırnak (\"\"\" veya \'\'\'…\'\'\'\') docstring / çok satır yorum için kullanılır.", en: "Triple quotes \"\"\" or \'\'\'\' create multi-line strings / docstrings. Python ignores them if not assigned." } },
 
-# Iterate:
-for key, value in test_result.items():
-    print(f"  {key}: {value}")
+      // ═══════════════════════════════════════════════════════════════════════
+      // W3Schools Topic 3 — Variables
+      // ═══════════════════════════════════════════════════════════════════════
+      { type: 'heading', text: 'Variables', difficulty: '🟢 Beginner' },
+      { type: 'simple-box', emoji: '🏷️', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: 'Değişken, içine bir şey koyabileceğin etiketlenmiş bir kutu. "isim = \'Ali\'" diyince "isim" etiketli kutuya \'Ali\' koymuş olursun. İstediğin zaman açıp bakabilirsin.', en: 'A variable is a labeled box. When you write name = "Ali", you put "Ali" in a box labeled "name". You can check it anytime.' } },
+      { type: 'text', content: { tr: "Java\'da değişken tipi açıkça yazılır: int x = 5. Python\'da sadece x = 5 yazılır — Python tipi otomatik anlar. Bu \"dinamik tipleme\" olarak adlandırılır.", en: 'Java requires explicit type: int x = 5. Python just needs x = 5 — the type is inferred automatically. This is called dynamic typing.' } },
+      { type: 'code', language: 'python', code: `# Python Variables — no type declaration needed
+name = "Alice"          # str (string)
+age = 25                # int (integer)
+score = 98.5            # float
+is_active = True        # bool
+nothing = None          # None (Java: null)
 
-print("tags" in test_result)             # True`,
-        expected: `PASS\nN/A\n  id: TC-001\n  name: Login Test\n  status: FAIL\n  duration: 1.23\n  tags: ['smoke', 'auth']\n  retry: True\nTrue`
-      },
-      { type: 'heading', text: 'Conditions and Loops', difficulty: '🟢 Beginner' },
-      {
-        type: 'code',
-        code: `results = [
-    {"test": "login",    "status": "PASS"},
-    {"test": "checkout", "status": "FAIL"},
-    {"test": "profile",  "status": "PASS"},
-    {"test": "logout",   "status": "SKIP"},
-]
+# Multiple assignment
+x, y, z = 1, 2, 3      # Assign multiple at once
 
-# if/elif/else:
-pass_count = 0
-for result in results:
-    if result["status"] == "PASS":
-        pass_count += 1
-    elif result["status"] == "FAIL":
-        print(f"  FAILED: {result['test']}")
-    else:
-        print(f"  Skipped: {result['test']}")
+# Same value to multiple variables
+a = b = c = 0
 
-print(f"Passed: {pass_count}/{len(results)}")
+# Type can change (dynamic typing)
+x = 10                  # int
+x = "hello"             # now str — valid in Python!
 
-# while loop:
-retries = 0
-while retries < 3:
-    retries += 1
-    print(f"Attempt {retries}")`,
-        expected: `  FAILED: checkout\n  Skipped: logout\nPassed: 2/4\nAttempt 1\nAttempt 2\nAttempt 3`
-      },
-      { type: 'heading', text: 'Functions', difficulty: '🟢 Beginner' },
-      {
-        type: 'code',
-        code: `# def keyword defines a function:
-def calculate_pass_rate(passed: int, total: int) -> float:
-    """Calculate the pass rate as a percentage."""
-    if total == 0:
-        return 0.0                       # avoid division by zero
-    return (passed / total) * 100.0     # return computed value
+# Check type
+print(type(name))       # <class 'str'>
+print(type(age))        # <class 'int'>` },
+      { type: 'editor', lang: 'python', defaultCode: `# Experiment with variables
+test_name = "Login Test"
+passed = True
+duration_ms = 234
+error_count = 0
 
-rate = calculate_pass_rate(42, 50)
-print(f"Pass rate: {rate:.1f}%")        # 84.0%
+print("Test:", test_name)
+print("Passed:", passed)
+print("Duration:", duration_ms, "ms")
+print("Errors:", error_count)
+print("Type of passed:", type(passed))` },
+      { type: 'comparison', title: { tr: 'Java ile Karşılaştırma', en: 'Java vs Python — Variables' }, columns: ['Java', 'Python'], rows: [
+        { concept: { tr: 'int değişken', en: 'Integer variable' }, java: 'int x = 5;', python: 'x = 5' },
+        { concept: { tr: 'String değişken', en: 'String variable' }, java: 'String s = "hi";', python: 's = "hi"' },
+        { concept: { tr: 'Null değer', en: 'Null value' }, java: 'String s = null;', python: 's = None' },
+        { concept: { tr: 'Tip kontrolü', en: 'Type check' }, java: 'x instanceof Integer', python: 'type(x) == int  or  isinstance(x, int)' },
+        { concept: { tr: 'Sabit (const)', en: 'Constant' }, java: 'final int MAX = 100;', python: 'MAX = 100  # convention: ALL_CAPS' },
+      ]},
+      { type: 'quiz', question: { tr: "Python\'da bir değişkenin tipini öğrenmek için hangi fonksiyon kullanılır?", en: 'Which function checks the type of a variable in Python?' }, options: [{ id: 'a', text: 'typeof(x)' }, { id: 'b', text: 'x.getClass()' }, { id: 'c', text: 'type(x)' }, { id: 'd', text: 'datatype(x)' }], correct: 'c', explanation: { tr: "type(x) Python\'ın yerleşik fonksiyonudur. isinstance(x, int) ise miras (inheritance) dahil kontrol eder.", en: "type(x) is Python\'s built-in. isinstance(x, int) also works and checks inheritance." } },
 
-# Default parameter values:
-def log_result(test_name, status="UNKNOWN", level="INFO"):
-    print(f"[{level}] {test_name}: {status}")
+      // ═══════════════════════════════════════════════════════════════════════
+      // W3Schools Topic 4 — Data Types
+      // ═══════════════════════════════════════════════════════════════════════
+      { type: 'heading', text: 'Data Types', difficulty: '🟢 Beginner' },
+      { type: 'simple-box', emoji: '🗂️', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: 'Veri tipleri, farklı "çekmece" türleri gibi. Sayılar, yazılar, listeler, doğru/yanlış — her veri türü için ayrı bir çekmece var.', en: 'Data types are like different drawer types. Numbers, text, lists, true/false — each kind of data has its own drawer.' } },
+      { type: 'text', content: { tr: "Java\'da primitive tipler (int, double, boolean) ve Object tipleri ayrıdır. Python\'da her şey bir object\'tir — int, str, list, dict hepsi birer sınıf örneğidir.", en: 'Java separates primitives (int, double, boolean) from Objects. In Python, everything is an object — int, str, list, dict are all class instances.' } },
+      { type: 'table', headers: ['Python Type', 'Example', 'Java Equivalent', 'Mutable?'], rows: [
+        ['str', '"hello"', 'String', 'No'],
+        ['int', '42', 'int / Integer', 'No'],
+        ['float', '3.14', 'double / Double', 'No'],
+        ['bool', 'True / False', 'boolean', 'No'],
+        ['list', '[1, 2, 3]', 'ArrayList<T>', 'Yes'],
+        ['tuple', '(1, 2, 3)', 'List.of()', 'No'],
+        ['dict', '{"a": 1}', 'HashMap<K,V>', 'Yes'],
+        ['set', '{1, 2, 3}', 'HashSet<T>', 'Yes'],
+        ['NoneType', 'None', 'null', '-'],
+      ]},
+      { type: 'editor', lang: 'python', defaultCode: `# Explore Python data types
+x = 42              # int
+y = 3.14            # float
+s = "hello"         # str
+b = True            # bool
+lst = [1, 2, 3]     # list
+tpl = (1, 2)        # tuple
+d = {"key": "val"}  # dict
+st = {1, 2, 3}      # set
 
-log_result("Login Test", "PASS")
-log_result("Signup Test")                # uses defaults`,
-        expected: `Pass rate: 84.0%\n[INFO] Login Test: PASS\n[INFO] Signup Test: UNKNOWN`
-      },
-      { type: 'heading', text: 'Reading CSV Files', difficulty: '🟢 Beginner' },
-      {
-        type: 'code',
-        label: 'read_test_results.py',
-        code: `import csv                              # built-in CSV module — no install needed
+for var in [x, y, s, b, lst, tpl, d, st]:
+    print(type(var).__name__, ":", var)` },
+      { type: 'quiz', question: { tr: "Python\'da hangi veri tipi değiştirilemez (immutable)?", en: 'Which Python data type is immutable (cannot be changed after creation)?' }, options: [{ id: 'a', text: 'list' }, { id: 'b', text: 'dict' }, { id: 'c', text: 'tuple' }, { id: 'd', text: 'set' }], correct: 'c', explanation: { tr: "Tuple immutable\'dır — oluşturduktan sonra eleman ekleyip çıkaramazsınız. Java\'daki List.of() gibi.", en: "Tuples are immutable — you cannot add or remove elements after creation. Like Java\'s List.of()." } },
 
-# test_results.csv:
-# test_name,status,duration_ms
-# Login Test,PASS,1200
-# Signup Test,FAIL,3400
+      // ═══════════════════════════════════════════════════════════════════════
+      // W3Schools Topic 5 — Numbers
+      // ═══════════════════════════════════════════════════════════════════════
+      { type: 'heading', text: 'Numbers', difficulty: '🟢 Beginner' },
+      { type: 'simple-box', emoji: '🔢', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: "Python\'da üç tür sayı var: tam sayılar (3, 100), ondalıklı sayılar (3.14), ve karmaşık sayılar (2+3j). Günlük kodlamada çoğunlukla ilk ikisini kullanırsın.", en: 'Python has three number types: integers (3, 100), floats (3.14), and complex (2+3j). In daily coding you mostly use the first two.' } },
+      { type: 'text', content: { tr: "Java\'da int sınırlı büyüklüktedir (max ~2 milyar). Python\'da int sınırsız büyüyebilir — memory yettikçe. float ise Java\'daki double\'a eşdeğerdir.", en: "Java\'s int has a fixed limit (~2 billion). Python\'s int can grow infinitely — limited only by memory. Python\'s float is equivalent to Java\'s double." } },
+      { type: 'code', language: 'python', code: `# Python Numbers
+x = 10          # int
+y = 3.14        # float
+z = 2 + 3j      # complex
 
-results = []                            # empty list to hold rows
+# Arithmetic operators
+print(10 + 3)   # 13  — addition
+print(10 - 3)   # 7   — subtraction
+print(10 * 3)   # 30  — multiplication
+print(10 / 3)   # 3.333... — true division (always float!)
+print(10 // 3)  # 3   — floor division (Java: 10 / 3)
+print(10 % 3)   # 1   — modulo
+print(2 ** 10)  # 1024 — power (Java: Math.pow(2,10))
 
-with open("test_results.csv", "r") as f:     # open file (auto-closes)
-    reader = csv.DictReader(f)               # headers become dict keys
-    for row in reader:
-        results.append(row)
+# Large numbers — Python handles them natively
+big = 2 ** 100   # No overflow!
+print(big)` },
+      { type: 'editor', lang: 'python', defaultCode: `# Number calculations for QA
+total = 250         # Total test cases
+passed = 223
+failed = total - passed
+pass_rate = (passed / total) * 100
 
-# Count by status:
-pass_count = sum(1 for r in results if r["status"] == "PASS")
-fail_count = sum(1 for r in results if r["status"] == "FAIL")
+print("Total:", total)
+print("Passed:", passed)
+print("Failed:", failed)
+print(f"Pass rate: {pass_rate:.1f}%")  # 1 decimal place
+print("Is 100% pass:", pass_rate == 100)` },
+      { type: 'comparison', title: { tr: 'Java ile Karşılaştırma', en: 'Java vs Python — Numbers' }, columns: ['Java', 'Python'], rows: [
+        { concept: { tr: 'Tam bölme', en: 'Integer division' }, java: '10 / 3  // = 3', python: '10 // 3  # = 3' },
+        { concept: { tr: 'Gerçek bölme', en: 'True division' }, java: '10.0 / 3  // = 3.333', python: '10 / 3  # = 3.333 (always!)' },
+        { concept: { tr: 'Üs alma', en: 'Power' }, java: 'Math.pow(2, 10)', python: '2 ** 10' },
+        { concept: { tr: 'Sınırsız int', en: 'Unlimited int' }, java: 'BigInteger', python: 'int (built-in, unlimited)' },
+      ]},
+      { type: 'quiz', question: { tr: "Python\'da 10 / 3 ifadesinin sonucu nedir?", en: 'What does 10 / 3 return in Python?' }, options: [{ id: 'a', text: '3' }, { id: 'b', text: '3.333...' }, { id: 'c', text: '3.0' }, { id: 'd', text: 'Error' }], correct: 'b', explanation: { tr: "Python\'da / her zaman float döner (3.3333...). Tam bölme için // kullanılır ve 3 döner. Java\'dan büyük fark!", en: 'In Python, / always returns a float (3.3333...). Use // for integer division which returns 3. Big difference from Java!' } },
 
-print(f"Total: {len(results)}, PASS: {pass_count}, FAIL: {fail_count}")`,
-        expected: `Total: 3, PASS: 2, FAIL: 1`
-      },
+      // ═══════════════════════════════════════════════════════════════════════
+      // W3Schools Topic 6 — Casting
+      // ═══════════════════════════════════════════════════════════════════════
+      { type: 'heading', text: 'Casting (Type Conversion)', difficulty: '🟢 Beginner' },
+      { type: 'simple-box', emoji: '🔄', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: 'Casting, bir şeyi farklı bir şekle dönüştürmek gibi. Suyu buz yapıyorsun ama H₂O aynı kalıyor. "5" yazısını 5 sayısına çeviriyorsun — ama artık matematiksel işlem yapabilirsin.', en: 'Casting is like transforming something into a different form. "5" is a text, 5 is a number. Casting turns one into the other so you can do math.' } },
+      { type: 'code', language: 'python', code: `# Python Casting — converting between types
+x = int("5")         # str → int  : 5
+y = float(5)         # int → float: 5.0
+z = str(3.14)        # float → str: "3.14"
+b = bool(0)          # int → bool : False
+b2 = bool("hello")   # str → bool : True  (non-empty = True)
+b3 = bool("")        # str → bool : False (empty = False)
+
+# Common in QA: reading CSV/JSON data
+csv_value = "1500"   # From a CSV file — it\'s a string!
+count = int(csv_value)
+print(count * 2)     # 3000 — now we can do math
+
+# Truthy / Falsy values
+print(bool(0))       # False
+print(bool(1))       # True
+print(bool([]))      # False (empty list)
+print(bool([1,2]))   # True  (non-empty list)` },
+      { type: 'editor', lang: 'python', defaultCode: `# Casting exercise
+age_str = "25"        # From user input — always a string!
+age_int = int(age_str)
+print("Age as string:", age_str, type(age_str).__name__)
+print("Age as int:", age_int, type(age_int).__name__)
+print("Next year:", age_int + 1)
+
+# Truthy/Falsy
+values = [0, 1, "", "hello", [], [1,2], None]
+for v in values:
+    print(f"bool({repr(v)}) = {bool(v)}")` },
+      { type: 'comparison', title: { tr: 'Java ile Karşılaştırma', en: 'Java vs Python — Casting' }, columns: ['Java', 'Python'], rows: [
+        { concept: { tr: 'String → int', en: 'String to int' }, java: 'Integer.parseInt("5")', python: 'int("5")' },
+        { concept: { tr: 'int → String', en: 'int to String' }, java: 'String.valueOf(5)', python: 'str(5)' },
+        { concept: { tr: 'int → double', en: 'int to float' }, java: '(double) 5', python: 'float(5)' },
+        { concept: { tr: 'Herhangi → bool', en: 'Anything to bool' }, java: '(boolean) — limited', python: 'bool(x) — all values castable' },
+      ]},
+      { type: 'quiz', question: { tr: 'int("3.14") ifadesi ne döner?', en: 'What does int("3.14") return in Python?' }, options: [{ id: 'a', text: '3' }, { id: 'b', text: '3.14' }, { id: 'c', text: 'ValueError' }, { id: 'd', text: '0' }], correct: 'c', explanation: { tr: "int() doğrudan ondalıklı string\'i çeviremez. Önce float(\"3.14\"), sonra int() kullanmalısınız: int(float(\"3.14\")) = 3", en: 'int() cannot directly convert a decimal string. Use int(float("3.14")) = 3. Direct int("3.14") raises ValueError.' } },
+
+      // ═══════════════════════════════════════════════════════════════════════
+      // W3Schools Topic 7 — Strings
+      // ═══════════════════════════════════════════════════════════════════════
+      { type: 'heading', text: 'Strings', difficulty: '🟢 Beginner' },
+      { type: 'simple-box', emoji: '📝', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: "String, harflerden oluşan bir dize — \"merhaba\" gibi. Python'da stringleri tek (''), çift (\"\") veya üçlü (\"\"\") tırnak içinde yazabilirsin.", en: 'A string is a sequence of characters — like "hello". In Python you can write strings with single, double, or triple quotes.' } },
+      { type: 'text', content: { tr: "Java\'da String.charAt(), substring(), indexOf() gibi metodlar kullanılır. Python\'da aynı işler için daha kısa ve okunabilir sözdizimi var: s[0], s[1:5], \"hello\" in s gibi.", en: 'Java uses String.charAt(), substring(), indexOf(). Python has shorter, more readable syntax: s[0], s[1:5], "hello" in s.' } },
+      { type: 'code', language: 'python', code: `# Python Strings
+s = "Hello, World!"
+
+# Access characters
+print(s[0])         # H  (first character)
+print(s[-1])        # !  (last character)
+
+# Slicing  [start:stop:step]
+print(s[0:5])       # Hello
+print(s[7:])        # World!
+print(s[:5])        # Hello
+print(s[::2])       # Hlo ol!  (every 2nd char)
+print(s[::-1])      # !dlroW ,olleH  (reversed!)
+
+# String methods
+print(s.upper())       # HELLO, WORLD!
+print(s.lower())       # hello, world!
+print(s.replace("World", "Python"))  # Hello, Python!
+print(s.split(", "))   # ['Hello', 'World!']
+print(len(s))          # 13
+
+# f-strings (most modern — use this!)
+name = "Alice"
+age = 30
+print(f"Name: {name}, Age: {age}")       # Python 3.6+
+print(f"Next year: {age + 1}")           # Can do math inside!` },
+      { type: 'editor', lang: 'python', defaultCode: `# String operations for QA
+url = "https://automationexercise.com/api/users"
+method = "GET"
+status = 200
+
+# f-string log message
+print(f"[{method}] {url} → {status}")
+
+# String methods
+print("Upper:", url.upper())
+print("Contains 'api':", "api" in url)
+print("Split path:", url.split("/"))
+print("Starts with https:", url.startswith("https"))
+print("Replace:", url.replace("api", "v2"))` },
+      { type: 'comparison', title: { tr: 'Java ile Karşılaştırma', en: 'Java vs Python — Strings' }, columns: ['Java', 'Python'], rows: [
+        { concept: { tr: 'İlk karakter', en: 'First character' }, java: 's.charAt(0)', python: 's[0]' },
+        { concept: { tr: 'Alt string', en: 'Substring' }, java: 's.substring(0,5)', python: 's[0:5]' },
+        { concept: { tr: 'Büyük harf', en: 'To upper' }, java: 's.toUpperCase()', python: 's.upper()' },
+        { concept: { tr: 'İçeriyor mu?', en: 'Contains?' }, java: 's.contains("x")', python: '"x" in s' },
+        { concept: { tr: 'Parçala', en: 'Split' }, java: 's.split(",")', python: 's.split(",")' },
+        { concept: { tr: 'Format (modern)', en: 'String format' }, java: 'String.format("Hi %s", name)', python: 'f"Hi {name}"' },
+      ]},
+      { type: 'quiz', question: { tr: '"Hello"[::-1] ifadesi ne döner?', en: 'What does "Hello"[::-1] return?' }, options: [{ id: 'a', text: 'Hello' }, { id: 'b', text: 'olleH' }, { id: 'c', text: 'H' }, { id: 'd', text: 'Error' }], correct: 'b', explanation: { tr: "[::-1] slice\'ı stringi tersine çevirir. -1 adım = sondan başa gider. Bu Python\'a özgü çok kullanışlı bir trick.", en: '[::-1] reverses the string. Step -1 means go backwards. This is a very Pythonic trick with no Java equivalent.' } },
+
+      // ═══════════════════════════════════════════════════════════════════════
+      // W3Schools Topic 8 — Booleans
+      // ═══════════════════════════════════════════════════════════════════════
+      { type: 'heading', text: 'Booleans', difficulty: '🟢 Beginner' },
+      { type: 'simple-box', emoji: '✅', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: 'Boolean, sadece iki değer alır: True veya False (doğru veya yanlış). "Test geçti mi?" sorusunun cevabı gibi — ya evet ya hayır.', en: 'A Boolean has only two values: True or False. Like the answer to "Did the test pass?" — only yes or no.' } },
+      { type: 'text', content: { tr: "Java\'da boolean küçük harfle (true/false) yazılır. Python\'da büyük harfle (True/False). Ayrıca Python\'da her değer True ya da False gibi davranır — boş liste, 0, None hepsi False sayılır.", en: 'Java writes boolean lowercase (true/false). Python uses uppercase (True/False). Python also has "truthy/falsy" — empty list, 0, None all behave as False.' } },
+      { type: 'code', language: 'python', code: `# Python Booleans
+print(True)          # True
+print(False)         # False
+print(10 > 5)        # True
+print(10 == 5)       # False
+
+# Comparison operators return bool
+x = 5
+print(x == 5)   # True   (equal)
+print(x != 3)   # True   (not equal)
+print(x > 3)    # True   (greater than)
+print(x >= 5)   # True   (greater or equal)
+
+# Logical operators (Python uses words, not symbols!)
+print(True and False)    # False  (Java: &&)
+print(True or False)     # True   (Java: ||)
+print(not True)          # False  (Java: !)
+
+# Truthy / Falsy
+print(bool(0))      # False
+print(bool(1))      # True
+print(bool(""))     # False — empty string
+print(bool("hi"))   # True  — non-empty string
+print(bool([]))     # False — empty list
+print(bool(None))   # False — None is always falsy` },
+      { type: 'editor', lang: 'python', defaultCode: `# QA Boolean checks
+test_passed = True
+response_time = 120   # ms
+expected_time = 200   # ms
+
+is_fast = response_time < expected_time
+print("Test passed:", test_passed)
+print("Is fast:", is_fast)
+print("Both OK:", test_passed and is_fast)
+
+# Truthiness check
+errors = []  # empty list
+if not errors:
+    print("No errors — all clear!")
+else:
+    print("Errors found:", errors)` },
+      { type: 'comparison', title: { tr: 'Java ile Karşılaştırma', en: 'Java vs Python — Booleans' }, columns: ['Java', 'Python'], rows: [
+        { concept: { tr: 'Boolean değerleri', en: 'Boolean values' }, java: 'true, false', python: 'True, False (capital!)' },
+        { concept: { tr: 'VE operatörü', en: 'AND operator' }, java: '&&', python: 'and' },
+        { concept: { tr: 'VEYA operatörü', en: 'OR operator' }, java: '||', python: 'or' },
+        { concept: { tr: 'DEĞİL operatörü', en: 'NOT operator' }, java: '!', python: 'not' },
+        { concept: { tr: 'Falsy değerler', en: 'Falsy values' }, java: 'false, null only', python: 'False, None, 0, "", [], {}, ()' },
+      ]},
+      { type: 'quiz', question: { tr: "Python\'da bool([]) ifadesi ne döner?", en: 'What does bool([]) return in Python?' }, options: [{ id: 'a', text: 'True' }, { id: 'b', text: 'False' }, { id: 'c', text: 'None' }, { id: 'd', text: 'Error' }], correct: 'b', explanation: { tr: "Boş liste False\'tur. Python\'da boş container\'lar ([], {}, (), set()), 0, None ve \"\" hepsi False sayılır.", en: 'Empty list is falsy. In Python: empty containers ([], {}, (), set()), 0, None, and "" are all False.' } },
+
+      // ═══════════════════════════════════════════════════════════════════════
+      // W3Schools Topic 9 — Operators
+      // ═══════════════════════════════════════════════════════════════════════
+      { type: 'heading', text: 'Operators', difficulty: '🟢 Beginner' },
+      { type: 'simple-box', emoji: '⚙️', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: 'Operatörler, işlem sembolleri. Toplama (+), çıkarma (-), karşılaştırma (>, <), ve mantık (and, or) — bunların hepsi operatör. Matematik dersindeki sembollerin kod versiyonu.', en: 'Operators are action symbols. Addition (+), comparison (>, <), logic (and, or) — all operators. Think of them as the math symbols from school, but for code.' } },
+      { type: 'code', language: 'python', code: `# Python Operators — complete reference
+
+# Arithmetic
+print(7 + 2)    # 9  (add)
+print(7 - 2)    # 5  (subtract)
+print(7 * 2)    # 14 (multiply)
+print(7 / 2)    # 3.5 (divide — float)
+print(7 // 2)   # 3  (floor divide — int)
+print(7 % 2)    # 1  (modulo)
+print(7 ** 2)   # 49 (power)
+
+# Comparison (return True or False)
+x = 5
+print(x == 5)   # True  — equal to
+print(x != 3)   # True  — not equal to
+print(x > 3)    # True  — greater than
+print(x < 10)   # True  — less than
+print(x >= 5)   # True  — greater or equal
+print(x <= 5)   # True  — less or equal
+
+# Assignment operators (shorthand)
+x = 10
+x += 3    # x = x + 3  → 13
+x -= 2    # x = x - 2  → 11
+x *= 2    # x = x * 2  → 22
+
+# Identity & Membership
+print(x is None)         # False
+print(5 in [1, 3, 5])    # True
+print(7 not in [1, 3, 5])# True` },
+      { type: 'editor', lang: 'python', defaultCode: `# Operator examples for QA
+response_time = 150  # ms
+threshold = 200      # ms SLA
+
+# Arithmetic
+margin = threshold - response_time
+print("Margin:", margin, "ms")
+print("50% of threshold:", threshold // 2)
+
+# Comparison + logical
+is_ok = response_time < threshold
+is_critical = response_time >= threshold * 0.9
+print("OK:", is_ok, "| Critical zone:", is_critical)
+
+# Membership
+allowed_methods = ["GET", "POST", "PUT", "DELETE"]
+method = "PATCH"
+print("Method allowed:", method in allowed_methods)` },
+      { type: 'comparison', title: { tr: 'Java ile Karşılaştırma', en: 'Java vs Python — Operators' }, columns: ['Java', 'Python'], rows: [
+        { concept: { tr: 'Üs alma', en: 'Power/Exponent' }, java: 'Math.pow(2, 8)', python: '2 ** 8' },
+        { concept: { tr: 'Tam bölme', en: 'Floor division' }, java: '7 / 2  // = 3', python: '7 // 2  # = 3' },
+        { concept: { tr: 'VE / VEYA / DEĞİL', en: 'AND / OR / NOT' }, java: '&& / || / !', python: 'and / or / not' },
+        { concept: { tr: 'İçeriyor mu?', en: 'Contains check' }, java: 'list.contains(x)', python: 'x in list' },
+        { concept: { tr: 'Referans eşitliği', en: 'Reference equality' }, java: '==', python: 'is' },
+        { concept: { tr: 'Değer eşitliği', en: 'Value equality' }, java: '.equals()', python: '==' },
+      ]},
+      { type: 'quiz', question: { tr: "Python\'da \"not in\" operatörü ne işe yarar?", en: 'What does the "not in" operator do in Python?' }, options: [{ id: 'a', text: 'It reverses a list' }, { id: 'b', text: 'It checks if a value is NOT in a sequence' }, { id: 'c', text: 'It removes an element from a list' }, { id: 'd', text: 'Same as !='}], correct: 'b', explanation: { tr: "\"not in\" bir değerin listede, string\'de ya da dict\'te OLMADIĞINI kontrol eder. Java\'da list.contains(x) == false ile eşdeğer.", en: "\"not in\" checks if a value is absent from a sequence. Equivalent to Java\'s !list.contains(x)." } },
+
+      // Section interview questions
+      { type: 'interview-questions', topic: 'Python Foundations', questions: [
+        { level: 'basic', q: { tr: 'Python dinamik tipli bir dil ne demek?', en: 'What does it mean that Python is dynamically typed?' }, a: { tr: "Değişken tipini siz belirtmezsiniz — Python çalışma zamanında anlar. x = 5 dersiniz, Python x\'i int olarak işler. Sonra x = \"hello\" derseniz, x artık str olur. Java\'da bu hata verir çünkü tip sabitlenir.", en: "You don\'t declare variable types — Python infers them at runtime. x = 5 makes x an int. Then x = \"hello\" makes it a str. In Java, this would be a compile error." } },
+        { level: 'basic', q: { tr: "Python\'da None nedir?", en: 'What is None in Python?' }, a: { tr: "None, Java\'daki null\'ın karşılığıdır. \"Değer yok\" anlamına gelir. Karşılaştırma için == yerine \"is\" kullanılır: if x is None. Fonksiyon hiçbir şey dönmezse implicit olarak None döner.", en: "None is Python\'s null. It means \"no value.\" Compare with \"is\" not \"==\": if x is None. Functions that return nothing implicitly return None." } },
+        { level: 'intermediate', q: { tr: "Python\'da \"is\" ile \"==\" operatörlerinin farkı nedir?", en: 'What is the difference between "is" and "==" in Python?' }, a: { tr: "\"==\" değer eşitliğini kontrol eder. \"is\" kimlik (identity) eşitliğini — aynı bellek nesnesini mi? None, True, False için \"is\" kullanın. Sayılar ve string\'ler için \"==\" kullanın. Java\'daki == (referans) → Python\'da is; Java\'daki .equals() → Python\'da ==.", en: "\"==\" checks value equality. \"is\" checks identity — are they the same object in memory? Use \"is\" for None, True, False. Use \"==\" for numbers and strings. Java\'s == → Python\'s is; Java\'s .equals() → Python\'s ==" } },
+        { level: 'advanced', q: { tr: "Python\'da truthy/falsy kavramını açıklayın ve QA\'da ne zaman kullanışlıdır?", en: "Explain Python\'s truthy/falsy concept and when it\'s useful in QA." }, a: { tr: "Herhangi bir Python değeri bool\'a dönüştürülebilir. 0, None, \"\", [], {}, () False\'tur; geri kalanlar True\'dur. QA\'da: \"if errors:\" veya \"if response.json():\" şeklinde kullanılır — Java\'daki \"if (errors != null && !errors.isEmpty())\" yerine çok daha kısa.", en: "Any Python value can be coerced to bool. 0, None, \"\", [], {}, () are False; everything else True. In QA: \"if errors:\" or \"if response.json()\" is much shorter than Java\'s \"if (errors != null && !errors.isEmpty())\"." } },
+      ]},
     ],
   },
 
   // ── 3. INTERMEDIATE ─────────────────────────────────────────────────────────
   {
-    title: '🟡 Level 2: Intermediate Python',
+    title: '🟡 Intermediate Python',
     blocks: [
-      { type: 'heading', text: 'List Comprehensions', difficulty: '🟡 Intermediate' },
-      {
-        type: 'code',
-        code: `results = [
-    {"name": "Login",    "status": "PASS", "duration": 1200},
-    {"name": "Checkout", "status": "FAIL", "duration": 5400},
-    {"name": "Profile",  "status": "PASS", "duration": 800},
-    {"name": "Logout",   "status": "SKIP", "duration": 0},
+
+      // ═══════════════════════════════════════════════════════════════════════
+      // W3Schools Topic 10 — Lists
+      // ═══════════════════════════════════════════════════════════════════════
+      { type: 'heading', text: 'Lists', difficulty: '🟡 Intermediate' },
+      { type: 'simple-box', emoji: '🛒', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: 'Liste, sıralı bir alışveriş listesi gibi. Her maddenin bir numarası (index) var. İstediğin yere ekleyebilir, istediğini silebilirsin.', en: 'A list is like a numbered shopping list. Each item has an index. You can add anywhere, remove anything.' } },
+      { type: 'text', content: { tr: "Java\'daki ArrayList\'in karşılığı Python\'daki list\'tir. Ama hiçbir import gerekmez, generic tip yazmak gerekmez. [1, 2, 3] yeterli. Farklı tipte elemanlar da tutabilir.", en: "Python list is Java\'s ArrayList. No import needed, no generic types. [1, 2, 3] is all you need. Lists can hold mixed types." } },
+      { type: 'code', language: 'python', code: `# Python Lists — most used data structure
+tests = ["login", "checkout", "search"]  # Create
+
+# Access
+print(tests[0])      # "login"  (first)
+print(tests[-1])     # "search" (last)
+print(tests[1:])     # ["checkout", "search"] (slice)
+
+# Modify
+tests.append("register")    # Add to end
+tests.insert(1, "cart")     # Insert at index 1
+tests.remove("search")      # Remove by value
+popped = tests.pop()        # Remove & return last
+tests[0] = "LOGIN"          # Change element
+
+# Info
+print(len(tests))           # Count elements
+print("login" in tests)     # Membership check
+tests.sort()                # Sort in place
+tests.reverse()             # Reverse in place
+
+# Iterate
+for test in tests:
+    print("-", test)` },
+      { type: 'editor', lang: 'python', defaultCode: `# Working with test case lists
+failed_tests = ["test_login", "test_checkout", "test_payment"]
+print("Failed tests:", len(failed_tests))
+
+# Add a new failure
+failed_tests.append("test_search")
+print("After append:", failed_tests)
+
+# Check if specific test failed
+if "test_login" in failed_tests:
+    print("ALERT: Login test failed!")
+
+# Sort and print
+failed_tests.sort()
+print("Sorted:", failed_tests)
+
+# Remove resolved test
+failed_tests.remove("test_checkout")
+print("After fix:", failed_tests)` },
+      { type: 'comparison', title: { tr: 'Java ile Karşılaştırma', en: 'Java vs Python — Lists' }, columns: ['Java (ArrayList)', 'Python (list)'], rows: [
+        { concept: { tr: 'Oluştur', en: 'Create' }, java: 'new ArrayList<>()', python: '[]' },
+        { concept: { tr: 'Ekle (sona)', en: 'Append (end)' }, java: 'list.add("x")', python: 'list.append("x")' },
+        { concept: { tr: 'İndexle eriş', en: 'Access by index' }, java: 'list.get(0)', python: 'list[0]' },
+        { concept: { tr: 'Boyut', en: 'Size' }, java: 'list.size()', python: 'len(list)' },
+        { concept: { tr: 'İçeriyor mu?', en: 'Contains?' }, java: 'list.contains(x)', python: 'x in list' },
+        { concept: { tr: 'Sırala', en: 'Sort' }, java: 'Collections.sort(list)', python: 'list.sort()' },
+      ]},
+      { type: 'quiz', question: { tr: 'tests = ["a","b","c"] ise tests[-1] ne döner?', en: 'If tests = ["a","b","c"], what does tests[-1] return?' }, options: [{ id: 'a', text: '"a"' }, { id: 'b', text: '"b"' }, { id: 'c', text: '"c"' }, { id: 'd', text: 'Error' }], correct: 'c', explanation: { tr: "Negatif index sondan sayar. -1 = son eleman, -2 = sondan ikinci. Java\'da bu doğrudan desteklenmez.", en: "Negative indices count from the end. -1 = last, -2 = second to last. Java doesn\'t support negative indexing." } },
+
+      // ═══════════════════════════════════════════════════════════════════════
+      // W3Schools Topic 11 — Tuples
+      // ═══════════════════════════════════════════════════════════════════════
+      { type: 'heading', text: 'Tuples', difficulty: '🟡 Intermediate' },
+      { type: 'simple-box', emoji: '📦', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: 'Tuple, açılamaz, değiştirilemez bir kutu gibi. İçine koyduklarını sonsuza kadar öyle kalır. GPS koordinatları gibi — (lat, lon) değişmez.', en: "A tuple is a sealed box — you can\'t change what\'s inside. Like GPS coordinates (lat, lon) — fixed and permanent." } },
+      { type: 'text', content: { tr: "Java\'da değiştirilemez liste için List.of() veya Collections.unmodifiableList() kullanırsınız. Python\'da tuple bu işi görür. Tuple() sözdizimi ile [] yerine () kullanılır. Fonksiyondan birden fazla değer döndürmek için ideal.", en: "Java uses List.of() or unmodifiableList() for immutable lists. Python\'s tuple does this. Use () instead of []. Ideal for returning multiple values from a function." } },
+      { type: 'code', language: 'python', code: `# Python Tuples — immutable sequences
+point = (10, 20)         # x, y coordinates
+color = (255, 128, 0)    # RGB — never changes
+status = (200, "OK")     # HTTP status + message
+
+# Access (same as list)
+print(point[0])          # 10
+print(point[-1])         # 20
+
+# Tuple unpacking — very Pythonic!
+x, y = point             # x=10, y=20
+code, msg = status       # code=200, msg="OK"
+print(f"HTTP {code}: {msg}")
+
+# Tuples are immutable — this raises TypeError:
+# point[0] = 99  ← ERROR!
+
+# Function returning multiple values (actually a tuple)
+def min_max(numbers):
+    return min(numbers), max(numbers)   # Returns tuple!
+
+low, high = min_max([3, 1, 4, 1, 5, 9])
+print(f"Min: {low}, Max: {high}")
+
+# tuple vs list
+print(type((1, 2)))    # <class 'tuple'>
+print(type([1, 2]))    # <class 'list'>` },
+      { type: 'editor', lang: 'python', defaultCode: `# Tuple use cases
+def get_test_result(test_name):
+    """Returns (passed: bool, duration_ms: int, message: str)"""
+    return True, 145, "Element found successfully"
+
+passed, duration, message = get_test_result("test_login")
+print("Passed:", passed)
+print("Duration:", duration, "ms")
+print("Message:", message)
+
+# Tuple in comparison
+result = ("PASS", 200)
+if result[0] == "PASS":
+    print("Test OK with status", result[1])` },
+      { type: 'comparison', title: { tr: 'Java ile Karşılaştırma', en: 'Java vs Python — Tuples' }, columns: ['Java', 'Python'], rows: [
+        { concept: { tr: 'Immutable liste', en: 'Immutable sequence' }, java: 'List.of(1, 2, 3)', python: '(1, 2, 3)' },
+        { concept: { tr: 'Çift döndür', en: 'Return pair' }, java: 'return new int[]{a, b}; or Pair', python: 'return a, b  # tuple implicitly' },
+        { concept: { tr: 'Unpack', en: 'Destructure' }, java: 'pair.getFirst(), pair.getSecond()', python: 'a, b = pair' },
+        { concept: { tr: 'Değiştirmeye çalış', en: 'Try to modify' }, java: 'throws UnsupportedOperationException', python: 'raises TypeError' },
+      ]},
+      { type: 'quiz', question: { tr: "Python\'da bir fonksiyon \"return a, b\" döndürürse, dönen değer tipi nedir?", en: 'When a Python function does "return a, b", what type is returned?' }, options: [{ id: 'a', text: 'list' }, { id: 'b', text: 'tuple' }, { id: 'c', text: 'dict' }, { id: 'd', text: 'Two separate values' }], correct: 'b', explanation: { tr: "\"return a, b\" aslında bir tuple döndürür: (a, b). Bu Python\'da çok yaygın — değişken unpacking ile x, y = func() şeklinde kullanılır.", en: '"return a, b" returns a tuple (a, b). Very common in Python — use variable unpacking: x, y = func().' } },
+
+      // ═══════════════════════════════════════════════════════════════════════
+      // W3Schools Topic 12 — Sets
+      // ═══════════════════════════════════════════════════════════════════════
+      { type: 'heading', text: 'Sets', difficulty: '🟡 Intermediate' },
+      { type: 'simple-box', emoji: '🎯', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: 'Set, tekrarsız bir koleksiyon. Bir sınıftaki öğrenci isimlerini listeliyor ama aynı isim birden fazla kez yazılmışsa — set kullanırsan sadece bir tane kalır.', en: 'A set is a collection with no duplicates. List student names but someone appears twice — a set keeps only one.' } },
+      { type: 'text', content: { tr: "Java\'daki HashSet\'in karşılığı Python\'daki set\'tir. İçe aktarma gerekmez. {1, 2, 3} ile oluşturulur. Sıralama garantisi yoktur.", en: "Python set is Java\'s HashSet. No import needed. Created with {1, 2, 3}. No guaranteed order." } },
+      { type: 'code', language: 'python', code: `# Python Sets — unique, unordered
+browsers = {"Chrome", "Firefox", "Safari"}
+browsers.add("Edge")           # Add element
+browsers.add("Chrome")         # Duplicate — ignored silently!
+print(len(browsers))           # 4 (no Chrome duplicate)
+
+# Set operations (like math sets)
+a = {1, 2, 3, 4}
+b = {3, 4, 5, 6}
+
+print(a | b)        # {1,2,3,4,5,6}  Union (a OR b)
+print(a & b)        # {3, 4}          Intersection (both)
+print(a - b)        # {1, 2}          Difference (in a, not b)
+print(a ^ b)        # {1,2,5,6}       Symmetric diff (either, not both)
+
+# Remove duplicates from a list
+tags = ["smoke", "regression", "smoke", "e2e", "regression"]
+unique_tags = list(set(tags))
+print(unique_tags)   # each tag only once (order may vary)` },
+      { type: 'editor', lang: 'python', defaultCode: `# Set use case: finding duplicate test IDs
+test_runs = ["TC001", "TC002", "TC001", "TC003", "TC002"]
+print("With duplicates:", test_runs)
+print("Unique tests:", set(test_runs))
+print("Total runs:", len(test_runs))
+print("Unique count:", len(set(test_runs)))
+
+# Find which browsers are NOT yet tested
+all_browsers = {"Chrome", "Firefox", "Safari", "Edge"}
+tested = {"Chrome", "Safari"}
+not_tested = all_browsers - tested
+print("Not tested:", not_tested)` },
+      { type: 'quiz', question: { tr: "Set\'e aynı eleman iki kez eklenirse ne olur?", en: 'What happens when you add the same element to a set twice?' }, options: [{ id: 'a', text: 'Error is raised' }, { id: 'b', text: 'It appears twice' }, { id: 'c', text: 'The duplicate is silently ignored' }, { id: 'd', text: 'The set is cleared' }], correct: 'c', explanation: { tr: "Set\'ler benzersizdir. Aynı eleman eklendiğinde sessizce görmezden gelinir — hata olmaz.", en: 'Sets are unique. Adding a duplicate is silently ignored — no error, no duplicate.' } },
+
+      // ═══════════════════════════════════════════════════════════════════════
+      // W3Schools Topic 13 — Dictionaries
+      // ═══════════════════════════════════════════════════════════════════════
+      { type: 'heading', text: 'Dictionaries', difficulty: '🟡 Intermediate' },
+      { type: 'simple-box', emoji: '📖', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: "Dictionary, telefon rehberi gibi. İsim (key) yazıyorsun, numarayı (value) alıyorsun. {\"Ali\": \"555-1234\"} — Ali\'ye bak, numarasını al.", en: 'A dictionary is like a phone book. Look up a name (key), get the number (value). {"Ali": "555-1234"} — look up Ali, get his number.' } },
+      { type: 'text', content: { tr: 'Java\'daki HashMap<K,V>\'nin karşılığı Python\'daki dict\'tir. İçe aktarma gerekmez. {"key": value} ile oluşturulur. Python 3.7\'den itibaren ekleme sırasını korur.', en: "Python dict is Java\'s HashMap<K,V>. No import. Created with {\"key\": value}. Since Python 3.7, dicts preserve insertion order." } },
+      { type: 'code', language: 'python', code: `# Python Dictionaries
+test = {
+    "name": "Login Test",
+    "status": "PASSED",
+    "duration": 1243,
+    "tags": ["smoke", "auth"],
+}
+
+# Access
+print(test["name"])               # "Login Test" — KeyError if missing
+print(test.get("name"))           # Same but safer
+print(test.get("owner", "N/A"))   # Default if key missing → "N/A"
+
+# Modify
+test["status"] = "FAILED"         # Update
+test["retry"] = 2                 # Add new key
+
+# Check key existence
+print("name" in test)             # True
+print("owner" in test)            # False
+
+# Iterate
+for key, value in test.items():   # .items() = key-value pairs
+    print(f"  {key}: {value}")
+
+print(list(test.keys()))    # all keys
+print(list(test.values()))  # all values
+
+# Delete
+del test["retry"]                 # Remove key
+test.pop("duration", None)        # Remove & return (safe)` },
+      { type: 'editor', lang: 'python', defaultCode: `# API response as dictionary
+api_response = {
+    "status": 200,
+    "message": "OK",
+    "data": {"user_id": 42, "username": "testuser"},
+    "elapsed_ms": 87
+}
+
+print("Status:", api_response["status"])
+print("Message:", api_response.get("message"))
+print("User ID:", api_response["data"]["user_id"])
+
+# Check all expected keys are present
+required_keys = ["status", "message", "data"]
+for key in required_keys:
+    if key not in api_response:
+        print(f"MISSING KEY: {key}")
+    else:
+        print(f"✓ {key} present")` },
+      { type: 'comparison', title: { tr: 'Java ile Karşılaştırma', en: 'Java vs Python — Dictionaries' }, columns: ['Java (HashMap)', 'Python (dict)'], rows: [
+        { concept: { tr: 'Oluştur', en: 'Create' }, java: 'new HashMap<>()', python: '{}  or  dict()' },
+        { concept: { tr: 'Ekle / güncelle', en: 'Put / update' }, java: 'map.put("k", v)', python: 'map["k"] = v' },
+        { concept: { tr: 'Değer al', en: 'Get value' }, java: 'map.get("k")', python: 'map["k"]  or  map.get("k")' },
+        { concept: { tr: 'Güvenli al', en: 'Get with default' }, java: 'map.getOrDefault("k", def)', python: 'map.get("k", default)' },
+        { concept: { tr: 'Anahtar var mı?', en: 'Contains key?' }, java: 'map.containsKey("k")', python: '"k" in map' },
+        { concept: { tr: 'Tüm girişler', en: 'All entries' }, java: 'map.entrySet()', python: 'map.items()' },
+      ]},
+      { type: 'quiz', question: { tr: 'Sözlükte olmayan bir key için dict.get("key") ne döner?', en: "What does dict.get(\"missing_key\") return when the key doesn\'t exist?" }, options: [{ id: 'a', text: 'KeyError' }, { id: 'b', text: 'None' }, { id: 'c', text: '0' }, { id: 'd', text: 'False' }], correct: 'b', explanation: { tr: '.get() varsayılan olarak None döner. dict["key"] ise KeyError fırlatır. QA kodunda .get() tercih edilir — crash olmaz.', en: ".get() returns None by default. dict[\"key\"] raises KeyError. In QA code, prefer .get() — it won\'t crash on missing data." } },
+
+      // ═══════════════════════════════════════════════════════════════════════
+      // W3Schools Topic 14 — If...Else
+      // ═══════════════════════════════════════════════════════════════════════
+      { type: 'heading', text: 'If...Else (Conditions)', difficulty: '🟡 Intermediate' },
+      { type: 'simple-box', emoji: '🚦', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: 'If-else, trafik ışığı gibi. Yeşil → git, kırmızı → dur, sarı → yavaşla. Kod da aynı şekilde karar verir: "Bu durum mu? O zaman şunu yap."', en: 'If-else is like a traffic light. Green → go, red → stop, yellow → slow down. Code makes decisions the same way: "Is this true? Then do this."' } },
+      { type: 'code', language: 'python', code: `# Python If...Else
+score = 87
+
+# Basic if-else
+if score >= 90:
+    print("A grade")
+elif score >= 80:      # "elif" — not "else if"!
+    print("B grade")
+elif score >= 70:
+    print("C grade")
+else:
+    print("Below C")
+
+# One-line ternary (inline if)
+result = "PASS" if score >= 70 else "FAIL"
+print(result)
+
+# Nested conditions
+user = "admin"
+logged_in = True
+
+if logged_in:
+    if user == "admin":
+        print("Admin dashboard")
+    else:
+        print("User dashboard")
+else:
+    print("Please login")
+
+# Multiple conditions
+status = 200
+body = {"user": "alice"}
+
+if status == 200 and "user" in body:
+    print("Valid response")
+
+# None check (use 'is', not ==)
+value = None
+if value is None:
+    print("No value")` },
+      { type: 'editor', lang: 'python', defaultCode: `# QA decision logic
+def validate_response(status_code, body):
+    if status_code == 200:
+        if "error" in body:
+            return "FAIL — body has error key"
+        return "PASS"
+    elif status_code == 401:
+        return "FAIL — Unauthorized"
+    elif status_code == 404:
+        return "FAIL — Not Found"
+    elif status_code >= 500:
+        return "FAIL — Server Error"
+    else:
+        return f"UNKNOWN — status {status_code}"
+
+print(validate_response(200, {"data": "ok"}))
+print(validate_response(200, {"error": "oops"}))
+print(validate_response(401, {}))
+print(validate_response(503, {}))` },
+      { type: 'comparison', title: { tr: 'Java ile Karşılaştırma', en: 'Java vs Python — Conditions' }, columns: ['Java', 'Python'], rows: [
+        { concept: { tr: 'Else-if', en: 'Else-if' }, java: 'else if (cond)', python: 'elif cond:' },
+        { concept: { tr: 'Ternary', en: 'Ternary operator' }, java: 'cond ? a : b', python: 'a if cond else b' },
+        { concept: { tr: 'Switch', en: 'Switch statement' }, java: 'switch(x) { case 1: ... }', python: 'match x:  case 1:  (Python 3.10+)' },
+        { concept: { tr: 'Null kontrolü', en: 'Null check' }, java: 'if (x == null)', python: 'if x is None:' },
+      ]},
+      { type: 'quiz', question: { tr: "Python\'da \"else if\" yerine hangi keyword kullanılır?", en: 'Which keyword does Python use instead of "else if"?' }, options: [{ id: 'a', text: 'else if' }, { id: 'b', text: 'elsif' }, { id: 'c', text: 'elif' }, { id: 'd', text: 'elseif' }], correct: 'c', explanation: { tr: "Python \"elif\" kullanır — \"else if\"nin kısaltması. Bu Python\'a özgüdür; Java\'da \"else if\" (iki kelime) kullanılır.", en: 'Python uses "elif" — short for "else if". This is Python-specific; Java uses "else if" (two words).' } },
+
+      // ═══════════════════════════════════════════════════════════════════════
+      // W3Schools Topic 15 — While Loops
+      // ═══════════════════════════════════════════════════════════════════════
+      { type: 'heading', text: 'While Loops', difficulty: '🟡 Intermediate' },
+      { type: 'simple-box', emoji: '🔁', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: 'While döngüsü, "koşul doğru olduğu sürece tekrar et" demek. Alarm saati çalana kadar uyumaya devam etmek gibi.', en: 'A while loop means "keep doing this as long as condition is true." Like sleeping until your alarm rings.' } },
+      { type: 'code', language: 'python', code: `# Python While Loop
+count = 0
+while count < 5:
+    print("Count:", count)  # 0, 1, 2, 3, 4
+    count += 1               # MUST increment — else infinite loop!
+
+# break — exit loop early
+attempt = 0
+while True:                  # Infinite loop
+    attempt += 1
+    if attempt >= 3:
+        print("Max retries reached")
+        break                # Exit loop
+
+# continue — skip rest, go to next iteration
+i = 0
+while i < 5:
+    i += 1
+    if i == 3:
+        continue             # Skip printing 3
+    print(i)                 # Prints 1, 2, 4, 5
+
+# else clause (runs when loop finishes normally — unique to Python!)
+n = 0
+while n < 3:
+    n += 1
+else:
+    print("Loop finished normally")` },
+      { type: 'editor', lang: 'python', defaultCode: `# Retry pattern — common in QA automation
+import random  # for simulation
+
+def check_service():
+    return random.choice([False, False, True])  # Simulates flaky service
+
+max_retries = 5
+retry = 0
+
+while retry < max_retries:
+    retry += 1
+    print(f"Attempt {retry}...")
+    if check_service():
+        print("Service is UP!")
+        break
+else:
+    print(f"Service still DOWN after {max_retries} retries")` },
+      { type: 'quiz', question: { tr: "Python\'da while döngüsünde \"else\" bloğu ne zaman çalışır?", en: 'When does the "else" block of a Python while loop execute?' }, options: [{ id: 'a', text: 'When the loop body throws an exception' }, { id: 'b', text: 'When the condition was never True' }, { id: 'c', text: 'When the loop completes normally (without break)' }, { id: 'd', text: 'Java has the same feature' }], correct: 'c', explanation: { tr: "Python\'a özgü: while...else bloğu döngü break ile sonlanmadıysa (normal bitti) çalışır. Java\'da bu özellik yoktur.", en: 'Python-specific: while...else runs only if the loop finished without hitting break. Java has no equivalent.' } },
+
+      // ═══════════════════════════════════════════════════════════════════════
+      // W3Schools Topic 16 — For Loops
+      // ═══════════════════════════════════════════════════════════════════════
+      { type: 'heading', text: 'For Loops', difficulty: '🟡 Intermediate' },
+      { type: 'simple-box', emoji: '🎢', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: 'For döngüsü, listedeki her şey için sırayla bir işlem yapar. "Her test için çalıştır" gibi — liste bitince döngü de biter.', en: 'A for loop does something for each item in a sequence. "Run for every test" — the loop ends when the list ends.' } },
+      { type: 'text', content: { tr: "Java\'da for-each: \"for (String s : list)\". Python\'da: \"for s in list:\". Çok benzer ama Python\'da index olmaz — index lazımsa enumerate() kullan.", en: 'Java for-each: "for (String s : list)". Python: "for s in list:". Very similar but Python has no index — if you need one, use enumerate().' } },
+      { type: 'code', language: 'python', code: `# Python For Loops
+tests = ["login", "checkout", "search"]
+
+# Basic for-each
+for test in tests:
+    print("Running:", test)
+
+# range() — Java equivalent: for(int i=0; i<5; i++)
+for i in range(5):        # 0, 1, 2, 3, 4
+    print(i)
+
+for i in range(2, 8, 2):  # 2, 4, 6 (start, stop, step)
+    print(i)
+
+# enumerate() — index + value
+for i, test in enumerate(tests):
+    print(f"{i}: {test}")   # 0: login, 1: checkout, ...
+
+# zip() — parallel iteration (Java: no direct equivalent)
+names = ["Alice", "Bob", "Carol"]
+scores = [95, 87, 92]
+for name, score in zip(names, scores):
+    print(f"{name}: {score}")
+
+# List comprehension — compact for loop
+squares = [x**2 for x in range(1, 6)]  # [1, 4, 9, 16, 25]
+evens = [x for x in range(20) if x % 2 == 0]
+
+# break and continue work same as while` },
+      { type: 'editor', lang: 'python', defaultCode: `# For loop QA examples
+api_endpoints = ["/users", "/products", "/orders", "/cart"]
+expected_status = 200
+
+print("Testing endpoints:")
+for i, endpoint in enumerate(api_endpoints, start=1):
+    # Simulating a check
+    result = "PASS" if endpoint != "/cart" else "FAIL"
+    print(f"  {i}. GET {endpoint} → {result}")
+
+# Count failures
+results = ["PASS", "FAIL", "PASS", "PASS", "FAIL"]
+failures = [r for r in results if r == "FAIL"]
+print(f"\nTotal: {len(results)}, Failed: {len(failures)}")` },
+      { type: 'comparison', title: { tr: 'Java ile Karşılaştırma', en: 'Java vs Python — For Loops' }, columns: ['Java', 'Python'], rows: [
+        { concept: { tr: 'For-each', en: 'For-each' }, java: 'for (String s : list)', python: 'for s in list:' },
+        { concept: { tr: 'Sayaçlı döngü', en: 'Indexed loop' }, java: 'for(int i=0; i<n; i++)', python: 'for i in range(n):' },
+        { concept: { tr: 'Index + değer', en: 'Index + value' }, java: 'IntStream.range(0,n).forEach(i→...)', python: 'for i, v in enumerate(lst):' },
+        { concept: { tr: 'Paralel iterasyon', en: 'Parallel iteration' }, java: 'Iterator + two lists manually', python: 'for a, b in zip(lst1, lst2):' },
+      ]},
+      { type: 'quiz', question: { tr: 'range(2, 10, 3) hangi sayıları üretir?', en: 'What numbers does range(2, 10, 3) produce?' }, options: [{ id: 'a', text: '2, 3, 4, 5, 6, 7, 8, 9' }, { id: 'b', text: '2, 5, 8' }, { id: 'c', text: '2, 4, 6, 8' }, { id: 'd', text: '3, 6, 9' }], correct: 'b', explanation: { tr: 'range(start, stop, step) → 2\'den başla, 10\'dan önce dur, 3 adım at: 2, 5, 8. Java\'daki for(i=2; i<10; i+=3)\'e eşdeğer.', en: "range(start, stop, step) → start at 2, stop before 10, step 3: 2, 5, 8. Equivalent to Java's for(i=2; i<10; i+=3)." } },
+
+      // ═══════════════════════════════════════════════════════════════════════
+      // W3Schools Topic 17 — Functions
+      // ═══════════════════════════════════════════════════════════════════════
+      { type: 'heading', text: 'Functions', difficulty: '🟡 Intermediate' },
+      { type: 'simple-box', emoji: '🔧', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: 'Fonksiyon, bir tarif gibi. "Çay yap" tarifi: su kaynat, demle, koy. Her çay yapmak istediğinde aynı adımları tekrar yazmana gerek yok — tarifi çağırırsın.', en: "A function is like a recipe. \"Make tea\": boil water, steep, pour. You don\'t rewrite the steps every time — you call the recipe." } },
+      { type: 'text', content: { tr: "Java\'da metod tanımlarken erişim belirleyici, dönüş tipi yazılır: public String greet(String name). Python\'da sadece \"def\" yeterli: def greet(name):. Tip ipuçları opsiyonel ama önerilen.", en: 'Java methods need access modifier and return type: public String greet(String name). Python just needs "def": def greet(name):. Type hints are optional but recommended.' } },
+      { type: 'code', language: 'python', code: `# Python Functions
+# Basic function
+def greet(name):
+    return f"Hello, {name}!"
+
+print(greet("Alice"))    # Hello, Alice!
+
+# Default parameters
+def run_test(url, method="GET", timeout=30):
+    return f"{method} {url} (timeout: {timeout}s)"
+
+print(run_test("/api/users"))                # GET /api/users (timeout: 30s)
+print(run_test("/api/login", "POST", 60))   # POST /api/login (timeout: 60s)
+
+# Keyword arguments — call in any order
+print(run_test(method="DELETE", url="/api/item/5"))
+
+# *args — variable number of arguments
+def sum_all(*numbers):
+    return sum(numbers)
+
+print(sum_all(1, 2, 3, 4, 5))    # 15
+
+# **kwargs — variable keyword arguments
+def log(**kwargs):
+    for k, v in kwargs.items():
+        print(f"  {k}={v}")
+
+log(test="login", status="PASS", time=234)
+
+# Type hints (Python 3.5+, recommended!)
+def add(a: int, b: int) -> int:
+    return a + b` },
+      { type: 'editor', lang: 'python', defaultCode: `# Function exercises
+def validate_email(email: str) -> bool:
+    """Returns True if email looks valid."""
+    return "@" in email and "." in email.split("@")[-1]
+
+def calculate_pass_rate(passed: int, total: int) -> float:
+    """Returns pass rate as percentage."""
+    if total == 0:
+        return 0.0
+    return round((passed / total) * 100, 2)
+
+# Test the functions
+emails = ["user@test.com", "bad-email", "admin@example.co.uk"]
+for email in emails:
+    print(f"{email}: {validate_email(email)}")
+
+print()
+print(f"Pass rate: {calculate_pass_rate(87, 100)}%")
+print(f"Pass rate: {calculate_pass_rate(0, 50)}%")` },
+      { type: 'comparison', title: { tr: 'Java ile Karşılaştırma', en: 'Java vs Python — Functions' }, columns: ['Java', 'Python'], rows: [
+        { concept: { tr: 'Metod tanımla', en: 'Define method' }, java: 'public String greet(String name)', python: 'def greet(name: str) -> str:' },
+        { concept: { tr: 'Default parametre', en: 'Default parameter' }, java: 'Overloading only', python: 'def f(x=10):' },
+        { concept: { tr: 'Varargs', en: 'Variable args' }, java: 'String... args', python: '*args' },
+        { concept: { tr: 'Named args', en: 'Named args (kwargs)' }, java: 'No equivalent', python: '**kwargs or name=value calls' },
+        { concept: { tr: 'Çoklu dönüş', en: 'Return multiple' }, java: 'array or wrapper class', python: 'return a, b  (tuple)' },
+      ]},
+      { type: 'quiz', question: { tr: "Python\'da fonksiyon tanımlamak için hangi keyword kullanılır?", en: 'Which keyword defines a function in Python?' }, options: [{ id: 'a', text: 'function' }, { id: 'b', text: 'def' }, { id: 'c', text: 'func' }, { id: 'd', text: 'method' }], correct: 'b', explanation: { tr: "\"def\" (define\'ın kısası) Python\'da fonksiyon tanımlar. JavaScript\'te \"function\", Java\'da tip ve isim yeterlidir.", en: '"def" (short for define) creates a Python function. JavaScript uses "function", Java just needs type and name.' } },
+
+      // ═══════════════════════════════════════════════════════════════════════
+      // W3Schools Topic 18 — Lambda
+      // ═══════════════════════════════════════════════════════════════════════
+      { type: 'heading', text: 'Lambda Functions', difficulty: '🟡 Intermediate' },
+      { type: 'simple-box', emoji: '⚡', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: 'Lambda, tek satırlık isimsiz bir fonksiyon. "Sadece bir kez kullanacağım, isim koymaya değmez" dediğinde kullanılır. Hesap makinesi gibi: sadece basarsın, sonucu alırsın.', en: 'A lambda is a one-line nameless function. Use it when "I only need this once, not worth naming." Like a quick calculator.' } },
+      { type: 'text', content: { tr: "Java\'da lambda: x -> x * 2. Python\'da: lambda x: x * 2. Çok benzer! Python lambda\'sı tek ifade ile sınırlıdır — birden fazla satıra ihtiyaç varsa normal def kullanılır.", en: 'Java lambda: x -> x * 2. Python: lambda x: x * 2. Very similar! Python lambda is limited to one expression — need multiple lines? Use def instead.' } },
+      { type: 'code', language: 'python', code: `# Python Lambda Functions
+# Basic lambda — anonymous function
+square = lambda x: x ** 2
+print(square(5))    # 25
+
+double = lambda x: x * 2
+add = lambda x, y: x + y
+
+# Real use: sorted() with key
+tests = [
+    {"name": "login", "duration": 1200},
+    {"name": "search", "duration": 340},
+    {"name": "checkout", "duration": 890},
 ]
 
-# List comprehension: [expression for item in iterable if condition]
-failed = [r["name"] for r in results if r["status"] == "FAIL"]
-print(failed)                     # ['Checkout']
+# Sort by duration (ascending)
+tests.sort(key=lambda t: t["duration"])
+for t in tests:
+    print(t["name"], t["duration"])
 
-# Transform all values:
-durations_sec = [r["duration"] / 1000 for r in results]
-print(durations_sec)              # [1.2, 5.4, 0.8, 0.0]
+# Sort by name (descending)
+tests.sort(key=lambda t: t["name"], reverse=True)
 
-# Nested: list of dicts → list of strings
-summaries = [f"{r['name']}:{r['status']}" for r in results]
-print(summaries)`,
-        expected: `['Checkout']\n[1.2, 5.4, 0.8, 0.0]\n['Login:PASS', 'Checkout:FAIL', 'Profile:PASS', 'Logout:SKIP']`
-      },
-      { type: 'heading', text: 'Exception Handling', difficulty: '🟡 Intermediate' },
-      {
-        type: 'code',
-        code: `import requests
+# filter() — keep only matching items
+durations = [1200, 340, 890, 450, 2100]
+slow = list(filter(lambda x: x > 1000, durations))
+print("Slow tests:", slow)   # [1200, 2100]
 
-def get_user(user_id: int) -> dict:
-    """Fetch user from API with full error handling."""
-    try:
-        response = requests.get(
-            f"https://api.example.com/users/{user_id}",
-            timeout=5
-        )
-        response.raise_for_status()      # raises HTTPError if status >= 400
-        return response.json()
+# map() — transform each item
+doubled = list(map(lambda x: x * 2, [1, 2, 3]))
+print(doubled)               # [2, 4, 6]` },
+      { type: 'editor', lang: 'python', defaultCode: `# Lambda sorting exercise
+test_results = [
+    {"test": "test_login", "status": "FAIL", "time": 1500},
+    {"test": "test_api", "status": "PASS", "time": 200},
+    {"test": "test_ui", "status": "FAIL", "time": 3200},
+    {"test": "test_db", "status": "PASS", "time": 150},
+]
 
-    except requests.exceptions.ConnectionError:
-        print("Cannot connect to server — is it running?")
-        return {}
+# Sort by time (fastest first)
+by_time = sorted(test_results, key=lambda r: r["time"])
+print("By speed:")
+for r in by_time:
+    print(f"  {r['test']}: {r['time']}ms")
 
-    except requests.exceptions.HTTPError as e:
-        print(f"HTTP error {e.response.status_code}: {e}")
-        return {}
+# Filter only failures
+failures = list(filter(lambda r: r["status"] == "FAIL", test_results))
+print("\nFailures:", [r["test"] for r in failures])` },
+      { type: 'comparison', title: { tr: 'Java ile Karşılaştırma', en: 'Java vs Python — Lambda' }, columns: ['Java', 'Python'], rows: [
+        { concept: { tr: 'Lambda sözdizimi', en: 'Lambda syntax' }, java: 'x -> x * 2', python: 'lambda x: x * 2' },
+        { concept: { tr: 'İki parametre', en: 'Two params' }, java: '(x, y) -> x + y', python: 'lambda x, y: x + y' },
+        { concept: { tr: 'Sort ile kullan', en: 'Use with sort' }, java: 'list.sort(Comparator.comparing(t -> t.name))', python: 'list.sort(key=lambda t: t["name"])' },
+        { concept: { tr: 'Filter ile kullan', en: 'Use with filter' }, java: 'stream().filter(x -> x > 5)', python: 'filter(lambda x: x > 5, list)' },
+      ]},
+      { type: 'quiz', question: { tr: 'lambda x, y: x + y ifadesi ne işe yarar?', en: 'What does lambda x, y: x + y do?' }, options: [{ id: 'a', text: 'Returns x only' }, { id: 'b', text: 'Creates an anonymous function that returns x + y' }, { id: 'c', text: 'Prints x + y' }, { id: 'd', text: 'Creates a list' }], correct: 'b', explanation: { tr: "Lambda, iki parametre alan ve toplamlarını döndüren isimsiz bir fonksiyon oluşturur. Java\'daki (x, y) -> x + y ile aynı.", en: "Lambda creates an anonymous function with two parameters that returns their sum. Same as Java\'s (x, y) -> x + y." } },
 
-    except requests.exceptions.Timeout:
-        print("Request timed out")
-        return {}
-
-    except Exception as e:               # unexpected errors
-        print(f"Unexpected error: {e}")
-        raise                            # re-raise — we want to know about this
-
-    finally:
-        print("get_user() call complete") # ALWAYS runs`,
-      },
-      { type: 'heading', text: 'Classes and OOP', difficulty: '🟡 Intermediate' },
-      {
-        type: 'code',
-        code: `class TestResult:
-    """Represents a single test execution result."""
-    total_runs = 0                          # class variable: shared by ALL instances
-
-    def __init__(self, name: str, status: str, duration_ms: int = 0):
-        """Constructor — called when you create a TestResult()."""
-        self.name        = name             # instance variables (unique per object)
-        self.status      = status
-        self.duration_ms = duration_ms
-        TestResult.total_runs += 1
-
-    def is_passed(self) -> bool:
-        return self.status == "PASS"
-
-    def __repr__(self) -> str:
-        return f"TestResult({self.name!r}, {self.status!r})"
-
-
-class TimedTestResult(TestResult):
-    """Extends TestResult with SLA checking."""
-
-    def __init__(self, name, status, duration_ms, sla_ms=3000):
-        super().__init__(name, status, duration_ms)  # call parent __init__
-        self.sla_ms = sla_ms
-
-    def is_within_sla(self) -> bool:
-        return self.duration_ms <= self.sla_ms
-
-
-r1 = TestResult("Login Test", "PASS", 1200)
-r2 = TimedTestResult("Checkout", "PASS", 4500, sla_ms=3000)
-print(r1)
-print(r1.is_passed())
-print(r2.is_within_sla())
-print(f"Total runs: {TestResult.total_runs}")`,
-        expected: `TestResult('Login Test', 'PASS')\nTrue\nFalse\nTotal runs: 2`
-      },
-      { type: 'heading', text: 'Regular Expressions', difficulty: '🟡 Intermediate' },
-      {
-        type: 'code',
-        code: `import re
-
-EMAIL_PATTERN = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$'
-DATE_PATTERN  = r'^\\d{4}-\\d{2}-\\d{2}$'    # YYYY-MM-DD
-
-def validate_email(email: str) -> bool:
-    return bool(re.match(EMAIL_PATTERN, email))
-
-def find_all_urls(text: str) -> list:
-    url_pattern = r'https?://[^\\s"]+'
-    return re.findall(url_pattern, text)
-
-def sanitize_name(name: str) -> str:
-    return re.sub(r'[^a-z0-9_]', '_', name.lower())
-
-print(validate_email("alice@example.com"))   # True
-print(validate_email("not-an-email"))        # False
-
-text = 'See https://example.com and http://test.io/docs for more'
-print(find_all_urls(text))
-
-print(sanitize_name("Login Test #1 (Mobile)"))`,
-        expected: `True\nFalse\n['https://example.com', 'http://test.io/docs']\nlogin_test__1__mobile_`
-      },
-      { type: 'heading', text: 'Working with JSON', difficulty: '🟡 Intermediate' },
-      {
-        type: 'code',
-        code: `import json
-
-# JSON string -> Python dict:
-api_response = '{"user": {"id": 42, "email": "alice@test.com"}, "status": "active"}'
-data = json.loads(api_response)          # parse JSON string
-print(data["user"]["email"])             # alice@test.com
-
-# Python dict -> JSON string:
-test_report = {"run_id": "2024-01-15", "total": 50, "passed": 45}
-json_str = json.dumps(test_report, indent=2)
-print(json_str)
-
-# Read/write JSON file:
-with open("report.json", "w") as f:
-    json.dump(test_report, f, indent=2)
-
-with open("report.json", "r") as f:
-    loaded = json.load(f)`,
-        expected: `alice@test.com\n{\n  "run_id": "2024-01-15",\n  "total": 50,\n  "passed": 45\n}`
-      },
-      { type: 'heading', text: 'Page Object Model (Intermediate Example)', difficulty: '🟡 Intermediate' },
-      {
-        type: 'code',
-        label: 'pages/login_page.py',
-        code: `from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-
-class BasePage:
-    """Base class for all Page Objects."""
-
-    def __init__(self, driver):
-        self.driver = driver
-        self.wait   = WebDriverWait(driver, timeout=10)
-
-    def click(self, locator):
-        self.wait.until(EC.element_to_be_clickable(locator)).click()
-
-    def fill(self, locator, text):
-        el = self.wait.until(EC.visibility_of_element_located(locator))
-        el.clear()
-        el.send_keys(text)
-
-    def get_text(self, locator) -> str:
-        return self.wait.until(EC.visibility_of_element_located(locator)).text
-
-
-class LoginPage(BasePage):
-    """Page Object for the login page — inherits BasePage."""
-
-    URL            = "https://example.com/login"
-    USERNAME_INPUT = (By.ID, "username")
-    PASSWORD_INPUT = (By.ID, "password")
-    LOGIN_BUTTON   = (By.CSS_SELECTOR, "button[type='submit']")
-    ERROR_MSG      = (By.CLASS_NAME, "error-message")
-
-    def navigate(self):
-        self.driver.get(self.URL)
-
-    def login(self, username: str, password: str):
-        self.fill(self.USERNAME_INPUT, username)
-        self.fill(self.PASSWORD_INPUT, password)
-        self.click(self.LOGIN_BUTTON)
-
-    def get_error_message(self) -> str:
-        return self.get_text(self.ERROR_MSG)`,
-      },
+      // Section interview questions
+      { type: 'interview-questions', topic: 'Python Intermediate', questions: [
+        { level: 'basic', q: { tr: "Python\'da list ve tuple arasındaki fark nedir?", en: 'What is the difference between a list and a tuple in Python?' }, a: { tr: 'List değiştirilebilir (mutable) — append, remove, değiştirme yapabilirsiniz. Tuple değiştirilemez (immutable) — oluşturduktan sonra element ekleyip çıkaramazsınız. List [] ile, tuple () ile tanımlanır. Tuple daha hızlıdır çünkü Python onu optimize edebilir.', en: 'List is mutable — you can append, remove, and change elements. Tuple is immutable — you cannot change it after creation. List uses [], tuple uses (). Tuples are faster because Python can optimize them.' } },
+        { level: 'basic', q: { tr: "Python\'da dictionary\'ye vs listelere erişimin zaman karmaşıklığı nedir?", en: 'What is the time complexity of dict vs list lookup in Python?' }, a: { tr: 'Dict lookup O(1) — anahtarı hash\'ler ve direkt gider. List lookup by index de O(1)\'dir. Ama "x in list" O(n)\'dir — her eleman kontrol edilir. "x in dict" ise O(1). Bu yüzden QA\'da büyük veri setlerinde dict tercih edilir.', en: "Dict lookup is O(1) — it hashes the key and jumps directly. List by index is also O(1). But \"x in list\" is O(n) — checks every element. \"x in dict\" is O(1). That\'s why dict is preferred for large datasets in QA." } },
+        { level: 'intermediate', q: { tr: "Python\'da *args ve **kwargs ne işe yarar?", en: 'What are *args and **kwargs in Python?' }, a: { tr: '*args, belirsiz sayıda pozisyonel argüman alır — tuple olarak gelir. **kwargs, belirsiz sayıda keyword argüman alır — dict olarak gelir. def log(*args, **kwargs) hem log("msg1", "msg2") hem de log(level="INFO", test="login") çağrılarını kabul eder.', en: '*args accepts a variable number of positional arguments — arrives as a tuple. **kwargs accepts variable keyword arguments — arrives as a dict. def log(*args, **kwargs) can accept both log("msg1", "msg2") and log(level="INFO", test="login").' } },
+        { level: 'advanced', q: { tr: 'List comprehension ne zaman kullanılmalı, for döngüsü ne zaman?', en: 'When should you use list comprehension vs a for loop?' }, a: { tr: 'List comprehension tek bir dönüşüm veya filtreleme işlemi için kullanılır — [x*2 for x in lst if x>0]. Okunabilir ve genellikle daha hızlıdır. For döngüsü ise birden fazla işlem, yan etkiler (print, IO, state değişikliği) veya iç içe karmaşık mantık için kullanılır. Kural: if comprehension anlaşılmaz görünüyorsa, for döngüsü yaz.', en: 'List comprehension is for single transformations or filters — [x*2 for x in lst if x>0]. Readable and usually faster. For loops are for multiple operations, side effects (print, IO, state changes), or complex nested logic. Rule: if the comprehension looks hard to read, use a for loop.' } },
+      ]},
     ],
   },
 
@@ -509,180 +1098,766 @@ class LoginPage(BasePage):
   {
     title: '🔴 Level 3: Advanced Python',
     blocks: [
-      { type: 'heading', text: 'Decorators', difficulty: '🔴 Advanced' },
-      { type: 'text', content: 'A decorator is a function that wraps another function to add behavior — without modifying the original. Applied with @ syntax. Think of it as "pre-processing + post-processing" around any function call.' },
-      {
-        type: 'code',
-        code: `import time
-import functools
 
-# How decorators work — step by step:
-def timer(func):
-    @functools.wraps(func)            # preserves original function metadata
-    def wrapper(*args, **kwargs):     # accepts any args
-        start  = time.perf_counter()
-        result = func(*args, **kwargs)  # call the original function
-        end    = time.perf_counter()
-        print(f"{func.__name__} took {(end - start) * 1000:.1f}ms")
+      // ═══════════════════════════════════════════════════════════════════════
+      // W3Schools Topic 19 — Classes / Objects
+      // ═══════════════════════════════════════════════════════════════════════
+      { type: 'heading', text: 'Classes / Objects', difficulty: '🔴 Advanced' },
+      { type: 'simple-box', emoji: '🏗️', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: "Class, bir nesne şablonu gibi. Araba şablonunda renk, hız, model var — her araba bu şablondan yaratılır ama hepsinin rengi farklı olabilir. Class = şablon, nesne (object) = şablondan üretilen şey.", en: "A class is a blueprint. The car blueprint has color, speed, model — every car is made from it but each can have a different color. Class = blueprint, object = thing made from it." } },
+      { type: 'text', content: { tr: "Java'da constructor açıkça yazılır: public Car(String color) {...}. Python'da __init__ metodu constructor görevi görür. Python'daki 'self', Java'daki 'this' gibidir — ama Python'da her metoda açıkça yazılmalıdır.", en: "Java constructors are explicit: public Car(String color) {}. Python uses __init__ as the constructor. Python's 'self' is like Java's 'this' — but must be written explicitly in every method." } },
+      { type: 'code', language: 'python', code: `# Python Classes — QA Engineer Example
+class TestResult:
+    # Class attribute — shared by all instances
+    company = "QA Corp"
+
+    def __init__(self, test_name, status):  # __init__ = constructor
+        self.test_name = test_name          # instance attribute
+        self.status = status                # instance attribute
+        self.duration = 0.0                 # default value
+
+    def set_duration(self, ms):             # instance method
+        self.duration = ms
+
+    def summary(self):                      # method using self
+        return f"[{self.status}] {self.test_name} ({self.duration}ms)"
+
+    def __str__(self):                      # like Java toString()
+        return self.summary()
+
+# Create instances
+r1 = TestResult("login_test", "PASS")      # calls __init__
+r1.set_duration(342)
+
+r2 = TestResult("checkout_test", "FAIL")
+r2.set_duration(1205)
+
+print(r1)                                   # [PASS] login_test (342ms)
+print(r2)                                   # [FAIL] checkout_test (1205ms)
+print(TestResult.company)                   # QA Corp` },
+      { type: 'editor', lang: 'python', defaultCode: `# Create a BankAccount class
+class BankAccount:
+    def __init__(self, owner, balance=0):
+        self.owner = owner
+        self.balance = balance
+
+    def deposit(self, amount):
+        self.balance += amount
+        print(f"Deposited {amount}. Balance: {self.balance}")
+
+    def withdraw(self, amount):
+        if amount > self.balance:
+            print("Insufficient funds!")
+        else:
+            self.balance -= amount
+            print(f"Withdrew {amount}. Balance: {self.balance}")
+
+acc = BankAccount("Alice", 1000)
+acc.deposit(500)
+acc.withdraw(200)
+acc.withdraw(2000)` },
+      { type: 'comparison', title: { tr: 'Java ile Karşılaştırma', en: 'Java vs Python — Classes' }, columns: ['Java', 'Python'], rows: [
+        { concept: 'Constructor', java: 'public MyClass(int x) { this.x = x; }', python: 'def __init__(self, x): self.x = x' },
+        { concept: 'Instance method', java: 'public void doIt() { ... }', python: 'def do_it(self): ...' },
+        { concept: 'toString', java: '@Override public String toString()', python: 'def __str__(self):' },
+        { concept: 'Access modifier', java: 'private int x; (enforced)', python: '_x or __x (convention only)' },
+      ]},
+      { type: 'quiz', question: { tr: "Python'da __init__ metodunun ilk parametresi nedir?", en: 'What is the first parameter of a Python __init__ method?' }, options: [{ id: 'a', text: 'this' }, { id: 'b', text: 'self' }, { id: 'c', text: 'cls' }, { id: 'd', text: 'me' }], correct: 'b', explanation: { tr: "'self' bu sınıfın o anki instance'ını temsil eder — Java'daki 'this' gibi. Python'da her instance metoduna açıkça yazılır.", en: "'self' represents the current instance of the class — like Java's 'this'. It must be written explicitly in every instance method in Python." } },
+
+      // ═══════════════════════════════════════════════════════════════════════
+      // W3Schools Topic 20 — Inheritance
+      // ═══════════════════════════════════════════════════════════════════════
+      { type: 'heading', text: 'Inheritance', difficulty: '🔴 Advanced' },
+      { type: 'simple-box', emoji: '🧬', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: "Kalıtım, miras gibi. Ebeveynin özellikleri çocuğa geçer. Araba şablonundan 'Elektrikli Araba' şablonu türetilirse, arabanın tüm özellikleri artık elektrikli arabada da var — üstüne pil kapasitesi ekleniyor.", en: "Inheritance is like a family trait. A child class gets all properties of the parent. ElectricCar inherits from Car — gets all car features plus adds battery capacity." } },
+      { type: 'text', content: { tr: "Java'da 'extends' keyword'ü kullanılır: class Dog extends Animal. Python'da parantez içinde yazılır: class Dog(Animal). Her iki dilde de 'super()' ile parent constructor çağrılır.", en: "Java uses 'extends': class Dog extends Animal. Python puts the parent in parentheses: class Dog(Animal). Both languages use super() to call the parent constructor." } },
+      { type: 'code', language: 'python', code: `# Python Inheritance — Test Framework Example
+class BaseTest:
+    """Parent class with shared test behavior."""
+    def __init__(self, browser="chrome"):
+        self.browser = browser              # inherited by all subclasses
+        self.results = []
+
+    def log(self, msg):                     # shared method — all tests can use this
+        print(f"[{self.browser.upper()}] {msg}")
+        self.results.append(msg)
+
+    def teardown(self):
+        self.log("Test complete.")
+
+class LoginTest(BaseTest):                  # inherits from BaseTest
+    def __init__(self, browser, base_url):
+        super().__init__(browser)           # call parent __init__ — like super() in Java
+        self.base_url = base_url
+
+    def run(self):
+        self.log(f"Navigating to {self.base_url}/login")
+        self.log("Filling credentials...")
+        self.log("Asserting redirect to dashboard")
+        self.teardown()                     # inherited method
+
+class ApiTest(BaseTest):                    # different child, same parent
+    def run(self, endpoint):
+        self.log(f"GET {endpoint}")
+        self.log("Asserting 200 OK")
+        self.teardown()
+
+t1 = LoginTest("firefox", "https://shop.example.com")
+t1.run()
+t2 = ApiTest("chrome")
+t2.run("/api/users")` },
+      { type: 'editor', lang: 'python', defaultCode: `class Animal:
+    def __init__(self, name):
+        self.name = name
+
+    def speak(self):
+        return f"{self.name} makes a sound"
+
+class Dog(Animal):
+    def speak(self):                        # override parent method
+        return f"{self.name} says: Woof!"
+
+class Cat(Animal):
+    def speak(self):
+        return f"{self.name} says: Meow!"
+
+animals = [Dog("Rex"), Cat("Whiskers"), Animal("Unknown")]
+for a in animals:
+    print(a.speak())` },
+      { type: 'comparison', title: { tr: 'Java ile Karşılaştırma', en: 'Java vs Python — Inheritance' }, columns: ['Java', 'Python'], rows: [
+        { concept: 'Extend class', java: 'class Dog extends Animal {}', python: 'class Dog(Animal): ...' },
+        { concept: 'Call parent', java: 'super(name);', python: 'super().__init__(name)' },
+        { concept: 'Override', java: '@Override void speak()', python: 'def speak(self): (no annotation)' },
+        { concept: 'Multiple inheritance', java: 'Not supported (use interface)', python: 'class C(A, B): # supported!' },
+      ]},
+      { type: 'quiz', question: { tr: "Python'da parent class constructor'ını çağırmak için ne kullanılır?", en: 'How do you call the parent class constructor in Python?' }, options: [{ id: 'a', text: 'parent().__init__()' }, { id: 'b', text: 'super().__init__()' }, { id: 'c', text: 'this.__init__()' }, { id: 'd', text: 'base.__init__()' }], correct: 'b', explanation: { tr: "super().__init__() parent class'ın constructor'ını çağırır. Java'daki super() gibi — ama Python'da açıkça super().__init__() yazılır.", en: "super().__init__() calls the parent class constructor. Like Java's super() — but in Python you must explicitly call super().__init__()." } },
+
+      // ═══════════════════════════════════════════════════════════════════════
+      // W3Schools Topic 21 — Scope
+      // ═══════════════════════════════════════════════════════════════════════
+      { type: 'heading', text: 'Scope', difficulty: '🔴 Advanced' },
+      { type: 'simple-box', emoji: '🔭', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: "Scope, değişkenin görünebildiği alan. Odanın içinde tanımladığın bir şey odanın dışından görünmez — tıpkı bir fonksiyon içindeki değişkenin dışarıdan erişilememesi gibi.", en: "Scope is the area where a variable can be seen. Something defined inside a room can't be seen from outside — just like a variable inside a function can't be accessed from outside." } },
+      { type: 'text', content: { tr: "Python LEGB kuralını kullanır: Local → Enclosing → Global → Built-in. Java'da benzer kural: yerel değişken → metod → sınıf → paket. 'global' keyword'ü ile Python'da global değişkene yazılabilir — ama bu pratikte kaçınılması gereken bir pattern.", en: "Python uses the LEGB rule: Local → Enclosing → Global → Built-in. Java has a similar rule. The 'global' keyword allows writing to a global variable — but this pattern is generally avoided in practice." } },
+      { type: 'code', language: 'python', code: `# Python Scope — LEGB Rule
+x = "global"                    # Global scope — visible everywhere
+
+def outer():
+    x = "enclosing"             # Enclosing scope
+
+    def inner():
+        x = "local"             # Local scope — shadows outer x
+        print(f"inner: {x}")    # local
+
+    inner()
+    print(f"outer: {x}")        # enclosing
+
+outer()
+print(f"global: {x}")           # global
+
+# global keyword — modify global from inside function
+counter = 0
+
+def increment():
+    global counter              # declare we want to write to global
+    counter += 1
+
+increment()
+increment()
+print(f"Counter: {counter}")    # 2
+
+# nonlocal — modify enclosing scope variable
+def make_counter():
+    count = 0
+    def tick():
+        nonlocal count          # modify enclosing count
+        count += 1
+        return count
+    return tick
+
+c = make_counter()
+print(c(), c(), c())            # 1 2 3` },
+      { type: 'editor', lang: 'python', defaultCode: `# Test scope understanding
+total = 0
+
+def add(n):
+    global total
+    total += n
+
+add(5)
+add(3)
+add(2)
+print(f"Total: {total}")        # Should print 10` },
+      { type: 'quiz', question: { tr: "Python'da LEGB kuralında 'E' neyi temsil eder?", en: "In Python's LEGB rule, what does 'E' stand for?" }, options: [{ id: 'a', text: 'External' }, { id: 'b', text: 'Enclosing' }, { id: 'c', text: 'Exported' }, { id: 'd', text: 'Extended' }], correct: 'b', explanation: { tr: "LEGB = Local, Enclosing, Global, Built-in. Python değişkeni bu sırayla arar. Enclosing, iç içe fonksiyonlarda dıştaki fonksiyonun kapsamını ifade eder.", en: "LEGB = Local, Enclosing, Global, Built-in. Python searches for variables in this order. Enclosing refers to the scope of outer functions in nested function definitions." } },
+
+      // ═══════════════════════════════════════════════════════════════════════
+      // W3Schools Topic 22 — Modules
+      // ═══════════════════════════════════════════════════════════════════════
+      { type: 'heading', text: 'Modules', difficulty: '🔴 Advanced' },
+      { type: 'simple-box', emoji: '📦', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: "Module, araç kutusu gibi. Matematiksel işlemler için 'math' kutusunu aç, tarih işlemleri için 'datetime' kutusunu. Her kutuda hazır araçlar var — sıfırdan yazman gerekmiyor.", en: "A module is like a toolbox. Open the 'math' toolbox for math operations, 'datetime' for date work. Each box has ready-made tools — you don't need to build them from scratch." } },
+      { type: 'text', content: { tr: "Java'da import java.util.List gibi paket import edilir. Python'da import math veya from math import sqrt. Python'da kendi modülünü yazmak da çok kolay — .py dosyası oluştur, import et.", en: "Java imports packages like import java.util.List. Python uses import math or from math import sqrt. Writing your own module in Python is simple — just create a .py file and import it." } },
+      { type: 'code', language: 'python', code: `import os                       # operating system interface
+import sys                      # system-specific parameters
+import json                     # JSON encode/decode
+from datetime import datetime   # import specific class from module
+from math import sqrt, pi       # import multiple names
+
+# os module — file system operations
+print(os.getcwd())              # current working directory
+print(os.path.exists("/tmp"))   # True/False — check if path exists
+
+# sys module — interpreter info
+print(sys.version)              # Python version string
+print(sys.platform)             # 'linux', 'win32', 'darwin'
+
+# math module
+print(sqrt(144))                # 12.0
+print(round(pi, 4))             # 3.1416
+
+# datetime module
+now = datetime.now()
+print(now.strftime("%Y-%m-%d %H:%M"))  # 2024-01-15 14:30
+
+# Custom module (if you had a file qa_helpers.py):
+# import qa_helpers
+# qa_helpers.take_screenshot(driver)
+print("Modules loaded successfully")` },
+      { type: 'editor', lang: 'python', defaultCode: `import random
+import string
+
+# Generate a random test user
+def generate_user():
+    suffix = ''.join(random.choices(string.digits, k=4))
+    email = f"testuser{suffix}@qa.example.com"
+    return {"email": email, "id": int(suffix)}
+
+for i in range(3):
+    user = generate_user()
+    print(user)` },
+      { type: 'quiz', question: { tr: "Python'da math modülünden sadece sqrt fonksiyonunu import etmek için hangi syntax kullanılır?", en: 'Which syntax imports only sqrt from the math module?' }, options: [{ id: 'a', text: 'import math.sqrt' }, { id: 'b', text: 'from math import sqrt' }, { id: 'c', text: 'include math: sqrt' }, { id: 'd', text: 'using math import sqrt' }], correct: 'b', explanation: { tr: "'from math import sqrt' sadece sqrt'yi import eder. Java'daki static import gibi: import static java.lang.Math.sqrt; Python'da bu şekilde kullanılır.", en: "'from math import sqrt' imports only sqrt. Like Java's static import: import static java.lang.Math.sqrt; This is the Python equivalent." } },
+
+      // ═══════════════════════════════════════════════════════════════════════
+      // W3Schools Topic 23 — Try...Except (Error Handling)
+      // ═══════════════════════════════════════════════════════════════════════
+      { type: 'heading', text: 'Try...Except', difficulty: '🔴 Advanced' },
+      { type: 'simple-box', emoji: '🛡️', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: "Try-except, kalkan gibi. 'Dene, çalışmazsa şu planı uygula.' Bisiklet sürerken düşebilirsin — ama kaskın varsa ciddi bir şey olmaz. Kod patlarsa except bloğu devreye girer.", en: "Try-except is like a safety helmet. 'Try this, if it breaks do this instead.' You might fall off a bike — but with a helmet, nothing serious happens. If code crashes, except catches it." } },
+      { type: 'text', content: { tr: "Java'da try-catch-finally kullanılır. Python'da da aynı yapı var: try-except-finally. Java'da Exception sınıfından türetme — Python'da da aynı. Fark: Python'da as keyword'ü ile exception nesnesine erişilir.", en: "Java uses try-catch-finally. Python has the same structure: try-except-finally. Both inherit from a base Exception class. Difference: Python uses the 'as' keyword to access the exception object." } },
+      { type: 'code', language: 'python', code: `# Python Error Handling — QA Patterns
+def safe_divide(a, b):
+    try:
+        result = a / b              # might raise ZeroDivisionError
+        return result
+    except ZeroDivisionError:       # specific exception — like catch(ArithmeticException e)
+        print("Cannot divide by zero!")
+        return None
+    except TypeError as e:          # 'as e' gives access to error object
+        print(f"Wrong type: {e}")
+        return None
+    else:                           # runs only if NO exception (no Java equivalent)
+        print("Division OK")        # Note: this is after return, so only runs if not returned
+    finally:
+        print("Division attempted") # ALWAYS runs — like Java finally
+
+# Multiple exception types
+def read_config(path):
+    try:
+        with open(path) as f:
+            return f.read()
+    except FileNotFoundError:
+        print(f"Config not found: {path}")
+    except PermissionError:
+        print("No read permission")
+    except (IOError, OSError) as e:  # catch multiple types at once
+        print(f"IO error: {e}")
+    return None
+
+# Custom exception
+class TestFailedError(Exception):
+    def __init__(self, test_name, expected, actual):
+        super().__init__(f"Test '{test_name}' failed: expected={expected}, actual={actual}")
+        self.test_name = test_name
+
+try:
+    raise TestFailedError("login_test", "dashboard", "error_page")
+except TestFailedError as e:
+    print(f"Caught: {e}")
+
+print(safe_divide(10, 2))` },
+      { type: 'editor', lang: 'python', defaultCode: `# Practice: handle multiple errors gracefully
+def get_user_age(data, key):
+    try:
+        age = data[key]
+        return int(age)
+    except KeyError:
+        print(f"Key '{key}' not found in data")
+    except ValueError:
+        print(f"Cannot convert '{data.get(key)}' to integer")
+    return -1
+
+print(get_user_age({"age": "25"}, "age"))         # 25
+print(get_user_age({"age": "abc"}, "age"))        # ValueError
+print(get_user_age({"name": "Ali"}, "age"))       # KeyError` },
+      { type: 'comparison', title: { tr: 'Java ile Karşılaştırma', en: 'Java vs Python — Error Handling' }, columns: ['Java', 'Python'], rows: [
+        { concept: 'Try block', java: 'try { ... }', python: 'try: ...' },
+        { concept: 'Catch', java: 'catch (IOException e) { }', python: 'except IOError as e:' },
+        { concept: 'Finally', java: 'finally { }', python: 'finally:' },
+        { concept: 'Multiple catches', java: 'catch (A | B e)', python: 'except (A, B) as e:' },
+        { concept: 'Else (no exception)', java: 'not available', python: 'else: (runs if no exception)' },
+      ]},
+      { type: 'quiz', question: { tr: "Python'da exception olmadığında çalışan blok hangisidir?", en: 'Which block in Python runs only when no exception occurs?' }, options: [{ id: 'a', text: 'finally' }, { id: 'b', text: 'else' }, { id: 'c', text: 'clean' }, { id: 'd', text: 'ok' }], correct: 'b', explanation: { tr: "'else' bloğu try bloğu exception fırlatmadan tamamlandığında çalışır. Java'da bu bloğun karşılığı yok — Python'a özgü.", en: "The 'else' block runs only when the try block completes without raising an exception. Java has no equivalent — this is unique to Python." } },
+
+      // ═══════════════════════════════════════════════════════════════════════
+      // W3Schools Topic 24 — JSON
+      // ═══════════════════════════════════════════════════════════════════════
+      { type: 'heading', text: 'JSON', difficulty: '🔴 Advanced' },
+      { type: 'simple-box', emoji: '🔄', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: "JSON, evrensel dil gibi. Farklı dillerdeki programlar birbirleriyle konuşmak için JSON kullanır. Türkçe-İngilizce tercüman gibi — Python dict'ini JSON'a çevir, karşı taraf anlasın.", en: "JSON is like a universal language. Programs in different languages use JSON to talk to each other. Like a translator — convert Python dict to JSON, and any other language can understand it." } },
+      { type: 'text', content: { tr: "Java'da Jackson veya Gson kütüphanesi kullanılır. Python'da standart kütüphane 'json' modülü yeterli — import etmek yeterli. json.dumps() Python'u JSON string'e, json.loads() JSON string'i Python'a çevirir.", en: "Java requires Jackson or Gson library. Python's built-in 'json' module is sufficient — just import it. json.dumps() converts Python to JSON string, json.loads() converts JSON string back to Python." } },
+      { type: 'code', language: 'python', code: `import json
+
+# Python dict → JSON string (dumps = dump string)
+test_result = {
+    "test_name": "login_test",
+    "status": "PASS",
+    "duration_ms": 342,
+    "tags": ["regression", "smoke"],
+    "metadata": None           # None → null in JSON
+}
+
+json_str = json.dumps(test_result, indent=2)   # indent=2 for pretty print
+print(json_str)
+
+# JSON string → Python dict (loads = load string)
+api_response = '''
+{
+  "users": [
+    {"id": 1, "email": "alice@example.com", "active": true},
+    {"id": 2, "email": "bob@example.com", "active": false}
+  ],
+  "total": 2
+}
+'''
+
+data = json.loads(api_response)
+print(type(data))              # <class 'dict'>
+print(data["total"])           # 2
+print(data["users"][0]["email"])  # alice@example.com
+
+# Filter active users — common QA pattern
+active = [u for u in data["users"] if u["active"]]
+print(f"Active users: {len(active)}")` },
+      { type: 'editor', lang: 'python', defaultCode: `import json
+
+# Parse this API response and check all tests passed
+response = """
+{
+  "suite": "Regression Suite",
+  "results": [
+    {"name": "login", "status": "PASS", "ms": 342},
+    {"name": "checkout", "status": "PASS", "ms": 891},
+    {"name": "profile", "status": "FAIL", "ms": 1205}
+  ]
+}
+"""
+
+data = json.loads(response)
+failed = [r for r in data["results"] if r["status"] != "PASS"]
+print(f"Suite: {data['suite']}")
+print(f"Total: {len(data['results'])}, Failed: {len(failed)}")
+if failed:
+    for f in failed:
+        print(f"  FAIL: {f['name']} ({f['ms']}ms)")` },
+      { type: 'quiz', question: { tr: "Python'da dict'i JSON string'e dönüştüren fonksiyon hangisidir?", en: 'Which function converts a Python dict to a JSON string?' }, options: [{ id: 'a', text: 'json.stringify()' }, { id: 'b', text: 'json.encode()' }, { id: 'c', text: 'json.dumps()' }, { id: 'd', text: 'json.serialize()' }], correct: 'c', explanation: { tr: "json.dumps() (dump string) Python nesnesini JSON string'e çevirir. json.loads() (load string) tersini yapar. JavaScript'teki JSON.stringify() ve JSON.parse() gibi.", en: "json.dumps() (dump string) converts Python objects to JSON string. json.loads() (load string) does the reverse. Like JavaScript's JSON.stringify() and JSON.parse()." } },
+
+      // ═══════════════════════════════════════════════════════════════════════
+      // W3Schools Topic 25 — RegEx
+      // ═══════════════════════════════════════════════════════════════════════
+      { type: 'heading', text: 'RegEx', difficulty: '🔴 Advanced' },
+      { type: 'simple-box', emoji: '🔍', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: "Regex, metin arama için çok güçlü bir filtre. 'E-posta bul' gibi değil — '@' işareti olan, noktayla biten, belirli uzunlukta olan metinleri bul. QA'de form validation testlerinde çok kullanılır.", en: "Regex is a powerful text filter. Not just 'find email' — find text that has '@', ends with a dot, has a specific length. Very useful in QA for form validation testing." } },
+      { type: 'code', language: 'python', code: `import re   # regular expressions module
+
+# Basic patterns:
+# \d = digit, \w = word char, \s = whitespace
+# .  = any char, * = 0+, + = 1+, ? = 0 or 1
+# ^  = start of string, $ = end
+
+# --- Email validation (common QA use case) ---
+email_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+
+emails = ["alice@example.com", "not-an-email", "user@.com", "test@qa.org"]
+for email in emails:
+    is_valid = bool(re.match(email_pattern, email))
+    print(f"{email}: {'VALID' if is_valid else 'INVALID'}")
+
+# --- Extract data from text ---
+log = "2024-01-15 14:32:01 ERROR test_login.py:42 Timeout after 30s"
+date = re.search(r'\d{4}-\d{2}-\d{2}', log)    # find date
+level = re.search(r'(ERROR|WARN|INFO)', log)      # find log level
+
+print(f"Date: {date.group()}")                    # 2024-01-15
+print(f"Level: {level.group()}")                  # ERROR
+
+# --- Find all matches ---
+text = "Test IDs: TC-001, TC-042, TC-099 passed"
+ids = re.findall(r'TC-\d{3}', text)
+print(f"Found: {ids}")                            # ['TC-001', 'TC-042', 'TC-099']
+
+# --- Replace ---
+masked = re.sub(r'\b\d{4}\b', '****', "Card: 1234 expires 2025")
+print(masked)                                     # Card: **** expires ****` },
+      { type: 'editor', lang: 'python', defaultCode: `import re
+
+# Validate phone numbers: format must be +90-555-123-4567 or 05551234567
+phone_pattern = r'^(\+90-\d{3}-\d{3}-\d{4}|0\d{10})$'
+
+phones = ["+90-555-123-4567", "05551234567", "5551234", "+1-555-123-4567"]
+for phone in phones:
+    valid = bool(re.match(phone_pattern, phone))
+    print(f"{phone}: {'VALID' if valid else 'INVALID'}")` },
+      { type: 'quiz', question: { tr: "re.findall() ve re.search() arasındaki fark nedir?", en: 'What is the difference between re.findall() and re.search()?' }, options: [{ id: 'a', text: { tr: 'Hiçbir fark yok', en: 'No difference' } }, { id: 'b', text: { tr: 'findall tüm eşleşmeleri listeler, search ilkini bulur', en: 'findall returns all matches as list, search returns first match object' } }, { id: 'c', text: { tr: 'search sadece başlangıçta arar', en: 'search only checks at the start' } }, { id: 'd', text: { tr: 'findall büyük/küçük harf duyarsız', en: 'findall is case-insensitive' } }], correct: 'b', explanation: { tr: "re.findall() tüm eşleşmeleri string listesi olarak döner. re.search() ilk eşleşmeyi Match nesnesi olarak döner — veya None. .group() ile eşleşen metni alırsın.", en: "re.findall() returns all matches as a list of strings. re.search() returns the first match as a Match object — or None. Use .group() to get the matched text." } },
+
+      // ═══════════════════════════════════════════════════════════════════════
+      // W3Schools Topic 26 — Comprehensions
+      // ═══════════════════════════════════════════════════════════════════════
+      { type: 'heading', text: 'Comprehensions', difficulty: '🔴 Advanced' },
+      { type: 'simple-box', emoji: '⚡', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: "Comprehension, listeni tek satırda oluşturmanın kısa yolu. 'Sepetteki tüm meyvelerden sadece kırmızı olanları al' — bunu Python'da tek satırda yazabilirsin. Uzun for döngüsü yazmaya gerek yok.", en: "Comprehension is a shortcut to build lists in one line. 'From all fruits in basket, take only the red ones' — Python lets you write this in one line. No need for a long for loop." } },
+      { type: 'code', language: 'python', code: `# List Comprehension — [expression for item in iterable if condition]
+numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+# Without comprehension (Java-style):
+evens_java = []
+for n in numbers:
+    if n % 2 == 0:
+        evens_java.append(n)
+
+# With list comprehension:
+evens = [n for n in numbers if n % 2 == 0]
+squares = [n**2 for n in range(1, 6)]
+print(evens)    # [2, 4, 6, 8, 10]
+print(squares)  # [1, 4, 9, 16, 25]
+
+# QA Use Case: filter test results
+results = [
+    {"name": "login", "status": "PASS", "ms": 342},
+    {"name": "checkout", "status": "FAIL", "ms": 891},
+    {"name": "profile", "status": "PASS", "ms": 215},
+    {"name": "payment", "status": "FAIL", "ms": 3201},
+]
+
+failed_tests = [r["name"] for r in results if r["status"] == "FAIL"]
+slow_tests = [r["name"] for r in results if r["ms"] > 500]
+print(f"Failed: {failed_tests}")   # ['checkout', 'payment']
+print(f"Slow: {slow_tests}")       # ['checkout', 'payment']
+
+# Dict comprehension
+durations = {r["name"]: r["ms"] for r in results}
+print(durations)   # {'login': 342, 'checkout': 891, ...}
+
+# Set comprehension (unique statuses)
+statuses = {r["status"] for r in results}
+print(statuses)    # {'PASS', 'FAIL'}` },
+      { type: 'editor', lang: 'python', defaultCode: `# Use comprehensions to process this test data
+tests = [
+    {"id": "TC-001", "duration": 120, "passed": True},
+    {"id": "TC-002", "duration": 2500, "passed": False},
+    {"id": "TC-003", "duration": 89, "passed": True},
+    {"id": "TC-004", "duration": 1800, "passed": False},
+    {"id": "TC-005", "duration": 342, "passed": True},
+]
+
+# 1. Get IDs of failed tests
+failed = [t["id"] for t in tests if not t["passed"]]
+
+# 2. Get avg duration of passed tests
+passed = [t["duration"] for t in tests if t["passed"]]
+avg = sum(passed) / len(passed) if passed else 0
+
+print(f"Failed: {failed}")
+print(f"Avg duration of passed tests: {avg:.0f}ms")` },
+      { type: 'quiz', question: { tr: "[x*2 for x in range(5) if x % 2 == 0] ne üretir?", en: 'What does [x*2 for x in range(5) if x % 2 == 0] produce?' }, options: [{ id: 'a', text: '[0, 2, 4, 6, 8]' }, { id: 'b', text: '[0, 4, 8]' }, { id: 'c', text: '[0, 2, 4]' }, { id: 'd', text: '[2, 4, 6, 8, 10]' }], correct: 'b', explanation: { tr: "range(5) = 0,1,2,3,4. x%2==0 filtrelemesi: 0,2,4 kalır. x*2 işlemi: 0,4,8. Sonuç: [0, 4, 8].", en: "range(5) = 0,1,2,3,4. Filter x%2==0 keeps 0,2,4. Then x*2 gives 0,4,8. Result: [0, 4, 8]." } },
+
+      // ═══════════════════════════════════════════════════════════════════════
+      // W3Schools Topic 27 — Iterators
+      // ═══════════════════════════════════════════════════════════════════════
+      { type: 'heading', text: 'Iterators', difficulty: '🔴 Advanced' },
+      { type: 'simple-box', emoji: '🎡', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: "Iterator, sıra bekleyen bir kuyruk gibi. Her defasında bir sonraki kişiyi verir. Dondurma kuyruğu — her çağırdığında sıradaki kişi gelir, kuyruğun hepsi hafızada değil.", en: "An iterator is like a queue. Each time you ask, it gives you the next one. An ice cream queue — each call gives the next person, not everyone in memory at once." } },
+      { type: 'code', language: 'python', code: `# Python Iterators and Generators
+# Iterator protocol: __iter__() and __next__()
+
+# Simple counter iterator
+class TestCounter:
+    def __init__(self, max_count):
+        self.max = max_count
+        self.current = 0
+
+    def __iter__(self):             # returns the iterator object itself
+        return self
+
+    def __next__(self):             # returns next value
+        if self.current >= self.max:
+            raise StopIteration    # signals end — like Java's hasNext() returning False
+        self.current += 1
+        return f"TC-{self.current:03d}"
+
+# Use in for loop — Python calls __next__ automatically
+for tc in TestCounter(5):
+    print(tc)                      # TC-001, TC-002, ..., TC-005
+
+# Built-in iterators
+lst = [10, 20, 30]
+it = iter(lst)                     # get iterator from list
+print(next(it))                    # 10
+print(next(it))                    # 20
+print(next(it))                    # 30
+
+# Generator function — simpler way to create iterators
+def test_ids(prefix, count):
+    for i in range(1, count + 1):
+        yield f"{prefix}-{i:03d}"  # yield pauses and returns value
+
+for id in test_ids("SMOKE", 3):
+    print(id)                      # SMOKE-001, SMOKE-002, SMOKE-003` },
+      { type: 'editor', lang: 'python', defaultCode: `# Generator that yields test data lazily
+def generate_test_users(count):
+    for i in range(1, count + 1):
+        yield {
+            "id": i,
+            "email": f"user{i:03d}@test.com",
+            "role": "admin" if i == 1 else "user"
+        }
+
+# Only processes one user at a time — memory efficient!
+for user in generate_test_users(5):
+    print(user)` },
+      { type: 'quiz', question: { tr: "Python'da bir generator fonksiyonu oluşturmak için hangi keyword kullanılır?", en: 'Which keyword is used to create a generator function in Python?' }, options: [{ id: 'a', text: 'return' }, { id: 'b', text: 'generate' }, { id: 'c', text: 'yield' }, { id: 'd', text: 'next' }], correct: 'c', explanation: { tr: "'yield' ile normal fonksiyon generator'a dönüşür. Her yield çağrısında değer döner ve fonksiyon duraklar. Java'da bu pattern için Iterator interface'i implement edilir.", en: "'yield' turns a normal function into a generator. Each yield returns a value and pauses the function. In Java, you'd implement the Iterator interface for this pattern." } },
+
+      // ═══════════════════════════════════════════════════════════════════════
+      // W3Schools Topic 28 — Decorators
+      // ═══════════════════════════════════════════════════════════════════════
+      { type: 'heading', text: 'Decorators', difficulty: '🔴 Advanced' },
+      { type: 'simple-box', emoji: '🎀', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: "Decorator, hediye paketleyici gibi. Çikolata güzel — ama paketleyince daha iyi görünüyor. Decorator, bir fonksiyonun etrafına ek davranış sarar — fonksiyonu değiştirmeden.", en: "A decorator is like a gift wrapper. Chocolate is great — but wrapped it looks even better. A decorator wraps a function with extra behavior — without changing the function itself." } },
+      { type: 'text', content: { tr: "Java'da Aspect Oriented Programming (AOP) veya @annotation + proxy pattern ile benzer şeyler yapılır. Python'da decorator çok daha basit — sadece @ ile fonksiyon üstüne yaz. QA'de retry, timer, log gibi cross-cutting concerns için idealdir.", en: "Java does similar things with AOP or @annotation + proxy pattern. Python decorators are much simpler — just write @ above the function. In QA, ideal for cross-cutting concerns like retry, timer, and logging." } },
+      { type: 'code', language: 'python', code: `import functools
+import time
+
+# Basic decorator — logs function calls
+def log_call(func):
+    @functools.wraps(func)           # preserves function metadata
+    def wrapper(*args, **kwargs):
+        print(f"Calling {func.__name__}({args}, {kwargs})")
+        result = func(*args, **kwargs)
+        print(f"{func.__name__} returned: {result}")
         return result
     return wrapper
 
-@timer                                # equivalent to: load_data = timer(load_data)
-def load_data(path: str) -> list:
-    # ... reads CSV ...
-    return []
+@log_call                            # equivalent to: add = log_call(add)
+def add(a, b):
+    return a + b
 
-load_data("results.csv")
-# Output: load_data took 12.3ms
+add(3, 5)                            # prints call info + 8
 
-# Retry decorator — critical for flaky tests:
-def retry(max_attempts: int = 3, delay: float = 1.0):
+# Decorator with parameters (factory pattern)
+def retry(times=3, delay=1.0):
     def decorator(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
-            for attempt in range(1, max_attempts + 1):
+            for attempt in range(1, times + 1):
                 try:
                     return func(*args, **kwargs)
                 except Exception as e:
-                    if attempt == max_attempts:
-                        raise          # last attempt — re-raise
-                    print(f"Attempt {attempt} failed: {e}. Retrying in {delay}s...")
-                    time.sleep(delay)
+                    print(f"Attempt {attempt}/{times} failed: {e}")
+                    if attempt < times:
+                        time.sleep(delay)
+            raise RuntimeError(f"{func.__name__} failed after {times} attempts")
         return wrapper
     return decorator
 
-@retry(max_attempts=3, delay=0.5)
-def unstable_api_call():
+@retry(times=3, delay=0.1)           # QA pattern: retry flaky tests
+def unstable_check():
     import random
-    if random.random() < 0.7:
-        raise ConnectionError("Intermittent failure")
-    return {"status": "ok"}`,
-        expected: `load_data took 12.3ms`
-      },
+    if random.random() < 0.5:
+        raise ConnectionError("Flaky network")
+    return "OK"
+
+try:
+    print(unstable_check())
+except RuntimeError as e:
+    print(e)` },
+      { type: 'editor', lang: 'python', defaultCode: `import time
+import functools
+
+# Write a timer decorator that measures execution time
+def timer(func):
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        start = time.perf_counter()
+        result = func(*args, **kwargs)
+        end = time.perf_counter()
+        print(f"{func.__name__} took {(end-start)*1000:.1f}ms")
+        return result
+    return wrapper
+
+@timer
+def slow_function(n):
+    total = 0
+    for i in range(n):
+        total += i
+    return total
+
+result = slow_function(100000)
+print(f"Result: {result}")` },
+      { type: 'quiz', question: { tr: "@functools.wraps(func) ne işe yarar?", en: 'What does @functools.wraps(func) do in a decorator?' }, options: [{ id: 'a', text: { tr: 'Fonksiyonu kopyalar', en: 'Copies the function' } }, { id: 'b', text: { tr: "Wrapper'ın orijinal fonksiyonun adını ve docstring'ini korumasını sağlar", en: "Preserves the original function's name and docstring on the wrapper" } }, { id: 'c', text: { tr: 'Decorator olmadan çağrılmasını sağlar', en: 'Allows calling without the decorator' } }, { id: 'd', text: { tr: 'Performansı artırır', en: 'Improves performance' } }], correct: 'b', explanation: { tr: "@functools.wraps(func) olmadan, wrapper.__name__ 'wrapper' olur. Wraps ile orijinal fonksiyonun adı ve docstring'i korunur — debugging ve logging için önemli.", en: "Without @functools.wraps(func), wrapper.__name__ would be 'wrapper'. Wraps preserves the original name and docstring — important for debugging and logging." } },
+
+      // ═══════════════════════════════════════════════════════════════════════
+      // W3Schools Topic 29 — Context Managers
+      // ═══════════════════════════════════════════════════════════════════════
       { type: 'heading', text: 'Context Managers', difficulty: '🔴 Advanced' },
-      {
-        type: 'code',
-        code: `import sqlite3
-from contextlib import contextmanager
+      { type: 'simple-box', emoji: '🚪', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: "Context manager, otomatik kapı gibi. Kütüphaneye girince kapı açılır, çıkınca kapanır — sen manuel kapatmak zorunda değilsin. Dosya açınca aynı şey: 'with' ile açarsan, Python otomatik kapatır.", en: "A context manager is like an automatic door. It opens when you enter, closes when you leave — you don't need to close it manually. Same with files: use 'with' and Python closes it automatically." } },
+      { type: 'code', language: 'python', code: `from contextlib import contextmanager
+import time
 
-# Custom context manager for DB connections:
+# 'with' statement — guaranteed cleanup (like try-finally)
+# Instead of:
+# f = open("test.txt")
+# try:
+#     data = f.read()
+# finally:
+#     f.close()   # must remember to close!
+
+# Use 'with' — auto-closes even if exception occurs:
+# with open("test.txt") as f:
+#     data = f.read()
+
+# Custom context manager using @contextmanager
 @contextmanager
-def get_db_connection(db_path: str):
-    """Opens, yields, and auto-closes a DB connection."""
-    conn = sqlite3.connect(db_path)    # setup
+def test_timer(test_name):
+    start = time.perf_counter()
+    print(f"Starting: {test_name}")
     try:
-        yield conn                      # code inside "with" runs here
-        conn.commit()                   # commit on success
-    except Exception:
-        conn.rollback()                 # rollback on any error
-        raise
+        yield                          # code inside 'with' runs here
     finally:
-        conn.close()                    # ALWAYS closes
+        elapsed = (time.perf_counter() - start) * 1000
+        print(f"Finished: {test_name} ({elapsed:.1f}ms)")
 
-# Usage:
-with get_db_connection("test.db") as db:
-    db.execute("CREATE TABLE IF NOT EXISTS runs (id INT, name TEXT)")
-    db.execute("INSERT INTO runs VALUES (1, 'Login Test')")
-# committed and closed automatically
+# Usage
+with test_timer("login_test"):
+    time.sleep(0.01)                  # simulate test work
+    print("  Executing login test...")
 
-print("DB operations complete")`,
-        expected: `DB operations complete`
-      },
+# Class-based context manager
+class DatabaseConnection:
+    def __init__(self, db_name):
+        self.db_name = db_name
+
+    def __enter__(self):              # setup — called on 'with' entry
+        print(f"Connecting to {self.db_name}")
+        return self                   # returned as 'as' variable
+
+    def __exit__(self, exc_type, exc_val, exc_tb):  # teardown
+        print(f"Closing connection to {self.db_name}")
+        return False                  # False = don't suppress exceptions
+
+with DatabaseConnection("test_db") as db:
+    print("  Running queries...")` },
+      { type: 'editor', lang: 'python', defaultCode: `from contextlib import contextmanager
+
+@contextmanager
+def assert_raises(exception_type):
+    """Context manager that passes only if the expected exception is raised."""
+    try:
+        yield
+        # If we get here, no exception was raised
+        raise AssertionError(f"Expected {exception_type.__name__} but no exception raised")
+    except exception_type:
+        print(f"OK: {exception_type.__name__} was raised as expected")
+    except Exception as e:
+        raise AssertionError(f"Expected {exception_type.__name__}, got {type(e).__name__}: {e}")
+
+# Test it
+with assert_raises(ZeroDivisionError):
+    result = 1 / 0
+
+with assert_raises(ValueError):
+    int("not a number")` },
+      { type: 'quiz', question: { tr: "Python'da with statement kullanmanın temel avantajı nedir?", en: 'What is the main advantage of using a with statement in Python?' }, options: [{ id: 'a', text: { tr: 'Daha hızlı çalışır', en: 'It runs faster' } }, { id: 'b', text: { tr: 'Exception olsa bile cleanup kodu garanti çalışır', en: 'Cleanup code runs guaranteed even if an exception occurs' } }, { id: 'c', text: { tr: 'Sadece dosya işlemleri için kullanılır', en: 'Can only be used with files' } }, { id: 'd', text: { tr: "try/except'e gerek bırakmaz", en: "Eliminates the need for try/except" } }], correct: 'b', explanation: { tr: "with statement, __exit__ metodunun exception durumunda bile çalışmasını garanti eder. Java'daki try-with-resources gibi: try (Resource r = new Resource()). Kaynak sızıntısını önler.", en: "The with statement guarantees __exit__ runs even if an exception occurs. Like Java's try-with-resources: try (Resource r = new Resource()). Prevents resource leaks." } },
+
+      // ═══════════════════════════════════════════════════════════════════════
+      // W3Schools Topic 30 — Type Hints
+      // ═══════════════════════════════════════════════════════════════════════
       { type: 'heading', text: 'Type Hints', difficulty: '🔴 Advanced' },
-      {
-        type: 'code',
-        code: `from typing import Optional, List, Dict, Union, Callable
+      { type: 'simple-box', emoji: '🏷️', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: "Type hint, adım adım tariften 'şekeri ölçerken bardakla değil, gramla koy' demek gibi. Zorunlu değil ama çok yardımcı — IDE sana yanlış tip verdiğinde uyarır, ekip arkadaşın kodu daha hızlı anlar.", en: "Type hints are like adding 'use grams not cups' to a recipe. Not required but very helpful — your IDE warns you about wrong types, and teammates understand the code faster." } },
+      { type: 'text', content: { tr: "Java statically-typed — her değişkene tip belirtmek zorunlu: String name = 'Ali'. Python dynamically-typed — tip opsiyonel ama type hint ekleyebilirsin: name: str = 'Ali'. Çalışma zamanında fark yaratmaz, sadece IDE ve mypy gibi araçlar kullanır.", en: "Java is statically-typed — types are mandatory: String name = 'Ali'. Python is dynamically-typed — types are optional but you can add hints: name: str = 'Ali'. No runtime difference, only IDEs and tools like mypy use them." } },
+      { type: 'code', language: 'python', code: `from typing import Optional, List, Dict, Union, Tuple, Callable
 
-# Type hints document intent and catch bugs with mypy:
-def parse_results(
-    raw_data: List[Dict[str, str]],    # list of string-keyed dicts
-    filter_status: Optional[str] = None,
-) -> Dict[str, int]:                    # returns str->int dict
-    counts: Dict[str, int] = {"PASS": 0, "FAIL": 0, "SKIP": 0}
-    for result in raw_data:
-        status = result.get("status", "UNKNOWN")
-        if filter_status and status != filter_status:
-            continue
-        counts[status] = counts.get(status, 0) + 1
-    return counts
+# Basic type hints
+name: str = "Alice"             # string
+age: int = 25                   # integer
+score: float = 98.5             # float
+active: bool = True             # boolean
 
-# Union: accepts multiple types:
-def get_test_id(identifier: Union[int, str]) -> str:
+# Function with type hints
+def greet(name: str, times: int = 1) -> str:    # -> return type
+    return (f"Hello, {name}! " * times).strip()
+
+print(greet("Bob", 3))
+
+# Complex types
+def process_results(
+    results: List[Dict[str, str]],  # list of string-keyed dicts
+    filter_by: Optional[str] = None  # Optional = can be None or str
+) -> Tuple[int, int]:               # returns (pass_count, fail_count)
+    passed = sum(1 for r in results if r.get("status") == "PASS")
+    failed = sum(1 for r in results if r.get("status") == "FAIL")
+    return (passed, failed)
+
+# Union type — accepts multiple types
+def get_id(identifier: Union[int, str]) -> str:
     if isinstance(identifier, int):
         return f"TC-{identifier:04d}"
     return identifier
 
-print(get_test_id(42))    # TC-0042
-print(get_test_id("TC-007"))  # TC-007`,
-        expected: `TC-0042\nTC-007`
-      },
-      { type: 'heading', text: 'Pytest Fundamentals', difficulty: '🔴 Advanced' },
-      {
-        type: 'code',
-        label: 'conftest.py',
-        code: `import pytest
-import sqlite3
+print(get_id(42))           # TC-0042
+print(get_id("TC-007"))     # TC-007
 
-# conftest.py — shared fixtures for all tests in the folder
+# Python 3.10+ shorthand: X | Y instead of Union[X, Y]
+def newer(val: int | str) -> str:
+    return str(val)` },
+      { type: 'editor', lang: 'python', defaultCode: `from typing import Optional, List
 
-@pytest.fixture(scope="session")       # ONE connection for entire test session
-def db_conn():
-    conn = sqlite3.connect(":memory:") # in-memory DB
-    conn.execute("""
-        CREATE TABLE users (
-            id    INTEGER PRIMARY KEY AUTOINCREMENT,
-            email TEXT    NOT NULL UNIQUE,
-            role  TEXT    DEFAULT 'user'
-        )
-    """)
-    conn.commit()
-    yield conn
-    conn.close()
+class TestSuite:
+    def __init__(self, name: str) -> None:
+        self.name = name
+        self.tests: List[str] = []
 
-@pytest.fixture(scope="function")      # fresh user for EACH test
-def test_user(db_conn):
-    db_conn.execute("INSERT INTO users (email, role) VALUES (?,?)",
-                    ("test@example.com", "user"))
-    db_conn.commit()
-    yield {"email": "test@example.com", "role": "user"}
-    db_conn.execute("DELETE FROM users WHERE email = ?", ("test@example.com",))
-    db_conn.commit()`,
-      },
-      {
-        type: 'code',
-        label: 'test_users.py',
-        code: `import pytest
-import re
+    def add_test(self, test_name: str) -> None:
+        self.tests.append(test_name)
 
-def test_user_exists_in_db(db_conn, test_user):
-    cursor = db_conn.execute(
-        "SELECT email FROM users WHERE email = ?",
-        (test_user["email"],)
-    )
-    row = cursor.fetchone()
-    assert row is not None, "User not found in DB after insert"
-    assert row[0] == test_user["email"]
+    def get_test(self, index: int) -> Optional[str]:
+        if 0 <= index < len(self.tests):
+            return self.tests[index]
+        return None
 
-@pytest.mark.parametrize("email,should_be_valid", [
-    ("alice@example.com", True),      # valid
-    ("not-an-email",      False),     # missing @
-    ("@nodomain.com",     False),     # missing local part
-    ("user@.com",         False),     # missing domain
-])
-def test_email_validation(email, should_be_valid):
-    """parametrize: runs once per tuple."""
-    pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$'
-    result  = bool(re.match(pattern, email))
-    assert result == should_be_valid
+    def summary(self) -> str:
+        return f"Suite '{self.name}': {len(self.tests)} tests"
 
-@pytest.mark.skip(reason="Feature not implemented yet")
-def test_future_feature():
-    pass
+suite = TestSuite("Regression")
+suite.add_test("test_login")
+suite.add_test("test_checkout")
+print(suite.summary())
+print(suite.get_test(0))
+print(suite.get_test(99))   # Should return None` },
+      { type: 'comparison', title: { tr: 'Java ile Karşılaştırma', en: 'Java vs Python — Type System' }, columns: ['Java', 'Python'], rows: [
+        { concept: { tr: 'Tip zorunlu mu?', en: 'Types required?' }, java: 'Yes — compile error if missing', python: 'No — hints are optional' },
+        { concept: 'Optional', java: 'Optional<String>', python: 'Optional[str] or str | None' },
+        { concept: 'List type', java: 'List<String>', python: 'List[str] or list[str]' },
+        { concept: 'Map type', java: 'Map<String, Integer>', python: 'Dict[str, int]' },
+        { concept: 'Type check tool', java: 'javac (compile time)', python: 'mypy (separate tool)' },
+      ]},
+      { type: 'quiz', question: { tr: "Python'da Optional[str] ne anlama gelir?", en: 'What does Optional[str] mean in Python type hints?' }, options: [{ id: 'a', text: { tr: 'Sadece string olabilir', en: 'Can only be a string' } }, { id: 'b', text: { tr: 'String veya None olabilir', en: 'Can be a string or None' } }, { id: 'c', text: { tr: 'Tip belirtmek isteğe bağlı', en: 'The type hint is optional' } }, { id: 'd', text: { tr: 'Birden fazla string', en: 'Multiple strings' } }], correct: 'b', explanation: { tr: "Optional[str] = Union[str, None] — değer str veya None olabilir. Java'daki Optional<String> ile benzer ama Python'da None döndürebilecek fonksiyonlarda yaygın.", en: "Optional[str] = Union[str, None] — the value can be str or None. Similar to Java's Optional<String> but commonly used in Python for functions that might return None." } },
 
-@pytest.mark.xfail(reason="Known bug #123 — pending fix")
-def test_known_failing():
-    assert False`,
-      },
+      // ─── Interview Questions for Advanced Topics ───────────────────────────
+      { type: 'interview-questions', topic: 'Python Advanced', questions: [
+        { level: 'basic', q: { tr: "Python'da decorator ne işe yarar? Bir örnek ver.", en: 'What does a decorator do in Python? Give an example.' }, a: { tr: "Decorator, bir fonksiyonun davranışını değiştirmek veya genişletmek için kullanılır — orijinal fonksiyona dokunmadan. @retry, @timer, @cache gibi. def retry(func): wrapper(*args): try: func(*args) except: retry... Bir QA test framework'ünde flaky testler için @retry(times=3) dekoratörü kullanılabilir.", en: "A decorator modifies or extends a function's behavior without touching the original. Examples: @retry, @timer, @cache. In a QA test framework, @retry(times=3) can automatically retry flaky tests." } },
+        { level: 'basic', q: { tr: "Python'da 'with' statement ne zaman kullanılır?", en: "When do you use the 'with' statement in Python?" }, a: { tr: "Kaynak yönetimi gereken yerlerde: dosya açma, veritabanı bağlantısı, network bağlantısı. with open('file.txt') as f: otomatik kapatır. Hata olsa bile __exit__ çalışır — Java'daki try-with-resources gibi.", en: "When resource management is needed: file operations, database connections, network connections. with open('file.txt') as f: closes automatically. __exit__ runs even if an error occurs — like Java's try-with-resources." } },
+        { level: 'intermediate', q: { tr: "Python'da generator ve list arasındaki fark nedir? QA'de neden generator kullanırsın?", en: 'What is the difference between a generator and a list in Python? Why use generators in QA?' }, a: { tr: "List tüm elemanları bellekte tutar. Generator lazy — her seferinde bir eleman üretir, bellekte hepsi tutulmaz. QA'de 100.000 test verisi üretmek için generator idealdir: def gen_users(): for i in range(100000): yield {...}. Bellek tasarrufu büyük.", en: "A list holds all elements in memory. A generator is lazy — produces one element at a time, not all in memory. In QA, generators are ideal for producing large test datasets: def gen_users(): for i in range(100000): yield {...}. Significant memory savings." } },
+        { level: 'advanced', q: { tr: "Python type hints runtime'da nasıl çalışır? Tip hatası olursa ne olur?", en: 'How do Python type hints work at runtime? What happens if there is a type mismatch?' }, a: { tr: "Python type hints runtime'da enforce edilmez — sadece documentation ve tool'lar (mypy, IDE) için var. def foo(x: int): pass; foo('string') çalışır, hata vermez. Hata almak için mypy ile statik analiz veya pydantic gibi bir validation kütüphanesi gerekir. Java'nın static typing'ından bu farkı bilmek önemli.", en: "Python type hints are not enforced at runtime — they are only for documentation and tools like mypy and IDEs. def foo(x: int): pass; foo('string') works without error. To get errors, use mypy for static analysis or a validation library like pydantic. This difference from Java's static typing is important to understand." } },
+      ]},
     ],
   },
 
@@ -906,6 +2081,142 @@ def generate_report(results: list, output_dir: str = "reports") -> str:
     print(f"Report: {filename} | Pass rate: {report.get('pass_rate', 0)}%")
     return filename`,
       },
+      { type: 'heading', text: '🗂️ How pytest Finds and Injects Fixtures' },
+      {
+        type: 'visual', variant: 'flow',
+        title: 'pytest Fixture Discovery & Injection Flow',
+        note: 'Fixtures are discovered bottom-up: local conftest.py first, then parent folders, then built-ins like `page` and `tmp_path`.',
+        steps: [
+          { num: '1', label: 'Test file', desc: '@pytest.fixture or @pytest.mark.xxx in test_*.py', highlight: true },
+          { num: '2', label: 'conftest.py (local)', desc: 'Same folder as the test — most specific' },
+          { num: '3', label: 'conftest.py (parent)', desc: 'Parent folders searched upward' },
+          { num: '4', label: 'Plugin fixtures', desc: 'pytest-playwright, pytest-django, etc.' },
+          { num: '5', label: 'Built-in fixtures', desc: 'tmp_path, monkeypatch, capsys, caplog' },
+          { num: '6', label: 'Inject & run', desc: 'Matched fixtures injected, test executes', highlight: true },
+        ],
+      },
+      {
+        type: 'comparison',
+        left: {
+          label: '❌ Anti-pattern: Manual Setup in Every Test',
+          code: `def test_order_placed():
+    db = sqlite3.connect(":memory:")
+    db.execute("CREATE TABLE orders ...")
+    db.execute("INSERT INTO orders ...")
+
+    # actual test
+    row = db.execute("SELECT ...").fetchone()
+    assert row[0] == "pending"
+
+    db.close()   # easy to forget!
+
+def test_order_cancelled():
+    db = sqlite3.connect(":memory:")  # duplicated!
+    db.execute("CREATE TABLE orders ...")
+    ...`,
+          note: 'Repeated setup, easy to forget teardown, hard to maintain',
+        },
+        right: {
+          label: '✅ Fixture: DRY, Automatic Teardown',
+          code: `@pytest.fixture(scope="session")
+def db():
+    conn = sqlite3.connect(":memory:")
+    conn.execute("CREATE TABLE orders ...")
+    yield conn
+    conn.close()  # auto teardown — always runs
+
+@pytest.fixture
+def sample_order(db):
+    cid = db.execute("INSERT ...").lastrowid
+    yield cid
+    db.execute("DELETE FROM orders WHERE id=?", (cid,))
+
+def test_order_placed(sample_order, db):
+    row = db.execute("SELECT status FROM orders WHERE id=?",
+                     (sample_order,)).fetchone()
+    assert row[0] == "pending"   # clean, focused`,
+          note: 'Setup once, inject everywhere, teardown guaranteed',
+        },
+      },
+      {
+        type: 'quiz',
+        question: 'A pytest fixture decorated with scope="session" runs setup code how many times per test run?',
+        options: [
+          'Once per test function',
+          'Once per test class',
+          'Once per test file',
+          'Once for the entire test session',
+        ],
+        correct: 3,
+        explanation: 'scope="session" creates the fixture once for the entire pytest session and shares it across ALL tests. Use it for expensive resources like DB connections and browser instances. The teardown (after yield) runs once at the very end.',
+      },
+      { type: 'heading', text: '🚨 Common Errors & How to Fix Them' },
+      {
+        type: 'error-dictionary',
+        framework: 'Selenium',
+        errors: [
+          {
+            error: 'NoSuchElementException',
+            fullMessage: 'selenium.common.exceptions.NoSuchElementException: Message: no such element: Unable to locate element',
+            cause: { tr: 'Locator yanlış yazılmış, element henüz yüklenmemiş (dynamic content), ya da element başka bir iframe içinde.', en: 'Wrong locator, element not yet loaded (dynamic content), or element is inside an iframe.' },
+            solution: { tr: '1) DevTools ile elementi kontrol et. 2) Explicit wait ekle. 3) iframe içindeyse driver.switch_to.frame() kullan.', en: '1) Inspect element in DevTools. 2) Add explicit wait. 3) Use driver.switch_to.frame() if inside iframe.' },
+            codeWrong: `# WRONG — element may not be ready
+driver.find_element(By.ID, "submit-btn").click()`,
+            codeFixed: `# CORRECT — wait for element to be clickable
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
+wait = WebDriverWait(driver, 10)         # wait up to 10 sec
+btn = wait.until(
+    EC.element_to_be_clickable((By.ID, "submit-btn"))
+)
+btn.click()`,
+          },
+          {
+            error: 'StaleElementReferenceException',
+            fullMessage: 'selenium.common.exceptions.StaleElementReferenceException: Message: stale element reference: element is not attached to the page document',
+            cause: { tr: 'DOM yenilendi (sayfa reload, AJAX, React re-render) ve eski element referansı artık geçersiz.', en: 'The DOM was refreshed (page reload, AJAX, React re-render) and the old element reference is no longer valid.' },
+            solution: { tr: 'Elementi tekrar bul (find_element çağrısını döngü içine al). Ya da her kullanımdan önce yeniden sorgula.', en: 'Re-find the element after the DOM changes. Wrap find_element in a retry loop or re-query before each use.' },
+            codeFixed: `# CORRECT — re-find element each time
+for item in driver.find_elements(By.CSS_SELECTOR, "li.product"):
+    # DON\'T store the list, re-query inside the loop
+    name = item.find_element(By.CLASS_NAME, "name").text
+    print(name)`,
+          },
+          {
+            error: 'TimeoutException',
+            fullMessage: 'selenium.common.exceptions.TimeoutException: Message: Timeout waiting for condition',
+            cause: { tr: 'WebDriverWait bekleme süresi doldu ama koşul gerçekleşmedi. Element hiç gelmedi ya da farklı bir locator.', en: 'WebDriverWait timed out before the condition was met. Element never appeared or locator is wrong.' },
+            solution: { tr: '1) Bekleme süresini artır. 2) Locator\'ı DevTools\'da test et. 3) Network yavaşsa implicit wait de ekle.', en: '1) Increase timeout. 2) Test locator in DevTools. 3) Add implicit wait if network is slow.' },
+          },
+          {
+            error: 'ElementClickInterceptedException',
+            fullMessage: 'selenium.common.exceptions.ElementClickInterceptedException: Element <button> is not clickable at point (x,y) because another element obscures it',
+            cause: { tr: 'Başka bir element (overlay, modal, cookie banner, navbar) tıklanmak istenen butonun üzerinde.', en: 'Another element (overlay, modal, cookie banner, sticky nav) is on top of the target element.' },
+            solution: { tr: '1) Overlay\'i kapat/bekle. 2) Elemana scroll et. 3) JavaScript ile tıkla.', en: '1) Close/wait for the overlay. 2) Scroll element into view. 3) Use JavaScript click as last resort.' },
+            codeFixed: `# Use JavaScript click as a last resort
+driver.execute_script("arguments[0].click();", element)`,
+          },
+        ],
+      },
+      {
+        type: 'error-dictionary',
+        framework: 'pytest',
+        errors: [
+          {
+            error: "fixture 'X' not found",
+            fullMessage: "fixture 'driver' not found\n  available fixtures: ...",
+            cause: { tr: 'Fixture conftest.py\'de tanımlanmamış ya da scope uyumsuz.', en: 'The fixture is not defined in conftest.py or the scope is incompatible.' },
+            solution: { tr: 'conftest.py dosyasına @pytest.fixture ile fixture\'ı ekle. Test dosyasıyla aynı dizinde ya da üst dizinde olmalı.', en: 'Add the fixture to conftest.py with @pytest.fixture. The conftest.py must be in the same or parent directory as the test file.' },
+          },
+          {
+            error: 'FAILED vs ERROR ayrımı',
+            fullMessage: 'FAILED tests/test_login.py::test_login — AssertionError\nERROR tests/test_login.py::test_login — Exception',
+            cause: { tr: 'FAILED = assertion başarısız (test çalıştı ama beklenen sonuç gelmedi). ERROR = exception fırlattı (test setup/teardown\'da ya da test içinde beklenmedik hata).', en: 'FAILED = assertion failed (test ran but expected result not met). ERROR = unexpected exception (in setup/teardown or test body).' },
+            solution: { tr: 'Stack trace\'e bak: AssertionError = test logic hatası. Başka exception = kod/fixture hatası.', en: 'Check the stack trace: AssertionError = logic bug in test. Other exception = bug in code or fixture.' },
+          },
+        ],
+      },
     ],
   },
 
@@ -1109,6 +2420,165 @@ def managed_page(browser):
 with managed_page(browser) as page:
     page.goto("/login")
     # page.close() called automatically even if assertion fails` },
+      { type: 'heading', text: '☕ If You Know Java: Advanced Python Concepts Bridge' },
+      {
+        type: 'java-compare',
+        topic: 'Decorator vs AOP / Method Wrapping',
+        why: 'In Java, cross-cutting concerns (logging, timing, retry) are handled via AOP frameworks (AspectJ, Spring @Around) or manual method wrapping with boilerplate. Python decorators do the same thing in a single @decorator line — no framework needed.',
+        why_en: 'In Java, cross-cutting concerns (logging, timing, retry) are handled via AOP frameworks (AspectJ, Spring @Around) or manual method wrapping with boilerplate. Python decorators do the same thing in a single @decorator line — no framework needed.',
+        java: `// Java: manual wrapper / Spring AOP
+// Option A: manual wrapper (verbose!)
+public Object timedCall(Method m, Object obj, Object... args)
+    throws Exception {
+  long start = System.currentTimeMillis();
+  Object result = m.invoke(obj, args);
+  System.out.println(m.getName() + " took "
+      + (System.currentTimeMillis() - start) + "ms");
+  return result;
+}
+
+// Option B: Spring @Around (needs framework!)
+@Around("@annotation(Timed)")
+public Object time(ProceedingJoinPoint pjp) throws Throwable {
+  long start = System.currentTimeMillis();
+  Object result = pjp.proceed();
+  System.out.println(pjp.getSignature().getName()
+      + " took " + (System.currentTimeMillis()-start) + "ms");
+  return result;
+}`,
+        python: `import functools, time
+
+# Python: decorator — no framework needed
+def timer(func):
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        start  = time.time()
+        result = func(*args, **kwargs)
+        elapsed = (time.time() - start) * 1000
+        print(f"{func.__name__} took {elapsed:.0f}ms")
+        return result
+    return wrapper
+
+@timer                        # one line — done!
+def load_test_data(path):
+    return open(path).readlines()
+
+# Parameterized decorator:
+def retry(max=3):
+    def decorator(func):
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            for i in range(max):
+                try:    return func(*args, **kwargs)
+                except: pass
+        return wrapper
+    return decorator
+
+@retry(max=5)
+def flaky_api_call(): ...`,
+        note: '@pytest.fixture, @pytest.mark.parametrize, @allure.step — all decorators. functools.wraps is the equivalent of preserving method signature metadata.',
+        note_en: '@pytest.fixture, @pytest.mark.parametrize, @allure.step — all decorators. functools.wraps is the equivalent of preserving method signature metadata.',
+      },
+      {
+        type: 'java-compare',
+        topic: 'Generator vs Iterator / Iterable',
+        why: 'Java requires you to implement Iterator<T> or Iterable<T> with hasNext() and next() methods — lots of boilerplate. Python generators produce the same lazy sequence with a single yield statement.',
+        why_en: 'Java requires you to implement Iterator<T> or Iterable<T> with hasNext() and next() methods — lots of boilerplate. Python generators produce the same lazy sequence with a single yield statement.',
+        java: `// Java: custom Iterator — lots of boilerplate
+public class IdGenerator implements Iterator<String> {
+    private int current = 0;
+    private final int max;
+
+    public IdGenerator(int max) { this.max = max; }
+
+    @Override
+    public boolean hasNext() { return current < max; }
+
+    @Override
+    public String next() {
+        return String.format("TC-%06d", current++);
+    }
+}
+
+// Usage:
+Iterator<String> gen = new IdGenerator(1_000_000);
+while (gen.hasNext()) {
+    String id = gen.next();   // lazy — one at a time
+}`,
+        python: `# Python: generator — one yield, no boilerplate
+def id_generator(count: int):
+    for i in range(count):
+        yield f"TC-{i:06d}"   # pauses here each iteration
+
+# Usage — same lazy behaviour, cleaner syntax:
+gen = id_generator(1_000_000)
+print(next(gen))    # TC-000000
+print(next(gen))    # TC-000001
+
+# Or iterate directly:
+for id in id_generator(100):
+    print(id)       # prints TC-000000 … TC-000099
+
+# Real test use: generate unique test emails lazily:
+def email_gen(domain="test.com"):
+    n = 0
+    while True:
+        yield f"user{n}@{domain}"
+        n += 1`,
+        note: 'Generators are memory-efficient: id_generator(1_000_000) uses almost no RAM until you call next(). Java equivalent would need the entire list stored upfront or Iterator boilerplate.',
+        note_en: 'Generators are memory-efficient: id_generator(1_000_000) uses almost no RAM until you call next(). Java equivalent would need the entire list stored upfront or Iterator boilerplate.',
+      },
+      {
+        type: 'java-compare',
+        topic: 'Context Manager vs try-with-resources',
+        why: 'Java try-with-resources (AutoCloseable) ensures resources close even if an exception occurs. Python "with" statement does exactly the same thing — it calls __exit__ (or the code after yield in @contextmanager) automatically.',
+        why_en: 'Java try-with-resources (AutoCloseable) ensures resources close even if an exception occurs. Python "with" statement does exactly the same thing — it calls __exit__ (or the code after yield in @contextmanager) automatically.',
+        java: `// Java: try-with-resources (AutoCloseable)
+// Resource must implement AutoCloseable:
+public class ManagedPage implements AutoCloseable {
+    private final Page page;
+    public ManagedPage(Browser b) {
+        this.page = b.newPage();
+    }
+    public Page get() { return page; }
+
+    @Override
+    public void close() {
+        page.close();   // ALWAYS called by JVM
+    }
+}
+
+// Usage:
+try (ManagedPage mp = new ManagedPage(browser)) {
+    mp.get().navigate("/login");
+    // page.close() called automatically here
+}`,
+        python: `from contextlib import contextmanager
+
+# Python: @contextmanager (no class needed!)
+@contextmanager
+def managed_page(browser):
+    page = browser.new_page()
+    try:
+        yield page        # "try" body runs here
+    finally:
+        page.close()      # ALWAYS runs (like AutoCloseable.close())
+
+# Usage — same guarantee as try-with-resources:
+with managed_page(browser) as page:
+    page.goto("/login")
+    # page.close() called automatically
+
+# Or with __enter__ / __exit__ (class-based):
+class ManagedDB:
+    def __enter__(self):
+        self.conn = sqlite3.connect("test.db")
+        return self.conn
+    def __exit__(self, *args):
+        self.conn.close()   # always runs`,
+        note: '"with" = try-with-resources. "yield" in @contextmanager = the try body. Code after yield in finally = AutoCloseable.close(). Same contract, zero boilerplate class.',
+        note_en: '"with" = try-with-resources. "yield" in @contextmanager = the try body. Code after yield in finally = AutoCloseable.close(). Same contract, zero boilerplate class.',
+      },
     ],
   },
 
@@ -1266,6 +2736,1082 @@ def test_user_validation(db, email, role):
       { type: 'tip', content: 'Run "python -m pytest -v --tb=short" for verbose output with compact tracebacks. Add "--headed" to Playwright to see the browser while debugging.' },
     ],
   },
+
+  // ── 8. JAVA → PYTHON ────────────────────────────────────────────────────────
+  {
+    title: '☕ Java → Python: Bildiğini Kullan',
+    blocks: [
+      { type: 'text', content: 'Core Java biliyorsan Python öğrenmek çok daha hızlı! Konseptler aynı — sözdizimi ve bazı kurallar farklı. Bu bölüm her Python kavramını tanıdık Java perspektifinden açıklar: neden gerekli, Java\'da nasıldı, Python\'da nasıl.' },
+      // 1
+      { type: 'heading', text: '1. Değişkenler ve Tipler' },
+      // 2
+      {
+        type: 'java-compare',
+        topic: 'Variables & Types',
+        why: 'Java\'da her değişkenin tipi derleme zamanında sabitlenir. Python\'da tipler dinamik — aynı değişken farklı tipler tutabilir. Testleri daha hızlı yazarsın ama dikkatli olman gerekir.',
+        why_en: 'In Java every variable\'s type is fixed at compile time. In Python types are dynamic — the same variable can hold different types. Tests are faster to write but require care.',
+        java: `// Java: explicit type declaration
+int count = 5;
+String name = "Alice";
+boolean active = true;
+double score = 98.5;
+// count = "hello"; // ❌ COMPILE ERROR`,
+        python: `# Python: type inferred, can change
+count = 5
+name = "Alice"
+active = True      # capital T!
+score = 98.5
+count = "hello"    # ✅ valid (but bad practice!)
+
+# Optional type hints (not enforced at runtime):
+count: int = 5
+name: str = "Alice"`,
+        note: 'Python type hints (count: int) Java gibi görünür ama çalışma zamanında zorlanmaz. Statik kontrol için mypy kullan.',
+        note_en: 'Python type hints (count: int) look like Java but are NOT enforced at runtime. Use mypy for static checking.',
+      },
+      // 3
+      { type: 'heading', text: '2. None — null\'ın Karşılığı' },
+      // 4
+      {
+        type: 'java-compare',
+        topic: 'null → None',
+        why: 'Java\'da null NullPointerException\'a yol açar. Python\'da aynı risk var ama None olarak adlandırılır. "is None" kullanımı Java\'nın Objects.equals() kullanımı gibi en iyi pratiktir.',
+        why_en: 'Java null causes NullPointerException. Python has the same risk but calls it None. "is None" is best practice, similar to Java\'s Objects.equals() for null checks.',
+        java: `// Java null
+String value = null;
+if (value == null) {
+    System.out.println("No value");
+}
+// value.length() → NullPointerException!
+
+// Java 8+ Optional:
+Optional.ofNullable(value).orElse("default");`,
+        python: `# Python None (null karşılığı)
+value = None
+if value is None:    # NOT: value == None
+    print("No value")
+# value.upper() → AttributeError (same risk!)
+
+# Python idiom (Optional.orElse karşılığı):
+result = value if value is not None else "default"
+result = value or "default"  # shorter`,
+        note: '"is None" kullan, "== None" değil — aynı nesne kontrolü yapar, __eq__ değil. value or "default" falsy check yapar (0, "", [] da default döner), dikkatli kullan.',
+        note_en: 'Use "is None" not "== None" — checks object identity, not __eq__. "value or \'default\'" does a falsy check (0, "", [] also trigger default), use carefully.',
+      },
+      // 5
+      { type: 'heading', text: '3. List — ArrayList\'in Karşılığı' },
+      // 6
+      {
+        type: 'java-compare',
+        topic: 'ArrayList → list',
+        why: 'Java ArrayList ve Python list aynı amaca hizmet eder: dinamik boyutlu sıralı koleksiyon. Python sözdizimi çok daha kısadır — new yoktur, import yoktur, generic tip yoktur.',
+        why_en: 'Java ArrayList and Python list serve the same purpose: a dynamically-sized ordered collection. Python syntax is much shorter — no new, no import, no generic type.',
+        java: `// Java ArrayList<String>
+import java.util.ArrayList;
+
+ArrayList<String> tests = new ArrayList<>();
+tests.add("login");
+tests.add("checkout");
+tests.remove("login");
+System.out.println(tests.get(0)); // "checkout"
+System.out.println(tests.size()); // 1
+tests.contains("checkout");       // true
+
+for (String t : tests) {
+    System.out.println(t);
+}`,
+        python: `# Python list (no import, no generic type!)
+tests = []
+tests.append("login")
+tests.append("checkout")
+tests.remove("login")
+print(tests[0])      # "checkout"
+print(len(tests))    # 1 — len(), not .size()
+"checkout" in tests  # True
+
+for t in tests:
+    print(t)
+
+# Index + value (Java\'nın indexed for\'u):
+for i, t in enumerate(tests):
+    print(f"{i}: {t}")`,
+        note: 'Python list mixed type destekler: [1, "hello", True]. append() = add(), remove() = remove(), len() = size(), in = contains(). "new ArrayList<>()" yok — sadece [].',
+        note_en: 'Python list supports mixed types: [1, "hello", True]. append() = add(), remove() = remove(), len() = size(), in = contains(). No "new ArrayList<>()" — just [].',
+      },
+      // 7
+      { type: 'heading', text: '4. Dict — HashMap\'in Karşılığı' },
+      // 8
+      {
+        type: 'java-compare',
+        topic: 'HashMap → dict',
+        why: 'Java HashMap ve Python dict aynı konsept: key-value eşlemeleri. Python sözdizimi çok daha temizdir — put/get yerine [] veya {} kullanılır, import gerekmez.',
+        why_en: 'Java HashMap and Python dict are the same concept: key-value mappings. Python syntax is much cleaner — use [] or {} instead of put/get, no import needed.',
+        java: `// Java HashMap<String, Object>
+import java.util.HashMap;
+import java.util.Map;
+
+Map<String, Object> result = new HashMap<>();
+result.put("status", "PASS");
+result.put("duration", 1200);
+result.get("status");             // "PASS"
+result.getOrDefault("err", "");   // safe access
+result.containsKey("status");     // true
+
+for (Map.Entry<String, Object> e : result.entrySet()) {
+    System.out.println(e.getKey() + ": " + e.getValue());
+}`,
+        python: `# Python dict (no import needed!)
+result = {}
+result["status"] = "PASS"
+result["duration"] = 1200
+result["status"]               # "PASS"
+result.get("err", "")          # getOrDefault karşılığı
+"status" in result             # containsKey karşılığı
+
+# Literal syntax (en yaygın):
+result = {"status": "PASS", "duration": 1200}
+
+for key, value in result.items():  # entrySet karşılığı
+    print(f"{key}: {value}")`,
+        note: 'Python dict Python 3.7\'den itibaren ekleme sırasını korur. Java HashMap sıra garantisi vermez. put() = result["k"] = v, get() = result.get("k"), entrySet() = .items().',
+        note_en: 'Python dict preserves insertion order since Python 3.7. Java HashMap gives no order guarantee. put() = result["k"] = v, get() = result.get("k"), entrySet() = .items().',
+      },
+      // 9
+      { type: 'heading', text: '5. Set — HashSet\'in Karşılığı' },
+      // 10
+      {
+        type: 'java-compare',
+        topic: 'HashSet → set',
+        why: 'Tekrar eden öğeleri elemek ve O(1) üyelik kontrolü için — Java\'da HashSet, Python\'da set. Hem sözdizimi hem performans karakteristiği aynıdır.',
+        why_en: 'For eliminating duplicates and O(1) membership testing — Java has HashSet, Python has set. Same syntax pattern and same performance characteristics.',
+        java: `// Java HashSet<String>
+import java.util.HashSet;
+Set<String> seen = new HashSet<>();
+seen.add("login");
+seen.add("login");      // no duplicate
+seen.size();            // 1
+seen.contains("login"); // true, O(1)
+
+// Union: seen.addAll(other)
+// Intersection: seen.retainAll(other)
+// Difference: seen.removeAll(other)`,
+        python: `# Python set (no import!)
+seen = set()
+seen.add("login")
+seen.add("login")  # duplicate ignored
+len(seen)          # 1
+"login" in seen    # True, O(1)
+
+# Literal syntax:
+seen = {"login", "checkout"}
+
+# Operatörler:
+seen | other       # Union (addAll)
+seen & other       # Intersection (retainAll)
+seen - other       # Difference (removeAll)
+seen ^ other       # Symmetric difference`,
+        note: 'O(1) lookup için list yerine set kullan (QA\'da: test tag\'leri, gezilen URL\'ler, görülen hata kodları). Python set ve Java HashSet aynı Big-O garantileri.',
+        note_en: 'Use set instead of list for O(1) lookup (QA: test tags, visited URLs, seen error codes). Python set and Java HashSet have the same Big-O guarantees.',
+      },
+      // 11
+      { type: 'heading', text: '6. Tuple — Java\'da Doğrudan Karşılığı Yok' },
+      // 12
+      {
+        type: 'java-compare',
+        topic: 'tuple (Java\'da yok!)',
+        why: 'Python tuple immutable (değiştirilemez) sıralı koleksiyondur. Java\'da buna en yakın List.of() veya record\'dur ama tuple daha yaygın ve daha çok idiomatik: birden fazla değer döndürmek için kullanılır.',
+        why_en: 'Python tuple is an immutable ordered collection. The closest Java equivalent is List.of() or a record, but tuple is more idiomatic — used for returning multiple values without a wrapper class.',
+        java: `// Java: no built-in tuple
+// Closest: List.of() (Java 9+):
+List<String> pair = List.of("user", "admin");
+// pair.add("x"); // ❌ UnsupportedOperationException
+
+// Java 16+ record:
+record Point(int x, int y) {}
+Point p = new Point(3, 5);
+p.x();  // 3
+
+// Return multiple values: must wrap in class/record
+record Result(String data, int code) {}
+return new Result("OK", 200);`,
+        python: `# Python tuple: immutable ordered collection
+pair = ("user", "admin")
+# pair[0] = "x"  # ❌ TypeError: immutable!
+
+# Multiple return values (killer feature!):
+def check_response(url: str):
+    resp = requests.get(url)
+    return resp.status_code, resp.text  # tuple!
+
+code, body = check_response("/api/health")  # unpacking
+
+# Named tuple (record karşılığı):
+from collections import namedtuple
+Point = namedtuple("Point", ["x", "y"])
+p = Point(3, 5)
+print(p.x)  # 3`,
+        note: 'Python\'ın en güçlü özelliklerinden biri: birden fazla değer döndürmek için tuple kullan. Java\'da Result/Pair sarmalayıcı gerekir; Python\'da sadece "return a, b".',
+        note_en: 'One of Python\'s best features: use a tuple to return multiple values. In Java you need a Result/Pair wrapper class; in Python just "return a, b".',
+      },
+      // 13
+      { type: 'heading', text: '7. String Formatting — f-string vs String.format()' },
+      // 14
+      {
+        type: 'java-compare',
+        topic: 'String formatting',
+        why: 'Test logları ve raporlarında sık kullanılır. Python f-string, Java String.format()\'un çok daha okunabilir versiyonudur. Süslü parantez içine doğrudan değişken veya ifade yazarsın.',
+        why_en: 'Frequently used in test logs and reports. Python f-string is the far more readable version of Java\'s String.format(). Write variables or expressions directly inside curly braces.',
+        java: `// Java String.format()
+String name = "Alice";
+int count = 5;
+
+String msg = String.format(
+    "User %s ran %d tests", name, count);
+// "User Alice ran 5 tests"
+
+// Java 15+ text block:
+String report = """
+    User: %s
+    Tests: %d
+    """.formatted(name, count);`,
+        python: `# Python f-string (Python 3.6+) — much cleaner!
+name = "Alice"
+count = 5
+
+msg = f"User {name} ran {count} tests"
+# "User Alice ran 5 tests"
+
+# Her türlü ifade {} içinde çalışır:
+status = f"Pass: {count-1}, Fail: {1}"
+result = f"{'PASS' if count > 0 else 'FAIL'}"
+obj_val = f"Status: {resp.status_code}"
+
+# Multiline:
+report = f"""
+User: {name}
+Tests: {count}
+"""`,
+        note: 'f-string süslü parantezleri içine method çağrısı, hesaplama, koşul da yazabilirsin. %s veya String.format kullanma — f-string her zaman daha okunabilir.',
+        note_en: 'Inside f-string braces you can write method calls, calculations, or ternary expressions. Avoid %s or String.format — f-string is always more readable.',
+      },
+      // 15
+      { type: 'heading', text: '8. Döngüler — for-each → for-in' },
+      // 16
+      {
+        type: 'java-compare',
+        topic: 'for loops',
+        why: 'Python for-in, Java\'nın enhanced for-each döngüsüne çok benzer. Tek önemli fark: Python\'da index VE değer için enumerate() kullanılır; Java\'da iki ayrı döngü kurman gerekir.',
+        why_en: 'Python for-in is very similar to Java\'s enhanced for-each loop. The key difference: use enumerate() to get both index AND value; Java needs two separate loop constructs.',
+        java: `// Java enhanced for
+for (String test : testList) {
+    System.out.println(test);
+}
+
+// Indexed loop:
+for (int i = 0; i < testList.size(); i++) {
+    System.out.println(i + ": " + testList.get(i));
+}
+
+// Range-based:
+for (int i = 0; i < 5; i++) {
+    System.out.println(i);  // 0,1,2,3,4
+}`,
+        python: `# Python for-in (Java enhanced for karşılığı)
+for test in test_list:
+    print(test)
+
+# Index + value (enumerate = Java\'nın indexed for):
+for i, test in enumerate(test_list):
+    print(f"{i}: {test}")
+
+# Range-based:
+for i in range(5):       # 0,1,2,3,4
+    print(i)
+
+# range(start, end, step):
+for i in range(0, 10, 2):   # 0,2,4,6,8
+    print(i)`,
+        note: 'Python\'da süslü parantez yok — GIRINTI blokları tanımlar! Eksik girinti = döngü gövdesi yok. Java\'dan geçişte en büyük sözdizimi şoku budur.',
+        note_en: 'Python has no curly braces — INDENTATION defines blocks! Missing indent = no loop body. This is the biggest syntax shock when coming from Java.',
+      },
+      // 17
+      { type: 'heading', text: '9. Fonksiyonlar — Method → def' },
+      // 18
+      {
+        type: 'java-compare',
+        topic: 'methods → functions',
+        why: 'Java\'da her metod bir class içinde olmak zorundadır. Python\'da fonksiyonlar serbest (standalone) olabilir — küçük yardımcı araçlar için class yazmaya gerek yoktur. Default parametreler Java method overloading\'in yerini alır.',
+        why_en: 'In Java every method must be inside a class. Python functions can be standalone — no need to write a class for small utility helpers. Default parameters replace Java method overloading.',
+        java: `// Java: methods must be inside a class
+public class TestUtils {
+    public static boolean isValidEmail(String email) {
+        return email != null && email.contains("@");
+    }
+}
+// Usage: TestUtils.isValidEmail("t@t.com")
+
+// Overloading (default params için):
+public static User create(String name) {
+    return create(name, "tester");
+}
+public static User create(String name, String role) {
+    return new User(name, role);
+}`,
+        python: `# Python: standalone functions (no class needed!)
+def is_valid_email(email: str) -> bool:
+    return email is not None and "@" in email
+
+is_valid_email("t@t.com")  # doğrudan çağır
+
+# Default params (overloading yerine):
+def create_user(name: str, role: str = "tester", active: bool = True):
+    return {"name": name, "role": role, "active": active}
+
+create_user("Alice")              # role="tester"
+create_user("Bob", role="admin")  # keyword arg`,
+        note: 'Python keyword arguments güçlüdür: create_user("Bob", active=False, role="admin") — sıra önemli değil. @staticmethod ile class içi utility method da yazabilirsin.',
+        note_en: 'Python keyword arguments are powerful: create_user("Bob", active=False, role="admin") — order doesn\'t matter. Use @staticmethod for utility methods inside a class.',
+      },
+      // 19
+      { type: 'heading', text: '10. Exception Handling — try/catch → try/except' },
+      // 20
+      {
+        type: 'java-compare',
+        topic: 'Exception handling',
+        why: 'Aynı konsept, farklı anahtar kelimeler: "catch" Python\'da "except" olur. Python\'da checked/unchecked exception ayrımı yoktur — tüm exception\'lar Java\'nın RuntimeException\'ı gibi davranır. throws bildirimi yoktur.',
+        why_en: 'Same concept, different keywords: "catch" becomes "except" in Python. There are no checked/unchecked exceptions — all exceptions behave like Java\'s RuntimeException. No throws declaration needed.',
+        java: `// Java try-catch-finally
+try {
+    Response r = httpClient.get(url);
+    process(r);
+} catch (IOException e) {
+    System.err.println("IO Error: " + e.getMessage());
+} catch (TimeoutException e) {
+    throw e;  // re-throw
+} finally {
+    System.out.println("Always runs");
+}
+// Method signature: void fetch() throws IOException`,
+        python: `# Python try-except-finally (same concept!)
+try:
+    r = requests.get(url)
+    process(r)
+except requests.exceptions.ConnectionError as e:
+    print(f"Connection Error: {e}")
+except requests.exceptions.Timeout as e:
+    raise  # re-raise (no arg = same exception)
+finally:
+    print("Always runs")
+# No "throws" declaration needed!`,
+        note: '"raise" (argümansız) = Java "throw e" (re-throw). "except Exception as e" = Java "catch (Exception e)". Python\'da checked exceptions yok — "throws IOException" bildirimi gerekmez.',
+        note_en: '"raise" (no argument) = Java "throw e" (re-throw). "except Exception as e" = Java "catch (Exception e)". No checked exceptions — no "throws IOException" declaration.',
+      },
+      // 21
+      { type: 'heading', text: '11. Sınıflar ve OOP — class (Çok Benzer!)' },
+      // 22
+      {
+        type: 'java-compare',
+        topic: 'class & OOP',
+        why: 'Python class yapısı Java\'ya çok benzer: constructor, instance fields, methods. İki kritik fark: (1) her method "self" parametresi alır (Java\'da "this" gizlidir), (2) access modifier\'lar kural — zorunluluk değil.',
+        why_en: 'Python class structure is very similar to Java: constructor, instance fields, methods. Two critical differences: (1) every method takes an explicit "self" parameter (Java\'s "this" is implicit), (2) access modifiers are convention — not enforced.',
+        java: `// Java class
+public class TestResult {
+    private String name;
+    private String status;
+
+    public TestResult(String name, String status) {
+        this.name = name;
+        this.status = status;
+    }
+    public String getName() { return name; }
+
+    public boolean isPassed() {
+        return "PASS".equals(status);
+    }
+    @Override public String toString() {
+        return name + ": " + status;
+    }
+}`,
+        python: `# Python class (very similar!)
+class TestResult:
+    def __init__(self, name: str, status: str):
+        self.name = name      # self = Java\'nın 'this\'i
+        self.status = status
+
+    @property
+    def is_passed(self) -> bool:   # getter (no () to call)
+        return self.status == "PASS"
+
+    def __str__(self) -> str:      # toString()
+        return f"{self.name}: {self.status}"
+
+result = TestResult("login_test", "PASS")
+result.is_passed  # True — parantez yok, @property!
+print(result)     # "login_test: PASS"`,
+        note: '"self" Python\'da explicit (Java\'nın implicit "this"i). @property = getter (parantez olmadan çağrılır). __init__ = constructor. __str__ = toString(). @Override yok — sadece metodu yeniden tanımla.',
+        note_en: '"self" is explicit in Python (Java\'s implicit "this"). @property = getter (called without parentheses). __init__ = constructor. __str__ = toString(). No @Override — just redefine the method.',
+      },
+      // 23
+      { type: 'heading', text: '12. Erişim Belirleyicileri — Kural, Zorunluluk Değil!' },
+      // 24
+      {
+        type: 'java-compare',
+        topic: 'access modifiers (convention only!)',
+        why: 'Java\'da private/public/protected derleyici tarafından zorlanır. Python\'da bu kavramlar sadece kuraldır (convention) — _ ve __ prefix kullanılır ama dışarıdan hala erişilebilir! Bu Java\'dan geçişin en büyük şokudur.',
+        why_en: 'In Java, private/public/protected are enforced by the compiler. In Python these are just conventions — _ and __ prefixes are used but access is never truly blocked! This is the biggest shock coming from Java.',
+        java: `// Java: enforced by compiler
+public class User {
+    private String password;   // ENFORCED
+    protected String email;    // ENFORCED
+    public String name;        // ENFORCED
+}
+// user.password → ❌ compile error (HARD BLOCK)`,
+        python: `# Python: convention only, NOT enforced!
+class User:
+    def __init__(self):
+        self.name = "Alice"       # public (default)
+        self._email = "x@x.com"  # _ = "please don\'t use"
+        self.__password = "..."   # __ = name mangling
+
+u = User()
+u.name            # ✅ public
+u._email          # ✅ works! (just a warning by convention)
+u._User__password # ✅ still accessible via mangled name!
+# Python cannot enforce private like Java`,
+        note: '__ (double underscore) ismi karıştırır: self.__password _User__password olur. Erişimi zorlaştırır ama engellemez. Python felsefesi: "Hepimiz yetişkiniz, gizlemeye gerek yok."',
+        note_en: '__ (double underscore) triggers name mangling: self.__password becomes _User__password. Makes access harder but NOT impossible. Python philosophy: "We\'re all adults here, no need to hide."',
+      },
+      // 25
+      { type: 'heading', text: '13. Java Streams → List Comprehension' },
+      // 26
+      {
+        type: 'java-compare',
+        topic: 'Streams → List Comprehensions',
+        why: 'Java 8 Streams ve Python list comprehension aynı amaca hizmet eder: koleksiyonları filtrele ve dönüştür. Python versiyonu çok daha kısadır ve okunabilirdir. QA\'da sık kullanılır: başarısız testleri filtrele, isim listesi oluştur vs.',
+        why_en: 'Java 8 Streams and Python list comprehensions serve the same purpose: filter and transform collections. Python version is far shorter and more readable. Used often in QA: filter failed tests, build name lists, etc.',
+        java: `// Java Streams (Java 8+)
+List<String> failed = tests.stream()
+    .filter(t -> t.getStatus().equals("FAIL"))
+    .map(t -> t.getName())
+    .collect(Collectors.toList());
+
+long failCount = tests.stream()
+    .filter(t -> t.getStatus().equals("FAIL"))
+    .count();
+
+int total = tests.stream()
+    .mapToInt(t -> t.getDuration()).sum();`,
+        python: `# Python list comprehension (daha özlü!)
+failed = [t["name"] for t in tests
+          if t["status"] == "FAIL"]
+# [ifade for öğe in liste if koşul]
+
+# Count:
+fail_count = sum(1 for t in tests
+                 if t["status"] == "FAIL")
+
+# Sum:
+total = sum(t["duration"] for t in tests)
+
+# Dict comprehension (Streams\'de yok!):
+status_map = {t["name"]: t["status"] for t in tests}`,
+        note: '[x for x in list if cond] = stream().filter().map().collect(). Bu idiom Python\'da her yerde kullanılır — mutlaka öğren. Generator expressions (parantez) lazy evaluation yapar, list comp (köşeli) hemen değerlendirir.',
+        note_en: '[x for x in list if cond] = stream().filter().map().collect(). This idiom is everywhere in Python — you must learn it. Generator expressions (parentheses) are lazy; list comp (brackets) evaluates immediately.',
+      },
+      // 27
+      { type: 'heading', text: '14. try-with-resources → with' },
+      // 28
+      {
+        type: 'java-compare',
+        topic: 'try-with-resources → with',
+        why: 'Dosya, DB bağlantısı, tarayıcı gibi kaynakları güvenli kapatmak için. Java\'da try-with-resources, Python\'da "with". Aynı güvence: hata olsa bile kaynak kapanır.',
+        why_en: 'For safely closing resources like files, DB connections, and browsers. Java uses try-with-resources; Python uses "with". Same guarantee: the resource closes even if an exception occurs.',
+        java: `// Java try-with-resources
+try (FileReader fr = new FileReader("data.csv");
+     BufferedReader br = new BufferedReader(fr)) {
+    String line = br.readLine();
+} // auto-closes fr and br
+
+// DB connection:
+try (Connection conn = ds.getConnection()) {
+    conn.prepareStatement("SELECT 1").execute();
+} // auto-closes conn`,
+        python: `# Python 'with' (context manager)
+with open("data.csv", "r") as f:
+    line = f.readline()
+# f automatically closed — even if exception!
+
+# Multiple resources:
+with open("in.csv") as fin, open("out.csv","w") as fout:
+    fout.write(fin.read())
+
+# Database:
+with db.connect() as conn:
+    conn.execute("SELECT 1")
+# conn auto-committed and closed
+
+# Playwright (context manager kullanır!):
+with sync_playwright() as p:
+    browser = p.chromium.launch()`,
+        note: '"with" AutoCloseable implement eden her nesneyle çalışır (__enter__ + __exit__). Dosya, bağlantı, kilit, Playwright browser — hepsi with ile kullanılır. "finally: f.close()" yazmak artık eski tarz.',
+        note_en: '"with" works with any object implementing __enter__ + __exit__ (like AutoCloseable). Files, connections, locks, Playwright browser — all work with "with". Writing "finally: f.close()" is now old-fashioned.',
+      },
+      // 29
+      { type: 'heading', text: '15. Kalıtım — extends/implements → Python' },
+      // 30
+      {
+        type: 'java-compare',
+        topic: 'inheritance & abstract class',
+        why: 'Python\'da extends ve implements arasında ayrım yoktur — ikisi de class parantezi içinde yapılır. Abstract class için ABC kullanılır, interface için normal class yeterlidir. Multiple inheritance doğal desteklenir.',
+        why_en: 'Python has no separate extends and implements keywords — both are done inside class parentheses. Use ABC for abstract classes; a regular class is enough for interfaces. Multiple inheritance is natively supported.',
+        java: `// Java: explicit extends & implements
+interface Loggable { void log(String msg); }
+
+abstract class BasePage {
+    protected WebDriver driver;
+    public BasePage(WebDriver d) { this.driver = d; }
+    public abstract void open();  // must implement
+}
+
+class LoginPage extends BasePage implements Loggable {
+    public LoginPage(WebDriver d) { super(d); }
+    @Override public void open() { driver.get("/login"); }
+    @Override public void log(String m) { System.out.println(m); }
+}`,
+        python: `# Python: all in one mechanism
+from abc import ABC, abstractmethod
+
+class Loggable:             # "interface" = plain class
+    def log(self, msg: str):
+        print(msg)
+
+class BasePage(ABC):        # abstract class
+    def __init__(self, driver):
+        self.driver = driver
+
+    @abstractmethod
+    def open(self): ...     # must implement
+
+class LoginPage(BasePage, Loggable):  # extends + implements!
+    def open(self):
+        self.driver.get("/login")
+    # log() inherited from Loggable ✅`,
+        note: 'Python multiple inheritance destekler: (BasePage, Loggable). @abstractmethod metodu override etmezsen instantiate edemezsin — Java abstract class ile aynı kural. @Override yok — sadece metodu yeniden tanımla.',
+        note_en: 'Python supports multiple inheritance: (BasePage, Loggable). If you don\'t override an @abstractmethod you can\'t instantiate — same rule as Java abstract class. No @Override — just redefine the method.',
+      },
+      // 31
+      { type: 'heading', text: 'Hızlı Karşılaştırma Tablosu' },
+      // 32
+      {
+        type: 'table',
+        headers: ['Kavram', 'Java', 'Python', 'Not'],
+        rows: [
+          ['Değişken', 'int x = 5;', 'x = 5', 'Python: dynamic typing'],
+          ['Null', 'null', 'None', '"is None" kullan, "== None" değil'],
+          ['Dinamik dizi', 'ArrayList<T>', 'list', 'Import yok, generic tip yok'],
+          ['Key-value map', 'HashMap<K,V>', 'dict', 'Import yok, literal: {k: v}'],
+          ['Benzersiz set', 'HashSet<T>', 'set', 'Import yok, literal: {v1, v2}'],
+          ['Immutable liste', 'List.of() / record', 'tuple', 'Birden fazla değer dönüşü için'],
+          ['String format', 'String.format()', 'f"...{var}..."', 'f-string çok daha temiz'],
+          ['For-each', 'for (T x : list)', 'for x in list:', 'Index için enumerate()'],
+          ['Constructor', 'ClassName(args)', '__init__(self, args)', 'self explicit this'],
+          ['toString()', 'toString()', '__str__(self)', '@Override yok'],
+          ['Getter', 'getX()', '@property', 'Parantez olmadan çağrılır'],
+          ['Private field', 'private int x;', 'self.__x', 'ZORUNLU DEĞİL! Sadece kural'],
+          ['Streams filter', '.stream().filter()', '[x for x in ... if ...]', 'List comprehension'],
+          ['try-catch', 'try {} catch (E e)', 'try: ... except E as e:', '"catch" → "except"'],
+          ['try-resources', 'try (Res r = ...)', 'with Res() as r:', '"with" auto-close'],
+          ['Abstract class', 'abstract class', 'class X(ABC)', 'from abc import ABC'],
+          ['Interface', 'interface I {}', 'class I: (plain class)', 'Interface keyword yok'],
+          ['Inheritance', 'extends Base', 'class X(Base):', 'Parantez içinde'],
+        ],
+      },
+    ],
+  },
+]
+
+function applyTr(enSection, overrides) {
+  return {
+    title: overrides.title ?? enSection.title,
+    blocks: enSection.blocks.map((block, i) => {
+      const o = overrides.blocks?.[i]
+      if (!o) return block
+      return { ...block, ...o }
+    })
+  }
+}
+
+const trSections = [
+  applyTr(sections[0], {
+    title: '🎯 Python Nedir & QA Mühendisleri Neden Kullanmalı?',
+    blocks: {
+      0: { content: "Python, temiz ve okunabilir söz dizimiyle tanınan yüksek seviyeli, yorumlanan bir programlama dilidir — neredeyse düz İngilizce gibi okunur. 1991\'de oluşturulan Python, otomasyon, veri bilimi ve web geliştirme için dünyanın en popüler dili haline gelmiştir." },
+      1: { content: "QA mühendisleri için Python bir İsviçre çakısıdır: Selenium/Playwright ile UI testleri, requests ile API testleri, performans testleri, veri doğrulama scriptleri ve CI/CD pipeline\'ları — hepsini aynı dilde yazabilirsiniz." },
+      2: { text: 'Test Otomasyonu için Neden Python?' },
+      3: { items: [
+        { icon: '📖', label: 'Okunabilir Söz Dizimi', desc: "Testler dokümantasyon gibi okunur — geliştirici olmayanlar bile neyin test edildiğini anlayabilir." },
+        { icon: '🧰', label: 'Geniş Ekosistem', desc: 'pytest, Selenium, Playwright, requests, Faker, pandas — binlerce test kütüphanesi.' },
+        { icon: '⚡', label: 'Hızlı Scripting', desc: 'Veri üretme scripti veya API testi dakikalar içinde yazılır.' },
+        { icon: '🔗', label: 'API Testi', desc: 'requests kütüphanesi HTTP çağrılarını kolaylaştırır. REST API doğrulaması için idealdir.' },
+        { icon: '📊', label: 'Veri İşleme', desc: 'pandas, csv, json — test verilerini herhangi bir formattan okuyun.' },
+        { icon: '🔄', label: 'CI/CD Uyumlu', desc: "Python scriptleri Jenkins, GitHub Actions ve Docker\'la sorunsuz çalışır." },
+      ]},
+      4: { text: 'Test için Python vs Diğer Diller' },
+      5: {
+        headers: ['Dil', 'Artılar', 'Eksiler', 'En İyi Kullanım'],
+        rows: [
+          ['Python', 'Okunabilir, hızlı yazım, geniş ekosistem', 'Derlenmiş dillerden yavaş çalışma', 'Otomasyon scriptleri, API testleri, pytest'],
+          ['Java', 'Kurumsal ölçek, güçlü tipleme', 'Ayrıntılı, yazmak daha yavaş', 'Selenium WebDriver, kurumsal legacy uygulamalar'],
+          ['JavaScript', 'Web uygulamalarıyla aynı dil, async native', 'Callback karmaşıklığı', 'Playwright, Cypress, frontend testi'],
+          ['C#', 'Microsoft stack, güçlü tipleme', 'Windows merkezli, daha az OSS', '.NET uygulamaları, SpecFlow, NUnit'],
+        ]
+      },
+      6: { text: 'Popüler Python Test Kütüphaneleri' },
+      7: {
+        headers: ['Kütüphane', 'Amaç', 'Kurulum Komutu'],
+        rows: [
+          ['pytest', 'Test runner, fixture\'lar, assertion\'lar', 'pip install pytest'],
+          ['selenium', 'Tarayıcı UI otomasyonu', 'pip install selenium'],
+          ['playwright', 'Modern tarayıcı otomasyonu', 'pip install playwright'],
+          ['requests', 'HTTP/API testi', 'pip install requests'],
+          ['pandas', 'CSV/Excel test verisi okuma', 'pip install pandas'],
+          ['faker', 'Gerçekçi test verisi üretme', 'pip install faker'],
+          ['allure-pytest', 'Güzel test raporları', 'pip install allure-pytest'],
+        ]
+      },
+    }
+  }),
+  applyTr(sections[1], {
+    title: '📦 Python Kurulumu & Ortam Hazırlama',
+    blocks: {
+      0: { text: 'Adım 1: Python 3 İndirme ve Kurulum' },
+      1: { items: [
+        "python.org/downloads adresine gidin ve en son Python 3.x\'i indirin (Python 2 DEĞİL)",
+        'Windows: Yükleyiciyi çalıştırın — KRİTİK: Yükle\'ye tıklamadan önce "Add Python to PATH" seçeneğini işaretleyin!',
+        'Mac: python.org\'dan .pkg yükleyicisini kullanın veya: brew install python3',
+        'Linux (Ubuntu/Debian): sudo apt update && sudo apt install python3 python3-pip',
+      ]},
+      2: { content: 'Windows kullanıcıları: "Add Python to PATH" seçeneğini işaretlemeyi unutursanız terminalde `python` komutu çalışmaz. Yükleyiciyi yeniden çalıştırın, "Modify" seçin ve PATH seçeneğini işaretleyin.' },
+      3: { text: 'Adım 2: Kurulumu Doğrulama' },
+      5: { text: 'Adım 3: Virtual Environment (Sanal Ortam) — Kritik!' },
+      6: { content: "Virtual environment, projenize özgü izole bir Python kurulumudur. Projeler arası bağımlılık çakışmalarını önler. Proje A\'da requests==2.28, Proje B\'de requests==2.31 gerekiyorsa? Sanal ortamlar bunu çözer." },
+      8: { content: 'Her yeni proje için venv oluşturun. `venv/` klasörünü .gitignore dosyasına ekleyin — asla commit etmeyin.' },
+      9: { text: 'Adım 4: requirements.txt Kalıbı' },
+      11: { text: 'Adım 5: İlk Program' },
+    }
+  }),
+  applyTr(sections[2], {
+    title: '🟢 Seviye 1: Python Temelleri',
+    blocks: {
+      0: { text: 'Değişkenler ve Veri Tipleri', difficulty: '🟢 Başlangıç' },
+      2: { text: 'String\'ler ve F-String\'ler', difficulty: '🟢 Başlangıç' },
+      4: { text: 'List\'ler (Listeler)', difficulty: '🟢 Başlangıç' },
+      6: { text: 'Dictionary\'ler (Sözlükler)', difficulty: '🟢 Başlangıç' },
+      8: { text: 'Koşullar ve Döngüler', difficulty: '🟢 Başlangıç' },
+      10: { text: 'Fonksiyonlar', difficulty: '🟢 Başlangıç' },
+      12: { text: 'CSV Dosyaları Okuma', difficulty: '🟢 Başlangıç' },
+      14: { text: 'Python Veri Tipleri — Görsel Kılavuz' },
+      15: {
+        title: '📋 list — Sıralı, Değiştirilebilir (mutable), Tekrara İzin Verir',
+        items: [
+          { value: 'login' },
+          { value: 'signup' },
+          { value: 'checkout', highlighted: true },
+          { value: 'logout' },
+        ],
+        note: 'İndeks 0\'dan başlar. test_cases[2] → "checkout". Append, insert, remove, sort yapılabilir. Test case koleksiyonları için idealdir.',
+      },
+      16: {
+        title: '🔑 dict — Anahtar-Değer Çiftleri, Hızlı Arama, Sıralı (Python 3.7+)',
+        items: [
+          { key: 'id', value: 'TC-001' },
+          { key: 'name', value: 'Login Test' },
+          { key: 'status', value: 'PASS' },
+          { key: 'duration', value: 1.23 },
+        ],
+        note: 'result["status"] → "PASS". result.get("browser", "N/A") → güvenli erişim. Test sonuç nesneleri için mükemmeldir.',
+      },
+      17: {
+        title: '🔵 set — Yalnızca Benzersiz Değerler, Sırasız, Hızlı Üyelik Kontrolü',
+        items: [
+          { value: 'PASS' },
+          { value: 'FAIL' },
+          { value: 'SKIP' },
+        ],
+        note: '"PASS" in statuses → True (anında, O(1)). Tekrar eden değer yok. Benzersiz ID\'ler, etiketler, durum değerleri için idealdir.',
+      },
+      18: {
+        title: '🔒 tuple — Sıralı, Değiştirilemez (immutable, oluşturulduktan sonra değiştirilmez)',
+        items: [
+          { value: 'css selector' },
+          { value: '#login-btn' },
+        ],
+        note: 'locator = ("css selector", "#login-btn"). Asla değişmemesi gereken sabit veri — Selenium locator\'lar, koordinatlar, DB satırı sonuçları.',
+      },
+      19: {
+        headers: ['Tip', 'Söz Dizimi', 'Sıralı?', 'Değiştirilebilir?', 'Tekrar?', 'En İyi Kullanım'],
+        rows: [
+          ['list', '[1, 2, 3]', '✅ Evet', '✅ Evet', '✅ Evet', 'Test case koleksiyonları, sonuç dizileri'],
+          ['tuple', '(1, 2, 3)', '✅ Evet', '❌ Hayır', '✅ Evet', 'Sabit veri, Selenium locator\'lar, DB satırları'],
+          ['set', '{1, 2, 3}', '❌ Hayır', '✅ Evet', '❌ Hayır', 'Benzersiz etiketler, hızlı üyelik testi'],
+          ['dict', '{"a": 1}', '✅ Evet (3.7+)', '✅ Evet', 'Anahtar: Hayır', 'Test sonuçları, config, JSON nesneleri'],
+        ]
+      },
+      20: {
+        left: {
+          label: '❌ Yavaş — Listede üyelik kontrolü',
+          code: `statuses = ["PASS", "FAIL", "SKIP"]
+# Python her öğeyi tek tek kontrol eder (O(n))
+if "PASS" in statuses:
+    print("bulundu")`,
+          note: '1 milyon öğe için 1 milyon kez kontrol',
+        },
+        right: {
+          label: '✅ Hızlı — Set ile üyelik kontrolü',
+          code: `statuses = {"PASS", "FAIL", "SKIP"}
+# Hash araması — boyuttan bağımsız anlık (O(1))
+if "PASS" in statuses:
+    print("bulundu")`,
+          note: '1 milyon öğe için de anlık!',
+        },
+      },
+      21: {
+        question: 'Asla yanlışlıkla değiştirilmemesi gereken bir Selenium locator çiftini ("css selector", "#login-btn") saklamak için hangi Python tipini kullanmalısınız?',
+        options: ['list — sıralı olduğu için', 'tuple — değiştirilemez, sabit veri için mükemmel', 'dict — anahtar-değer çiftleri için', 'set — benzersiz değerler için'],
+        correct: 1,
+        explanation: 'tuple değiştirilemezdir — oluşturulduktan sonra değiştirilemez. Bu, kazara değişiklikleri önler. Selenium locator çiftleri, veritabanı satırı sonuçları ve koordinatlar için tuple kullanımı idealdir.',
+      },
+      22: { text: '☕ Java Biliyorsan: Veri Tipi Köprüsü' },
+      23: { topic: 'Değişkenler ve Tipler', why: 'Java\'da her değişkenin tipi derleme zamanında sabitlenir. Python\'da tipler dinamiktir — aynı değişken farklı tipler tutabilir. Testleri daha hızlı yazarsın ama tip uyumsuzluklarına dikkat etmen gerekir.', note: 'Python type hints (count: int) Java gibi görünür ama çalışma zamanında zorlanmaz. Statik kontrol için mypy kullan.' },
+      24: { topic: 'null → None', why: 'Java\'da null NullPointerException\'a yol açar. Python\'da aynı risk None ile var. "is None" kullanımı en iyi pratiktir (Java\'daki Objects.isNull() gibi).', note: '"is None" kullan, "== None" değil. "value or default" falsy kontrol yapar (0, "", [] de default döner), dikkatli kullan.' },
+      25: { topic: 'ArrayList → list', why: 'Java ArrayList ve Python list aynı amaca hizmet eder: dinamik boyutlu sıralı koleksiyon. Python sözdizimi çok daha kısadır — new yok, import yok, generic tip yok.', note: 'append()=add(), remove()=remove(), len()=size(), in=contains(). "new ArrayList<>()" yok — sadece []. Karışık tipler desteklenir.' },
+      26: { topic: 'HashMap → dict', why: 'Java HashMap ve Python dict aynı konsepttir: key-value eşlemeleri. Python sözdizimi çok daha temizdir — put/get yerine [] kullanılır, import gerekmez.', note: 'Python dict Python 3.7\'den itibaren ekleme sırasını korur. put()=result["k"]=v, get()=result.get("k"), entrySet()=.items().' },
+      27: { topic: 'HashSet → set', why: 'Tekrar eden öğeleri elemek ve O(1) üyelik kontrolü için — Java\'da HashSet, Python\'da set. Aynı sözdizimi kalıbı ve aynı Big-O performans özellikleri.', note: 'Hızlı üyelik testi için list yerine set kullan (QA\'da: test etiketleri, ziyaret edilen URL\'ler, görülen hata kodları). Aynı O(1) garantisi.' },
+      28: { topic: 'tuple (Java\'da karşılığı yok!)', why: 'Python tuple değiştirilemez sıralı koleksiyondur. Java\'daki en yakın karşılık List.of() veya record\'dur. Anahtar kullanım: bir fonksiyondan sarmalayıcı sınıf olmadan birden fazla değer döndürmek.', note: 'Python\'ın en güçlü özelliklerinden biri: tuple ile birden fazla değer döndür. Java\'da Result/Pair sarmalayıcı gerekir; Python\'da sadece "return a, b".' },
+    }
+  }),
+  applyTr(sections[3], {
+    title: '🟡 Seviye 2: Orta Seviye Python',
+    blocks: {
+      0: { text: 'List Comprehension\'lar', difficulty: '🟡 Orta Seviye' },
+      2: { text: 'Exception Handling (Hata Yönetimi)', difficulty: '🟡 Orta Seviye' },
+      4: { text: 'Class\'lar ve OOP', difficulty: '🟡 Orta Seviye' },
+      6: { text: 'Regular Expression\'lar (Regex)', difficulty: '🟡 Orta Seviye' },
+      8: { text: 'JSON ile Çalışma', difficulty: '🟡 Orta Seviye' },
+      10: { text: 'Page Object Model (Orta Seviye Örnek)', difficulty: '🟡 Orta Seviye' },
+      12: { text: 'Pythonic Stil — Daha Temiz Kod Yazın' },
+      13: {
+        left: {
+          label: '❌ Uzun — Geleneksel for döngüsü',
+          code: `# Başarısız testlerin adlarını al
+failed = []
+for r in results:
+    if r["status"] == "FAIL":
+        failed.append(r["name"])`,
+          note: '5 satır, geçici değişken, ekstra append çağrısı',
+        },
+        right: {
+          label: '✅ Pythonic — List comprehension',
+          code: `# Aynı sonuç tek okunabilir satırda:
+failed = [r["name"] for r in results
+          if r["status"] == "FAIL"]`,
+          note: '1 satır, geçici değişken yok, daha hızlı çalışır',
+        },
+      },
+      14: {
+        left: {
+          label: '❌ Tehlikeli — Genel except',
+          code: `try:
+    response = requests.get(url)
+    data = response.json()
+except:
+    # KeyboardInterrupt ve SystemExit dahil
+    # HER ŞEYİ yakalar!
+    print("bir şeyler yanlış gitti")`,
+          note: 'Tüm hataları gizler, debug edilemez',
+        },
+        right: {
+          label: '✅ Güvenli — Belirli exception\'lar',
+          code: `try:
+    response = requests.get(url, timeout=5)
+    response.raise_for_status()
+    data = response.json()
+except requests.exceptions.Timeout:
+    print("İstek 5 saniye sonra zaman aşımına uğradı")
+except requests.exceptions.HTTPError as e:
+    print(f"HTTP {e.response.status_code}")`,
+          note: 'Her hata türü ayrı işlenir, net mesajlar',
+        },
+      },
+      15: {
+        question: 'Hangi Python koleksiyon tipi en HIZLI "bu değer burada mı?" kontrolünü sağlar (O(1) karmaşıklık)?',
+        options: ['list', 'tuple', 'set', 'string'],
+        correct: 2,
+        explanation: 'set dahili olarak hash tablosu kullanır. "değer in my_set" kontrolü O(1)\'dir — boyuttan bağımsız sabit süre. list ve tuple her öğeyi tek tek kontrol eder (O(n)). Hızlı üyelik testi için her zaman set kullanın.',
+      },
+      16: { text: '☕ Java Biliyorsan: Kontrol Akışı Köprüsü' },
+      17: { topic: 'for döngüleri', why: 'Python for-in, Java\'nın enhanced for-each döngüsüne çok benzer. Temel fark: Python\'da index VE değer için enumerate() kullanılır; Java\'da iki ayrı döngü stili gerekir.', note: 'Python\'da süslü parantez yok — GIRINTI blokları tanımlar! Eksik girinti = döngü gövdesi yok. Java\'dan geçişte en büyük sözdizimi şoku budur.' },
+      18: { topic: 'method → fonksiyon', why: 'Java\'da her metod bir class içinde olmak zorundadır. Python fonksiyonları bağımsız (standalone) olabilir — küçük yardımcı araçlar için class yazmaya gerek yoktur. Varsayılan parametreler Java\'nın method overloading\'ini karşılar.', note: 'Python keyword argümanları güçlüdür: create_user("Bob", active=False, role="admin") — sıra önemli değil.' },
+      19: { topic: 'Exception handling', why: 'Aynı konsept, farklı anahtar kelimeler: "catch" Python\'da "except" olur. Python\'da checked/unchecked exception ayrımı yoktur — tüm exception\'lar Java\'nın RuntimeException gibi davranır. throws bildirimi yoktur.', note: '"raise" (argümansız) = Java "throw e" (re-throw). "except Exception as e" = Java "catch (Exception e)". Python\'da checked exception yok — "throws IOException" bildirimi gerekmez.' },
+    }
+  }),
+  applyTr(sections[4], {
+    title: '🔴 Seviye 3: İleri Seviye Python',
+    blocks: {
+      0: { text: 'Decorator\'lar', difficulty: '🔴 İleri' },
+      1: { content: "Decorator, başka bir fonksiyonu sarıp davranış ekleyen bir fonksiyondur — orijinali değiştirmeden. @ söz dizimiyle uygulanır. Herhangi bir fonksiyon çağrısı etrafında 'ön işleme + son işleme' olarak düşünün." },
+      3: { text: 'Context Manager\'lar', difficulty: '🔴 İleri' },
+      5: { text: 'Type Hint\'ler (Tip İpuçları)', difficulty: '🔴 İleri' },
+      7: { text: 'Pytest Temelleri', difficulty: '🔴 İleri' },
+      9: {
+        title: 'Bir Decorator Nasıl Çalışır — Adım Adım',
+        note: 'Decorator, fonksiyondan ÖNCE ve SONRA çalışır — proxy/wrapper kalıbı gibi. @timer söz dizimi şunun kısaltmasıdır: load_data = timer(load_data)',
+        steps: [
+          { num: '1', label: 'def timer(func)', desc: 'decorator fonksiyonu alır' },
+          { num: '2', label: 'def wrapper()', desc: 'bir wrapper closure oluşturur' },
+          { num: '3', label: 'ÖN: süreyi başlat', desc: 'func() çağrısından önceki kod', highlight: true },
+          { num: '4', label: 'func(*args)', desc: 'ORİJİNAL fonksiyonu çağırır' },
+          { num: '5', label: 'SON: süreyi logla', desc: 'func() döndükten sonraki kod', highlight: true },
+          { num: '6', label: 'return wrapper', desc: 'decorator wrapper\'ı döndürür' },
+        ],
+      },
+      10: {
+        title: 'pytest Fixture Scope\'ları — Yaşam Döngüsü Piramidi',
+        note: 'Kapsam ne kadar yüksekse o kadar az çalışır. session fixture tüm test çalıştırması için bir kez çalışır. function fixture her test için çalışır.',
+        levels: [
+          { label: 'session', desc: 'tüm test çalıştırması için bir kez', color: 'red' },
+          { label: 'module', desc: 'her .py test dosyası için bir kez', color: 'orange' },
+          { label: 'class', desc: 'her test sınıfı için bir kez', color: 'yellow' },
+          { label: 'function', desc: 'her test öncesi ve sonrası (varsayılan)', color: 'green' },
+        ],
+      },
+    }
+  }),
+  applyTr(sections[5], {
+    title: '🧪 QA\'da Python — Gerçek Otomasyon Senaryoları',
+    blocks: {
+      0: { text: 'Senaryo 1: JSON API Yanıtını Parse Et & Değerleri Doğrula' },
+      2: { text: "Senaryo 2: CSV\'den Data-Driven Testler" },
+      4: { text: 'Senaryo 3: Kararsız Testler için Retry Decorator' },
+      6: { text: 'Senaryo 4: İki API Yanıtını Karşılaştır' },
+      8: { text: 'Senaryo 5: Setup/Teardown ile Pytest DB Fixture' },
+      10: { text: 'Senaryo 6: Regex ile Test Verisi Doğrulama' },
+      12: { text: 'Senaryo 7: Zaman Damgalı Test Raporu Oluştur' },
+      14: { text: '🗂️ pytest Fixture\'ları Nasıl Bulur ve Enjekte Eder?' },
+      15: {
+        title: 'pytest Fixture Keşif & Enjeksiyon Akışı',
+        note: 'Fixture\'lar aşağıdan yukarıya keşfedilir: önce yerel conftest.py, sonra üst klasörler, en son `page` ve `tmp_path` gibi yerleşikler.',
+        steps: [
+          { num: '1', label: 'Test dosyası', desc: 'test_*.py içindeki @pytest.fixture veya @pytest.mark.xxx', highlight: true },
+          { num: '2', label: 'conftest.py (yerel)', desc: 'Testle aynı klasör — en özgün' },
+          { num: '3', label: 'conftest.py (üst)', desc: 'Üst klasörler yukarı doğru aranır' },
+          { num: '4', label: 'Plugin fixture\'ları', desc: 'pytest-playwright, pytest-django vb.' },
+          { num: '5', label: 'Yerleşik fixture\'lar', desc: 'tmp_path, monkeypatch, capsys, caplog' },
+          { num: '6', label: 'Enjekte et & çalıştır', desc: 'Eşleşen fixture\'lar enjekte edilir, test çalışır', highlight: true },
+        ],
+      },
+      16: {
+        left: {
+          label: '❌ Anti-pattern: Her Testte Manuel Kurulum',
+          code: `def test_order_placed():
+    db = sqlite3.connect(":memory:")
+    db.execute("CREATE TABLE orders ...")
+    db.execute("INSERT INTO orders ...")
+
+    # asıl test
+    row = db.execute("SELECT ...").fetchone()
+    assert row[0] == "pending"
+
+    db.close()   # unutmak çok kolay!
+
+def test_order_cancelled():
+    db = sqlite3.connect(":memory:")  # tekrar!
+    db.execute("CREATE TABLE orders ...")
+    ...`,
+          note: 'Tekrarlanan kurulum, unutulan teardown, bakımı zor',
+        },
+        right: {
+          label: '✅ Fixture: DRY, Otomatik Teardown',
+          code: `@pytest.fixture(scope="session")
+def db():
+    conn = sqlite3.connect(":memory:")
+    conn.execute("CREATE TABLE orders ...")
+    yield conn
+    conn.close()  # otomatik teardown — her zaman çalışır
+
+@pytest.fixture
+def sample_order(db):
+    cid = db.execute("INSERT ...").lastrowid
+    yield cid
+    db.execute("DELETE FROM orders WHERE id=?", (cid,))
+
+def test_order_placed(sample_order, db):
+    row = db.execute("SELECT status FROM orders WHERE id=?",
+                     (sample_order,)).fetchone()
+    assert row[0] == "pending"   # temiz, odaklı`,
+          note: 'Bir kez kur, her yerde kullan, teardown garantili',
+        },
+      },
+      17: {
+        question: 'scope="session" ile işaretlenmiş bir pytest fixture, test çalışması boyunca kurulum kodunu kaç kez çalıştırır?',
+        options: [
+          'Her test fonksiyonu için bir kez',
+          'Her test sınıfı için bir kez',
+          'Her test dosyası için bir kez',
+          'Tüm test oturumu için yalnızca bir kez',
+        ],
+        correct: 3,
+        explanation: 'scope="session", fixture\'ı tüm pytest oturumu için yalnızca bir kez oluşturur ve TÜM testlerle paylaşır. DB bağlantıları ve tarayıcı örnekleri gibi pahalı kaynaklar için kullanın. Teardown (yield sonrası) en sonda yalnızca bir kez çalışır.',
+      },
+    }
+  }),
+  applyTr(sections[6], {
+    title: '💼 Python Mülakat Soruları & Cevapları',
+    blocks: {
+      0: { content: 'Model cevabı görmek için her soruya tıklayın. Zorluk düzeyine göre sıralanmıştır.' },
+      1: { text: '🟢 Temel Sorular' },
+      2: { question: 'S1: List ile tuple arasındaki fark nedir?', answer: "List\'ler DEĞİŞTİRİLEBİLİR (oluşturulduktan sonra değiştirilebilir) ve [] kullanır. Tuple\'lar DEĞİŞTİRİLEMEZ ve () kullanır.\n\nList kullanın: koleksiyon değiştiğinde (sonuçlar ekleniyor). Tuple kullanın: veri sabit olmalıysa — izin verilen durum değerleri, (x,y) koordinatı, bir Selenium locator." },
+      3: { question: "S2: Python\'da None nedir?", answer: "None, Python\'un null değeridir — bir değerin yokluğu. Kendi tipi vardır (NoneType). Return ifadesi olmayan tüm fonksiyonlar örtük olarak None döndürür.\n\nHer zaman 'is None' veya 'is not None' ile kontrol edin — asla == None kullanmayın." },
+      4: { question: 'S3: == ile is arasındaki fark nedir?', answer: "== DEĞER eşitliğini kontrol eder. 'is' KİMLİK kontrol eder — iki değişkenin bellekte AYNI nesneyi gösterip göstermediğini.\n\nKural: 'is' yalnızca None, True, False için kullanın. Geri kalan her şey için == kullanın." },
+      5: { question: 'S4: *args ve **kwargs ne anlama gelir?', answer: "*args, fazladan KONUMSAL argümanları bir tuple\'a toplar. **kwargs, fazladan ANAHTAR KELİME argümanlarını bir dict\'e toplar. Fonksiyonların herhangi sayıda argüman almasına izin verir — herhangi bir fonksiyonu saran decorator\'lar yazmak için gereklidir." },
+      6: { question: 'S5: List comprehension nedir?', answer: 'Bir liste oluşturmanın kısa tek satırlı yolu: [ifade for öğe in iterable if koşul]. Basit dönüşümler için for döngüsünden daha okunabilirdir. İç içe comprehension\'lardan kaçının — mantık karmaşıklaştığında düzenli döngüler kullanın.' },
+      7: { text: '🟡 Orta Seviye Sorular' },
+      8: { question: "S6: Decorator nedir ve nasıl yazılır?", answer: "Decorator, bir fonksiyonu alıp davranışla sararak sarılmış versiyonu döndüren bir fonksiyondur. Test otomasyonunda: @retry, @timer, @pytest.fixture, @allure.step hepsi birer decorator\'dır. functools.wraps, sarılan fonksiyonun metadata\'sını korur." },
+      9: { question: 'S7: Pytest fixture scope\'larını açıklayın.', answer: "function (varsayılan): test başına yeni fixture. İzolasyon için kullanın (her test için kullanıcı oluştur/sil).\nclass: bir sınıftaki tüm testlerde paylaşılır.\nmodule: bir dosyadaki tüm testlerde paylaşılır.\nsession: tüm test oturumunda paylaşılır. Pahalı kurulum için kullanın — DB bağlantıları, tarayıcı örnekleri, auth token\'ları." },
+      10: { question: 'S8: Test otomasyonunda exception handling nedir?', answer: "try/except/finally çalışma zamanı hatalarını yakalar. Otomasyonda: bir başarısız API çağrısının test runner\'ı çöktürmemesi için ağ hatalarını yakalayın. Temizlik için finally kullanın (tarayıcı/bağlantı her zaman kapanır). Daha iyi hata mesajları için özel exception\'lar oluşturun." },
+      11: { question: 'S9: Instance, class ve static method arasındaki fark nedir?', answer: "Instance method: ilk parametre self\'tir — instance state\'e erişir. En yaygın kullanım.\nClass method (@classmethod): ilk parametre cls\'dir — class state\'e erişir. Alternatif constructor\'lar için kullanın.\nStatic method (@staticmethod): self/cls yok — class isim alanındaki saf yardımcı fonksiyon." },
+      12: { question: 'S10: Python test otomasyon framework\'ünü nasıl yapılandırırsınız?', answer: "Temel katmanlar: pages/ (Page Object\'ler, sayfa başına bir), tests/ (özellik başına pytest dosyaları), fixtures/ (conftest.py hiyerarşisi), test_data/ (CSV, JSON dosyaları), utils/ (API client\'ları, DB yardımcıları), reports/ (git-ignored çıktı), config/ (.env + config.py).\n\nİlkeler: DRY (tekrarlanan locator yok), fixture\'lar setup/teardown yönetir, parametrize data-driven testleri yönetir, CI her şeyi headless çalıştırır." },
+      13: { text: '🔴 İleri Seviye Sorular' },
+      14: { question: 'S11: Generator nedir? Testte ne zaman kullanılır?', answer: "Generator, yield ile birer birer değer üretir — lazy evaluation. List\'in aksine tüm değerleri bellekte saklamaz. Testte kullanım: bellek sorunları olmadan büyük test veri setleri üretme, büyük log dosyalarını satır satır işleme." },
+      15: { question: 'S12: Kararsız testler için retry decorator nasıl yazılır?', answer: "Temel öğeler: metadata korumak için functools.wraps, yapılandırılabilir max_retries + delay + exception tipleri, denemeler arası exponential backoff, tüm yeniden denemeler tükendiğinde son exception\'ı yeniden fırlat." },
+      16: { question: 'S13: Context manager nedir ve özel bir tane nasıl yazılır?', answer: "Context manager, exception oluşsa bile setup ve cleanup\'ın her zaman gerçekleşmesini sağlar. 'with open(file) as f:' arkasında bu mekanizma yatar. @contextmanager decorator\'ı veya __enter__/__exit__ metodları ile özel context manager yazın." },
+      17: { text: '☕ Java Biliyorsan: İleri Python Kavramları Köprüsü' },
+      18: {
+        topic: 'Decorator — AOP / Metod Sarma',
+        why: 'Java\'da çapraz kesen kaygılar (loglama, zamanlama, retry) AOP framework\'leri (AspectJ, Spring @Around) veya manuel boilerplate ile ele alınır. Python decorator\'ları aynı şeyi tek bir @decorator satırı ile yapar — framework gerekmez.',
+        note: '@pytest.fixture, @pytest.mark.parametrize, @allure.step — hepsi decorator. functools.wraps metod imzası metadata\'sını korumaya eşdeğerdir.',
+      },
+      19: {
+        topic: 'Generator — Iterator / Iterable',
+        why: 'Java\'da hasNext() ve next() metodları olan Iterator<T> veya Iterable<T> uygulamanız gerekir — çok boilerplate. Python generator\'ları tek bir yield ifadesiyle aynı lazy diziyi üretir.',
+        note: 'Generator\'lar bellek açısından verimlidir: id_generator(1_000_000) next() çağrılana kadar neredeyse sıfır RAM kullanır. Java karşılığı için tüm listeyi veya Iterator boilerplate\'i saklamamız gerekir.',
+      },
+      20: {
+        topic: 'Context Manager — try-with-resources',
+        why: 'Java try-with-resources (AutoCloseable) exception oluşsa bile kaynakların kapandığını garanti eder. Python "with" ifadesi tamamen aynı şeyi yapar — __exit__\'i veya @contextmanager\'da yield\'den sonraki kodu otomatik çağırır.',
+        note: '"with" = try-with-resources. @contextmanager\'daki "yield" = try gövdesi. finally\'deki kod = AutoCloseable.close(). Aynı garanti, sıfır boilerplate sınıf.',
+      },
+    }
+  }),
+  applyTr(sections[7], {
+    title: '📝 Pratik Alıştırmalar & Hızlı Referans',
+    blocks: {
+      0: { text: 'Pratik Alıştırmalar' },
+      1: {
+        difficulty: '🟢 Başlangıç',
+        title: 'Alıştırma 1: Test Sonuçlarını Parse Et',
+        description: 'Her biri "status" anahtarı ("PASS", "FAIL" veya "SKIP") olan dict\'lerin listesini alan parse_results(results) fonksiyonunu yazın. Döndürsün: {"PASS": N, "FAIL": N, "SKIP": N, "total": N}.',
+        hint: 'Döngüden önce counts dict\'ini başlatın. Güvenlik için .get(status, "UNKNOWN") kullanın.',
+        explanation: 'Döngüden önce counts\'ı başlatın. .get() ile varsayılan değer KeyError\'ı önler. "total" değerini sonunda ekleyin; bilinmeyenler dahil tüm öğeleri yansıtsın.',
+      },
+      2: {
+        difficulty: '🟡 Orta',
+        title: 'Alıştırma 2: APIClient Class\'ı',
+        description: "base_url, get(path) ve post(path, data) metodlarına sahip APIClient class\'ı oluşturun; parse edilmiş JSON dönsün. ConnectionError (None döndür), Timeout (None döndür), HTTPError (fırlat) durumlarını yönetin. Bağlantı yeniden kullanımı için requests.Session kullanın.",
+        hint: '__init__ içinde requests.Session() kullanın. response.raise_for_status() otomatik olarak 4xx/5xx için exception fırlatır.',
+        explanation: "Session TCP bağlantılarını yeniden kullanarak overhead\'i azaltır. Ağ hatalarını (None döndür) HTTP hatalarından (fırlat) ayırmak çağıran koda farklı seçenekler sunar.",
+      },
+      3: {
+        difficulty: '🔴 İleri',
+        title: 'Alıştırma 3: Session DB + CSV Parametrize ile pytest conftest',
+        description: "Session-scoped SQLite fixture ile conftest.py yazın (users tablosu oluşturun). parametrize ile CSV\'den test verisi yükleyip her kullanıcının e-postasını DB\'de doğrulayan test_users.py dosyası yazın.",
+        hint: 'conftest.py scope="session". load_csv() fonksiyonunu @pytest.mark.parametrize([...]) içinde kullanın.',
+        explanation: 'Session scope: DB tüm testler boyunca kalıcıdır (verimli). Her test kendi verilerini temizleyerek testler arası durum sızıntısını önler. parametrize tek fonksiyondan birden fazla senaryo çalıştırır.',
+      },
+      4: { text: 'Hızlı Referans Kartı' },
+      5: {
+        headers: ['Kavram', 'Söz Dizimi', 'Örnek'],
+        rows: [
+          ['f-string', 'f"{değişken}"', 'f"Test {name}: {status}"'],
+          ['List comprehension', '[ifade for x in liste if koşul]', '[r["name"] for r in res if r["status"]=="FAIL"]'],
+          ['Dict güvenli get', 'dict.get(anahtar, varsayılan)', 'row.get("status", "UNKNOWN")'],
+          ['Unpacking', 'a, b = iterable', 'width, height = (1920, 1080)'],
+          ['Type hint', 'parametre: tip', 'def fn(name: str) -> bool:'],
+          ['Optional', 'Optional[T]', 'def fn(x: Optional[str] = None)'],
+          ['Decorator', '@decorator', '@retry(max_attempts=3)'],
+          ['Context manager', 'with ifade as değişken:', 'with open("f.txt") as f:'],
+          ['Generator', 'yield değer', 'def gen(): yield öğe'],
+          ['Fixture (pytest)', '@pytest.fixture(scope=...)', '@pytest.fixture(scope="session")'],
+          ['Parametrize', '@pytest.mark.parametrize()', '@pytest.mark.parametrize("x,y", [(1,2)])'],
+          ['Assert mesajlı', 'assert ifade, "mesaj"', 'assert status == "PASS", f"Alındı {status}"'],
+          ['Regex match', 're.match(kalıp, s)', 're.match(r"^\\d+$", "123")'],
+          ['JSON parse', 'json.loads(str)', 'data = json.loads(response.text)'],
+          ['CSV okuma', 'csv.DictReader(f)', 'for row in csv.DictReader(f):'],
+        ]
+      },
+      6: { content: 'Ayrıntılı çıktı ve kısa hata izleri için "python -m pytest -v --tb=short" çalıştırın. Hata ayıklarken tarayıcıyı görmek için Playwright\'a "--headed" ekleyin.' },
+    }
+  }),
+  applyTr(sections[8], {
+    title: '☕ Java → Python: Bildiğini Kullan',
+    blocks: {
+      0: { content: 'Core Java biliyorsan Python öğrenmek çok daha hızlı! Konseptler aynı — sözdizimi ve bazı kurallar farklı. Bu bölüm her Python kavramını tanıdık Java perspektifinden açıklar: neden gerekli, Java\'da nasıldı, Python\'da nasıl.' },
+      1: { text: '1. Değişkenler ve Tipler' },
+      2: { topic: 'Değişkenler ve Tipler', why: 'Java\'da her değişkenin tipi derleme zamanında sabitlenir. Python\'da tipler dinamik — aynı değişken farklı tipler tutabilir. Testleri daha hızlı yazarsın ama dikkatli olman gerekir.', note: 'Python type hints (count: int) Java gibi görünür ama çalışma zamanında zorlanmaz. Statik kontrol için mypy kullan.' },
+      3: { text: '2. None — null\'ın Karşılığı' },
+      4: { topic: 'null → None', why: 'Java\'da null NullPointerException\'a yol açar. Python\'da aynı risk var ama None olarak adlandırılır. "is None" kullanımı en iyi pratiktir.', note: '"is None" kullan, "== None" değil. value or "default" falsy check yapar (0, "", [] da default döner), dikkatli kullan.' },
+      5: { text: '3. List — ArrayList\'in Karşılığı' },
+      6: { topic: 'ArrayList → list', why: 'Java ArrayList ve Python list aynı amaca hizmet eder: dinamik boyutlu sıralı koleksiyon. Python sözdizimi çok daha kısadır — new yoktur, import yoktur, generic tip yoktur.', note: 'Python list mixed type destekler. append()=add(), remove()=remove(), len()=size(), in=contains(). "new ArrayList<>()" yok — sadece [].' },
+      7: { text: '4. Dict — HashMap\'in Karşılığı' },
+      8: { topic: 'HashMap → dict', why: 'Java HashMap ve Python dict aynı konsept: key-value eşlemeleri. Python sözdizimi çok daha temizdir — put/get yerine [] kullanılır, import gerekmez.', note: 'Python dict Python 3.7\'den itibaren ekleme sırasını korur. put()=d["k"]=v, get()=d.get("k"), entrySet()=.items().' },
+      9: { text: '5. Set — HashSet\'in Karşılığı' },
+      10: { topic: 'HashSet → set', why: 'Tekrar eden öğeleri elemek ve O(1) üyelik kontrolü için — Java\'da HashSet, Python\'da set. Hem sözdizimi hem performans karakteristiği aynıdır.', note: 'O(1) lookup için list yerine set kullan. Python set ve Java HashSet aynı Big-O garantileri sunar.' },
+      11: { text: '6. Tuple — Java\'da Doğrudan Karşılığı Yok' },
+      12: { topic: 'tuple (Java\'da yok!)', why: 'Python tuple immutable sıralı koleksiyondur. Java\'da en yakın List.of() veya record\'dur. Python\'da birden fazla değer döndürmek için tuple kullanılır.', note: 'Python\'ın en güçlü özelliklerinden biri: birden fazla değer döndürmek için tuple kullan. Java\'da Result/Pair sarmalayıcı gerekir; Python\'da sadece "return a, b".' },
+      13: { text: '7. String Formatting — f-string vs String.format()' },
+      14: { topic: 'String formatting', why: 'Test logları ve raporlarında sık kullanılır. Python f-string, Java String.format()\'un çok daha okunabilir versiyonudur.', note: 'f-string {} içine method çağrısı, hesaplama, koşul da yazabilirsin. %s veya String.format kullanma — f-string her zaman daha okunabilir.' },
+      15: { text: '8. Döngüler — for-each → for-in' },
+      16: { topic: 'for loops', why: 'Python for-in, Java\'nın enhanced for-each döngüsüne çok benzer. Tek fark: Python\'da index için enumerate() kullanılır.', note: 'Python\'da süslü parantez yok — GİRİNTİ blokları tanımlar! Eksik girinti = döngü gövdesi yok. Java\'dan geçişte en büyük sözdizimi şoku budur.' },
+      17: { text: '9. Fonksiyonlar — Method → def' },
+      18: { topic: 'methods → functions', why: 'Java\'da her metod bir class içinde olmak zorundadır. Python\'da fonksiyonlar serbest (standalone) olabilir. Default parametreler Java method overloading\'in yerini alır.', note: 'Python keyword arguments güçlüdür: create_user("Bob", active=False, role="admin") — sıra önemli değil.' },
+      19: { text: '10. Exception Handling — try/catch → try/except' },
+      20: { topic: 'Exception handling', why: 'Aynı konsept, farklı anahtar kelimeler: "catch" Python\'da "except" olur. Python\'da checked/unchecked exception ayrımı yoktur — throws bildirimi yoktur.', note: '"raise" (argümansız) = Java "throw e". Python\'da checked exceptions yok — "throws IOException" bildirimi gerekmez.' },
+      21: { text: '11. Sınıflar ve OOP — class (Çok Benzer!)' },
+      22: { topic: 'class & OOP', why: 'Python class yapısı Java\'ya çok benzer. İki kritik fark: (1) her method "self" parametresi alır, (2) access modifier\'lar kural — zorunluluk değil.', note: '"self" Python\'da explicit. @property = getter (parantez olmadan çağrılır). __init__ = constructor. __str__ = toString().' },
+      23: { text: '12. Erişim Belirleyicileri — Kural, Zorunluluk Değil!' },
+      24: { topic: 'access modifiers (kural, zorunluluk değil!)', why: 'Java\'da private/public/protected derleyici tarafından zorlanır. Python\'da sadece kuraldır — _ ve __ prefix kullanılır ama dışarıdan hala erişilebilir!', note: '__ (double underscore) ismi karıştırır ama engellemez. Python felsefesi: "Hepimiz yetişkiniz, gizlemeye gerek yok."' },
+      25: { text: '13. Java Streams → List Comprehension' },
+      26: { topic: 'Streams → List Comprehensions', why: 'Java 8 Streams ve Python list comprehension aynı amaca hizmet eder: filtrele ve dönüştür. Python versiyonu çok daha kısadır.', note: '[x for x in list if cond] = stream().filter().map().collect(). Bu idiom Python\'da her yerde kullanılır — mutlaka öğren.' },
+      27: { text: '14. try-with-resources → with' },
+      28: { topic: 'try-with-resources → with', why: 'Dosya, DB bağlantısı gibi kaynakları güvenli kapatmak için. Java\'da try-with-resources, Python\'da "with". Aynı güvence: hata olsa bile kaynak kapanır.', note: '"with" AutoCloseable implement eden her nesneyle çalışır. "finally: f.close()" artık eski tarz.' },
+      29: { text: '15. Kalıtım — extends/implements → Python' },
+      30: { topic: 'inheritance & abstract class', why: 'Python\'da extends ve implements arasında ayrım yoktur. Abstract class için ABC kullanılır. Multiple inheritance doğal desteklenir.', note: 'Python multiple inheritance destekler: (BasePage, Loggable). @Override yok — sadece metodu yeniden tanımla.' },
+      31: { text: 'Hızlı Karşılaştırma Tablosu' },
+      32: {
+        headers: ['Kavram', 'Java', 'Python', 'Not'],
+        rows: [
+          ['Değişken', 'int x = 5;', 'x = 5', 'Python: dinamik tipleme'],
+          ['Null', 'null', 'None', '"is None" kullan, "== None" değil'],
+          ['Dinamik dizi', 'ArrayList<T>', 'list', 'Import yok, generic tip yok'],
+          ['Key-value map', 'HashMap<K,V>', 'dict', 'Import yok, literal: {k: v}'],
+          ['Benzersiz set', 'HashSet<T>', 'set', 'Import yok, literal: {v1, v2}'],
+          ['Immutable liste', 'List.of() / record', 'tuple', 'Birden fazla değer dönüşü için'],
+          ['String format', 'String.format()', 'f"...{var}..."', 'f-string çok daha temiz'],
+          ['For-each', 'for (T x : list)', 'for x in list:', 'Index için enumerate()'],
+          ['Constructor', 'ClassName(args)', '__init__(self, args)', 'self explicit this'],
+          ['toString()', 'toString()', '__str__(self)', '@Override yok'],
+          ['Getter', 'getX()', '@property', 'Parantez olmadan çağrılır'],
+          ['Private field', 'private int x;', 'self.__x', 'ZORUNLU DEĞİL! Sadece kural'],
+          ['Streams filter', '.stream().filter()', '[x for x in ... if ...]', 'List comprehension'],
+          ['try-catch', 'try {} catch (E e)', 'try: ... except E as e:', '"catch" → "except"'],
+          ['try-resources', 'try (Res r = ...)', 'with Res() as r:', '"with" auto-close'],
+          ['Abstract class', 'abstract class', 'class X(ABC)', 'from abc import ABC'],
+          ['Interface', 'interface I {}', 'class I: (plain class)', 'Interface keyword yok'],
+          ['Kalıtım', 'extends Base', 'class X(Base):', 'Parantez içinde'],
+        ],
+      },
+    },
+  }),
 ]
 
 const trHero = {
@@ -1274,7 +3820,7 @@ const trHero = {
   intro: 'Python\'u sıfırdan öğrenin, test otomasyonuna odaklanın. Temel kodlamadan gelişmiş pytest çerçevelerine kadar — modern bir QA mühendisinin ihtiyaç duyduğu her şey burada.',
 }
 
-const trTabs = ['🎯 Giriş', '📦 Kurulum', '🟢 Temeller', '🟡 Orta Seviye', '🔴 İleri Seviye', '🧪 QA Kullanım', '💼 Mülakat', '📝 Pratik & Referans']
+const trTabs = ['🎯 Giriş', '📦 Kurulum', '🟢 Temeller', '🟡 Orta Seviye', '🔴 İleri Seviye', '🧪 QA Kullanım', '💼 Mülakat', '📝 Pratik & Referans', '☕ Java → Python']
 
 const enHero = {
   title: '🐍 Python',
@@ -1282,9 +3828,9 @@ const enHero = {
   intro: 'Learn Python from scratch with a focus on test automation. From basic scripting to advanced pytest frameworks — everything a modern QA engineer needs to write reliable, maintainable tests.',
 }
 
-const enTabs = ['🎯 Intro & Why', '📦 Installation', '🟢 Foundations', '🟡 Intermediate', '🔴 Advanced', '🧪 QA Use Cases', '💼 Interview Q&A', '📝 Practice & Reference']
+const enTabs = ['🎯 Intro & Why', '📦 Installation', '🟢 Foundations', '🟡 Intermediate', '🔴 Advanced', '🧪 QA Use Cases', '💼 Interview Q&A', '📝 Practice & Reference', '☕ Java → Python']
 
 export const pythonData = {
   en: { hero: enHero, tabs: enTabs, sections },
-  tr: { hero: trHero, tabs: trTabs, sections },
+  tr: { hero: trHero, tabs: trTabs, sections: trSections },
 }

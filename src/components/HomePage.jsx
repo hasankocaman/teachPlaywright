@@ -9,6 +9,7 @@ import APISimulation from './APISimulation'
 import FrameworkComparison from './FrameworkComparison'
 import LocatorGuide from './LocatorGuide'
 import Practice from './Practice'
+import PlaywrightLangCompare from './PlaywrightLangCompare'
 
 function HomePage() {
     const { language, t, toggleLanguage } = useLanguage()
@@ -31,6 +32,7 @@ function HomePage() {
         { id: 'table', name: t('nav.table') },
         { id: 'api', name: t('nav.api') },
         { id: 'comparison', name: t('nav.comparison') },
+        { id: 'lang-compare', name: language === 'tr' ? '🔀 3 Dil Karşılaştır' : '🔀 3-Language Compare' },
         { id: 'practice', name: t('nav.practice') || '🛠️ Uygulama Bahçesi' },
     ]
 
@@ -50,6 +52,8 @@ function HomePage() {
                 return <APISimulation darkMode={darkMode} />
             case 'comparison':
                 return <FrameworkComparison darkMode={darkMode} />
+            case 'lang-compare':
+                return <PlaywrightLangCompare darkMode={darkMode} />
             case 'practice':
                 return <Practice darkMode={darkMode} onHomeClick={() => setActiveSection('basic')} />
             default:

@@ -326,1210 +326,1157 @@ npx playwright show-report`,
   {
     title: "TypeScript Foundations",
     blocks: [
-      {
-        type: "heading",
-        content: "TypeScript vs JavaScript: The Same Bug, Two Outcomes",
-        difficulty: "🟢 Beginner",
-      },
-      {
-        type: "code",
-        language: "javascript",
-        label: "JavaScript — error only visible at runtime",
-        content: `// JavaScript: no compile step — this bug runs silently until tests fail
-function getTestName(test) {
-  return test.name.toUpperCase();   // What if test is null? Runtime crash!
+
+      // ═══════════════════════════════════════════════════════════════════════
+      // W3Schools Topic 1 — Simple Types
+      // ═══════════════════════════════════════════════════════════════════════
+      { type: "heading", text: "Simple Types", difficulty: "🟢 Beginner" },
+      { type: "simple-box", emoji: "🔷", title: { tr: "Bunu 10 yaşındaki birine anlatalım:", en: "Simply put:" }, content: { tr: "TypeScript, JavaScript'in üzerine etiket takılmış hali. 'Bu kutu sadece sayı içerir' etiketi gibi — yanlış bir şey koymaya çalışırsan hemen uyarı alırsın. Java'da zaten böyleydi; TypeScript bunu JavaScript'e getiriyor.", en: "TypeScript is JavaScript with labels attached. Like a box labeled 'numbers only' — if you try to put the wrong thing in, you get an immediate warning. Java already had this; TypeScript brings it to JavaScript." } },
+      { type: "text", content: { tr: "Java'da her değişkenin tipi açıkça belirtilir: int x = 5; String name = 'Ali'. TypeScript'te aynı şey: let x: number = 5; let name: string = 'Ali'. Fark: TypeScript genellikle tipi otomatik çıkarabilir (type inference) — her yere yazmak zorunda değilsin.", en: "Java requires explicit types: int x = 5; String name = 'Ali'. TypeScript is the same: let x: number = 5; let name: string = 'Ali'. Difference: TypeScript can usually infer the type automatically — you don't have to write it everywhere." } },
+      { type: "code", language: "typescript", code: `// TypeScript Simple Types — Java Comparison
+// Java:    int age = 25;
+// TypeScript: let age: number = 25;  (or just: let age = 25)
+
+let age: number = 25;          // number (int, float, double all combined)
+let name: string = "Alice";    // string
+let isActive: boolean = true;  // boolean
+let score: number = 98.5;      // TypeScript number = Java double
+
+// Type inference — TypeScript deduces type from value
+let city = "Istanbul";         // TypeScript knows this is string
+// city = 42;                  // ERROR: Type 'number' not assignable to type 'string'
+
+// Type annotation vs inference
+let explicitNum: number = 10;  // explicit annotation
+let inferredNum = 10;          // inferred as number (same result)
+
+// any — disables type checking (avoid in production!)
+let anything: any = "hello";
+anything = 42;                 // no error — but you lose type safety
+anything = true;
+
+// Function with typed params and return type
+function greet(name: string, times: number): string {
+  return (name + " ").repeat(times).trim();
+}
+console.log(greet("Hi", 3));   // Hi Hi Hi
+// greet(42, "three");          // ERROR: wrong types` },
+      { type: "editor", lang: "typescript", defaultCode: `// TypeScript catches errors at compile time
+function calculateTax(price: number, taxRate: number): number {
+  return price * (1 + taxRate);
 }
 
-getTestName(null);
-// Runtime Error: Cannot read properties of null (reading 'name')
-// You find this bug only when CI fails at 3 AM`,
-        expected: "TypeError: Cannot read properties of null (reading 'name')",
-      },
-      {
-        type: "code",
-        language: "typescript",
-        label: "TypeScript — error caught before you run",
-        content: `// TypeScript: compile-time check catches the bug immediately in your editor
-interface Test {
-  name: string;   // name is required and must be a string
-  id: number;
+const total = calculateTax(100, 0.18);
+console.log("Total with tax:", total);
+
+// Try: change 100 to "100" — TypeScript will show an error
+// const wrongTotal = calculateTax("100", 0.18);` },
+      { type: "comparison", title: { tr: "Java ile Karşılaştırma", en: "Java vs TypeScript — Basic Types" }, columns: ["Java", "TypeScript"], rows: [
+        { concept: "Integer", java: "int x = 5;", typescript: "let x: number = 5;" },
+        { concept: "Float", java: "double d = 3.14;", typescript: "let d: number = 3.14;" },
+        { concept: "String", java: 'String s = "hi";', typescript: 'let s: string = "hi";' },
+        { concept: "Boolean", java: "boolean b = true;", typescript: "let b: boolean = true;" },
+        { concept: "No type", java: "Object o = anything;", typescript: "let o: any = anything;" },
+      ]},
+      { type: "quiz", question: { tr: "TypeScript'te hem integer hem float için hangi tip kullanılır?", en: "Which TypeScript type is used for both integers and floats?" }, options: [{ id: "a", text: "int" }, { id: "b", text: "float" }, { id: "c", text: "number" }, { id: "d", text: "numeric" }], correct: "c", explanation: { tr: "TypeScript'te 'number' tipi Java'daki int, long, double, float'un hepsini kapsar. Tek bir sayısal tip var. Java'da bu ayrım önemliydi — TypeScript'te yok.", en: "TypeScript's 'number' type covers Java's int, long, double, and float. There is only one numeric type. This distinction was important in Java — not in TypeScript." } },
+
+      // ═══════════════════════════════════════════════════════════════════════
+      // W3Schools Topic 2 — Special Types
+      // ═══════════════════════════════════════════════════════════════════════
+      { type: "heading", text: "Special Types", difficulty: "🟢 Beginner" },
+      { type: "simple-box", emoji: "⚠️", title: { tr: "Bunu 10 yaşındaki birine anlatalım:", en: "Simply put:" }, content: { tr: "Özel tipler, beklenmedik durumlar için. 'any' = her şey olabilir (kötü pratik), 'unknown' = bilinmiyor ama önce kontrol et, 'never' = bu kod asla çalışmaz, 'void' = fonksiyon bir şey döndürmez.", en: "Special types for unexpected situations. 'any' = can be anything (bad practice), 'unknown' = unknown but check first, 'never' = this code never runs, 'void' = function returns nothing." } },
+      { type: "code", language: "typescript", code: `// TypeScript Special Types
+
+// void — function returns nothing (like Java void)
+function logMessage(msg: string): void {
+  console.log("[LOG]", msg);
+  // no return value
 }
 
-function getTestName(test: Test): string {
-  return test.name.toUpperCase();   // Safe: TypeScript guarantees 'name' exists
+// null and undefined
+let nullVal: null = null;
+let undVal: undefined = undefined;
+
+// any — escapes type checking (use sparingly)
+let userInput: any = document.getElementById("input");  // from DOM
+userInput = 42;         // no error
+
+// unknown — safer than any: must type-check before use
+function processInput(input: unknown): string {
+  if (typeof input === "string") {
+    return input.toUpperCase();    // safe: we checked the type
+  }
+  if (typeof input === "number") {
+    return input.toFixed(2);       // safe: we checked the type
+  }
+  return String(input);            // fallback
+}
+console.log(processInput("hello"));  // HELLO
+console.log(processInput(42.5));     // 42.50
+
+// never — function that never returns (throws or infinite loop)
+function throwError(message: string): never {
+  throw new Error(message);         // never returns normally
 }
 
-// getTestName(null);
-// Compile Error: Argument of type 'null' is not assignable to parameter of type 'Test'
-// Your IDE shows a red squiggle — before you even save the file
-
-getTestName({ name: "Login Test", id: 1 });`,
-        expected: "LOGIN TEST",
-      },
-      {
-        type: "heading",
-        content: "Basic Types",
-      },
-      {
-        type: "code",
-        language: "typescript",
-        label: "All fundamental TypeScript types with automation context",
-        content: `// ── Primitive Types ─────────────────────────────────────────────
-
-let testName: string = "Login flow test";         // text values
-let retryCount: number = 3;                        // integers and floats
-let headless: boolean = true;                      // true or false
-let timeout: number = 30_000;                      // 30000ms — underscore separator for readability
-
-// ── Avoid: any ───────────────────────────────────────────────────
-// 'any' disables ALL type checking — it is the escape hatch that defeats the purpose of TypeScript
-let dangerous: any = "I could be anything";        // compiler trusts you blindly
-dangerous = 42;                                    // no error — types not checked
-dangerous.nonExistentMethod();                     // no error at compile time — WILL crash at runtime
-// Rule: Never use 'any' in production test code. Use 'unknown' instead if you truly don't know the type.
-
-// ── void ─────────────────────────────────────────────────────────
-// Used for functions that don't return a value
-async function clickLoginButton(): Promise<void> { // returns nothing — just performs action
-  // await page.click('#login');
+// Type guard pattern (common in QA code)
+function assertDefined<T>(val: T | null | undefined, name: string): T {
+  if (val == null) throwError(\`\${name} is required but was \${val}\`);
+  return val;
+}` },
+      { type: "editor", lang: "typescript", defaultCode: `// Practice unknown vs any
+function parseAge(input: unknown): number {
+  if (typeof input === "number") return input;
+  if (typeof input === "string") {
+    const parsed = parseInt(input);
+    if (isNaN(parsed)) throw new Error("Invalid age: " + input);
+    return parsed;
+  }
+  throw new Error("Cannot parse age from: " + typeof input);
 }
 
-// ── null and undefined ────────────────────────────────────────────
-let pageTitle: string | null = null;               // could be a string OR null
-let optionalSelector: string | undefined;          // declared but not yet assigned
+console.log(parseAge(25));       // 25
+console.log(parseAge("30"));    // 30
+// console.log(parseAge(true)); // Error` },
+      { type: "quiz", question: { tr: "TypeScript'te 'unknown' ve 'any' arasındaki temel fark nedir?", en: "What is the key difference between 'unknown' and 'any' in TypeScript?" }, options: [{ id: "a", text: { tr: "Hiçbir fark yok", en: "No difference" } }, { id: "b", text: { tr: "unknown kullanmadan önce tip kontrolü zorunlu, any'de değil", en: "unknown requires a type check before use, any does not" } }, { id: "c", text: { tr: "unknown sadece string için, any hepsi için", en: "unknown is only for strings, any is for everything" } }, { id: "d", text: { tr: "any daha güvenli", en: "any is safer" } }], correct: "b", explanation: { tr: "'unknown' tip kontrolü (typeof, instanceof) yapılmadan kullanılamaz. 'any' tip güvenliğini tamamen devre dışı bırakır. Production kodunda any yerine unknown tercih edilir.", en: "'unknown' cannot be used without a type check (typeof, instanceof). 'any' completely disables type safety. In production code, prefer unknown over any." } },
 
-// ── never ─────────────────────────────────────────────────────────
-// A function that ALWAYS throws — it never returns normally
-function failTest(message: string): never {
-  throw new Error(\`Test failed: \${message}\`);       // always throws, never returns
-}
+      // ═══════════════════════════════════════════════════════════════════════
+      // W3Schools Topic 3 — Arrays
+      // ═══════════════════════════════════════════════════════════════════════
+      { type: "heading", text: "Arrays", difficulty: "🟢 Beginner" },
+      { type: "simple-box", emoji: "📚", title: { tr: "Bunu 10 yaşındaki birine anlatalım:", en: "Simply put:" }, content: { tr: "TypeScript array'i Java'nın typed ArrayList'i gibi. Java'da List<String> yazınca sadece String girebilirdin. TypeScript'te string[] yazarsan sadece string girebilirsin.", en: "TypeScript arrays are like Java's typed ArrayList. In Java, List<String> only accepts Strings. In TypeScript, string[] only accepts strings." } },
+      { type: "code", language: "typescript", code: `// TypeScript Arrays — two syntax options (both work)
+// Java: List<String> names = new ArrayList<>();
+// TypeScript:
+let names: string[] = ["Alice", "Bob", "Carol"];    // preferred syntax
+let scores: Array<number> = [95, 87, 72, 98];       // generic syntax
 
-console.log(testName);       // "Login flow test"
-console.log(retryCount);     // 3
-console.log(headless);       // true`,
-        expected: "Login flow test\n3\ntrue",
-      },
-      {
-        type: "heading",
-        content: "Type Inference",
-      },
-      {
-        type: "code",
-        language: "typescript",
-        label: "TypeScript infers types from initial values",
-        content: `// Type inference — TypeScript figures out the type from the initial value
-let testCount = 5;            // TypeScript infers: number
-let suiteName = "Smoke";      // TypeScript infers: string
-let isPassing = true;         // TypeScript infers: boolean
-let durations = [120, 340];   // TypeScript infers: number[]
+// Typed array operations
+names.push("Dave");           // OK: string
+// names.push(42);            // ERROR: number not assignable to string
 
-// Once inferred, the type is locked — same as explicit annotation
-// testCount = "five";         // Error: Type 'string' is not assignable to type 'number'
-
-// Explicit annotation — use when the initial value doesn't carry the right type
-let baseUrl: string;          // declared without value — MUST annotate explicitly
-baseUrl = "https://staging.example.com";
-
-// Function return type inference
-function add(a: number, b: number) {
-  return a + b;               // TypeScript infers return type: number
-}
-
-const result = add(2, 3);     // result is inferred as: number
-console.log(result);`,
-        expected: "5",
-      },
-      {
-        type: "heading",
-        content: "Arrays",
-      },
-      {
-        type: "code",
-        language: "typescript",
-        label: "Typed arrays in test automation",
-        content: `// Two equivalent syntaxes for typed arrays
-const browsers: string[] = ["chromium", "firefox", "webkit"];   // syntax 1
-const retries: Array<number> = [1, 2, 3];                       // syntax 2 (generic)
-
-// Arrays are typed — wrong element type is caught at compile time
-// browsers.push(42);   // Error: Argument of type 'number' not assignable to 'string'
-
-// Array of objects — typed with an interface
+// Array of objects (common in QA test data)
 interface TestCase {
   id: number;
-  title: string;
+  name: string;
   passed: boolean;
 }
 
-const testResults: TestCase[] = [
-  { id: 1, title: "Login", passed: true },
-  { id: 2, title: "Checkout", passed: false },
+const testCases: TestCase[] = [
+  { id: 1, name: "login_test", passed: true },
+  { id: 2, name: "checkout_test", passed: false },
+  { id: 3, name: "profile_test", passed: true },
 ];
 
-// Iterate with full type safety — IDE knows every property on 'test'
-testResults.forEach((test) => {
-  console.log(\`\${test.id}: \${test.title} — \${test.passed ? "PASS" : "FAIL"}\`);
-});`,
-        expected: "1: Login — PASS\n2: Checkout — FAIL",
-      },
-      {
-        type: "heading",
-        content: "Tuples",
-      },
-      {
-        type: "code",
-        language: "typescript",
-        label: "Tuples — fixed-length, mixed-type arrays",
-        content: `// A tuple is an array with a FIXED number of elements and FIXED types at each position
-// Use case 1: CSV row (column values in known order)
-type CsvRow = [string, number, boolean];   // name, score, passed
-const row: CsvRow = ["Test Login", 95, true];
+// Filter, map, reduce — same as Java Stream API
+const failedTests = testCases.filter(t => !t.passed);
+const testNames = testCases.map(t => t.name);
+const passCount = testCases.reduce((acc, t) => acc + (t.passed ? 1 : 0), 0);
 
-// Use case 2: test data pair — input and expected output
-type TestPair = [string, string];           // [input, expectedOutput]
-const loginPair: TestPair = ["admin@test.com", "Dashboard"];
+console.log("Failed:", failedTests.length);    // 1
+console.log("Names:", testNames);
+console.log("Pass count:", passCount);          // 2
 
-// Use case 3: coordinate-style — environment + URL
-type EnvConfig = [string, string, number]; // [envName, baseUrl, port]
-const staging: EnvConfig = ["staging", "https://staging.myapp.com", 443];
-
-// Destructuring tuples — name each position for readability
-const [envName, baseUrl, port] = staging;
-console.log(\`Environment: \${envName}\`);  // Environment: staging
-console.log(\`URL: \${baseUrl}:\${port}\`);  // URL: https://staging.myapp.com:443`,
-        expected: "Environment: staging\nURL: https://staging.myapp.com:443",
-      },
-      {
-        type: "heading",
-        content: "Enums — String Enums Are Best for Tests",
-      },
-      {
-        type: "code",
-        language: "typescript",
-        label: "String enums vs number enums — why string enums win in testing",
-        content: `// ── Number Enum (avoid in tests) ─────────────────────────────────
-enum StatusNum {
-  PASS,   // 0
-  FAIL,   // 1
-  SKIP,   // 2
-}
-console.log(StatusNum.PASS);   // 0  — meaningless in test logs and reports
-
-// ── String Enum (prefer in tests) ─────────────────────────────────
-// String enums produce human-readable output in logs, reports, and error messages
-enum TestStatus {
-  PASS = "PASS",
-  FAIL = "FAIL",
-  SKIP = "SKIP",
-  BLOCKED = "BLOCKED",
+// readonly array — like Java unmodifiableList
+const fixedList: readonly string[] = ["a", "b", "c"];
+// fixedList.push("d");        // ERROR: readonly` },
+      { type: "editor", lang: "typescript", defaultCode: `interface ApiEndpoint {
+  path: string;
+  method: "GET" | "POST" | "PUT" | "DELETE";
+  requiresAuth: boolean;
 }
 
-enum Browser {
-  CHROMIUM = "chromium",
-  FIREFOX = "firefox",
-  WEBKIT = "webkit",
+const endpoints: ApiEndpoint[] = [
+  { path: "/api/login", method: "POST", requiresAuth: false },
+  { path: "/api/users", method: "GET", requiresAuth: true },
+  { path: "/api/users/1", method: "DELETE", requiresAuth: true },
+];
+
+const publicEndpoints = endpoints.filter(e => !e.requiresAuth);
+const paths = endpoints.map(e => \`\${e.method} \${e.path}\`);
+
+console.log("Public endpoints:", publicEndpoints.length);
+paths.forEach(p => console.log(p));` },
+      { type: "quiz", question: { tr: "TypeScript'te string array nasıl tanımlanır?", en: "How do you declare a string array in TypeScript?" }, options: [{ id: "a", text: "let arr: Array<String>" }, { id: "b", text: "let arr: string[]" }, { id: "c", text: "let arr = String[]" }, { id: "d", text: "let arr: [string]" }], correct: "b", explanation: { tr: "string[] tercih edilen syntax'tır. Array<string> da çalışır. [string] ise tuple sözdizimi — tek elemanlı string tuple'ı tanımlar.", en: "string[] is the preferred syntax. Array<string> also works. [string] is tuple syntax — it defines a single-element string tuple." } },
+
+      // ═══════════════════════════════════════════════════════════════════════
+      // W3Schools Topic 4 — Tuples
+      // ═══════════════════════════════════════════════════════════════════════
+      { type: "heading", text: "Tuples", difficulty: "🟢 Beginner" },
+      { type: "simple-box", emoji: "🎁", title: { tr: "Bunu 10 yaşındaki birine anlatalım:", en: "Simply put:" }, content: { tr: "Tuple, sabit boyutlu ve her pozisyonun tipi bilinen bir dizi. 'İlk eleman her zaman isim (string), ikincisi yaş (number)' gibi. Java'da tam karşılığı yok — ama Python'da tuple var ve aynı mantık.", en: "A tuple is a fixed-size array where each position has a known type. 'First element is always name (string), second is age (number).' Java has no direct equivalent — but Python has tuples with the same idea." } },
+      { type: "code", language: "typescript", code: `// TypeScript Tuples — fixed-length, typed by position
+// Java has no direct equivalent (use a simple class instead)
+// Python: (name, age) = ("Alice", 25)
+
+// Basic tuple
+let person: [string, number] = ["Alice", 25];
+let [name, age] = person;               // destructuring
+console.log(name, age);                 // Alice 25
+
+// Tuple types prevent index errors
+// person[0] = 42;                      // ERROR: number not assignable to string
+// person[2] = "extra";                 // ERROR: index 2 out of bounds
+
+// Named tuple elements (TypeScript 4.0+)
+type TestResult = [testName: string, passed: boolean, durationMs: number];
+
+const result: TestResult = ["login_test", true, 342];
+console.log(result[0], result[1], result[2]);  // login_test true 342
+
+// Tuple array — array of fixed-structure pairs
+type KeyValue = [string, string];
+const headers: KeyValue[] = [
+  ["Content-Type", "application/json"],
+  ["Authorization", "Bearer token123"],
+  ["Accept", "application/json"],
+];
+
+headers.forEach(([key, value]) => {
+  console.log(\`\${key}: \${value}\`);
+});
+
+// Optional tuple element
+type Point3D = [x: number, y: number, z?: number];
+const p2d: Point3D = [10, 20];          // z is optional
+const p3d: Point3D = [10, 20, 30];` },
+      { type: "editor", lang: "typescript", defaultCode: `// Use tuples to represent test step results
+type StepResult = [stepName: string, passed: boolean, ms: number];
+
+function runStep(name: string, shouldPass: boolean): StepResult {
+  const ms = Math.floor(Math.random() * 500) + 50;
+  return [name, shouldPass, ms];
 }
 
-enum Environment {
-  DEV = "development",
-  STAGING = "staging",
-  PROD = "production",
+const steps: StepResult[] = [
+  runStep("Navigate to login", true),
+  runStep("Enter credentials", true),
+  runStep("Click submit", true),
+  runStep("Assert dashboard", false),  // simulated failure
+];
+
+const failed = steps.filter(([, passed]) => !passed);
+console.log("Total steps:", steps.length);
+console.log("Failed steps:", failed.length);
+steps.forEach(([name, passed, ms]) => {
+  console.log(\`  \${passed ? "✓" : "✗"} \${name} (\${ms}ms)\`);
+});` },
+      { type: "quiz", question: { tr: "let t: [string, number] = [42, 'hello'] neden hata verir?", en: "Why does let t: [string, number] = [42, 'hello'] cause an error?" }, options: [{ id: "a", text: { tr: "Tuple boş olmalı", en: "Tuple must be empty" } }, { id: "b", text: { tr: "Eleman sayısı hatalı", en: "Wrong number of elements" } }, { id: "c", text: { tr: "Tip sıralaması yanlış: ilk eleman string, ikinci number olmalı", en: "Type order is wrong: first must be string, second must be number" } }, { id: "d", text: { tr: "Tuple readonly olmalı", en: "Tuple must be readonly" } }], correct: "c", explanation: { tr: "[string, number] tuple'ında 0. pozisyon string, 1. pozisyon number olmalı. 42 number'dır, string değil. TypeScript her pozisyonun tipini kontrol eder.", en: "In [string, number] tuple, position 0 must be string, position 1 must be number. 42 is a number, not a string. TypeScript checks the type of each position." } },
+
+      // ═══════════════════════════════════════════════════════════════════════
+      // W3Schools Topic 5 — Object Types
+      // ═══════════════════════════════════════════════════════════════════════
+      { type: "heading", text: "Object Types", difficulty: "🟢 Beginner" },
+      { type: "simple-box", emoji: "📋", title: { tr: "Bunu 10 yaşındaki birine anlatalım:", en: "Simply put:" }, content: { tr: "Object type, bir nesnenin içinde ne olması gerektiğini söyleyen sözleşme. 'Test sonucu için mutlaka ad, durum ve süre lazım' gibi. Java'da interface veya class ile yapılır.", en: "Object type is a contract saying what must be inside an object. 'A test result must have a name, status, and duration.' In Java, this is done with an interface or class." } },
+      { type: "code", language: "typescript", code: `// TypeScript Object Types
+
+// Inline object type annotation
+function printTest(test: { name: string; passed: boolean; duration: number }): void {
+  const icon = test.passed ? "✓" : "✗";
+  console.log(\`\${icon} \${test.name} (\${test.duration}ms)\`);
 }
 
-// Usage — these read clearly in test output
-const result: TestStatus = TestStatus.PASS;
-const env: Environment = Environment.STAGING;
+printTest({ name: "login_test", passed: true, duration: 342 });
 
-console.log(\`Status: \${result}\`);    // Status: PASS   (readable!)
-console.log(\`Env: \${env}\`);          // Env: staging   (readable!)
-
-// Enum as parameter type — prevents typos
-function runTests(browser: Browser): void {
-  console.log(\`Running on \${browser}\`);
-}
-runTests(Browser.CHROMIUM);          // Running on chromium
-// runTests("chrome");               // Error! 'chrome' is not assignable to type 'Browser'`,
-        expected: "Status: PASS\nEnv: staging\nRunning on chromium",
-      },
-      {
-        type: "heading",
-        content: "Interfaces",
-      },
-      {
-        type: "code",
-        language: "typescript",
-        label: "Interfaces — defining shapes for test data and page objects",
-        content: `// An interface defines the SHAPE of an object — what properties it must have
-interface User {
-  id: number;           // required — every User must have an id
-  email: string;        // required
-  password: string;     // required
-  role?: string;        // optional — the '?' means it might not exist
-  readonly token: string; // readonly — can be set once, never mutated
-}
-
-// Using the interface — TypeScript validates the object matches the shape
-const testUser: User = {
-  id: 1,
-  email: "admin@example.com",
-  password: "Secret123",
-  token: "abc-xyz-789",
-  // role is optional — fine to omit
-};
-
-// testUser.token = "new-token";  // Error: Cannot assign to 'token' — it is read-only
-
-// Interfaces can extend other interfaces (inheritance)
-interface AdminUser extends User {
-  permissions: string[];   // AdminUser has everything User has, plus permissions
-  department: string;
-}
-
-const admin: AdminUser = {
-  id: 2,
-  email: "admin@corp.com",
-  password: "Admin456",
-  token: "admin-token",
-  permissions: ["read", "write", "delete"],
-  department: "QA",
-};
-
-console.log(\`User: \${testUser.email}\`);
-console.log(\`Admin dept: \${admin.department}\`);`,
-        expected: "User: admin@example.com\nAdmin dept: QA",
-      },
-      {
-        type: "heading",
-        content: "Type Aliases vs Interfaces",
-      },
-      {
-        type: "code",
-        language: "typescript",
-        label: "type vs interface — when to use which",
-        content: `// ── Type Alias ─────────────────────────────────────────────────────
-// 'type' is more flexible — supports unions, intersections, tuples, primitives
-type TestId = string | number;             // union — can be either
-type Coordinates = [number, number];        // tuple
-type Status = "pass" | "fail" | "skip";    // string literal union
-
-// 'type' cannot be reopened / merged
-type Config = { baseUrl: string };
-// type Config = { timeout: number };       // Error: Duplicate identifier 'Config'
-
-// ── Interface ───────────────────────────────────────────────────────
-// 'interface' supports declaration merging — reopen and add properties
-interface TestConfig {
+// Optional properties (Java: nullable fields)
+type Config = {
   baseUrl: string;
+  timeout?: number;         // optional — may be undefined
+  retries?: number;
+};
+
+const cfg: Config = { baseUrl: "https://api.example.com" };
+const cfgWithTimeout: Config = { baseUrl: "https://api.example.com", timeout: 5000 };
+
+// Readonly properties
+type ImmutableUser = {
+  readonly id: number;      // like final in Java
+  readonly email: string;
+  role: string;             // mutable
+};
+
+const user: ImmutableUser = { id: 1, email: "alice@example.com", role: "admin" };
+user.role = "user";         // OK: mutable
+// user.id = 2;             // ERROR: Cannot assign to readonly property
+
+// Index signatures — object with dynamic keys
+type TestSuiteResults = {
+  [testName: string]: "PASS" | "FAIL" | "SKIP";
+};
+
+const results: TestSuiteResults = {
+  login_test: "PASS",
+  checkout_test: "FAIL",
+  profile_test: "SKIP",
+};
+console.log(results["login_test"]);  // PASS` },
+      { type: "editor", lang: "typescript", defaultCode: `type ApiRequest = {
+  url: string;
+  method: "GET" | "POST" | "PUT" | "DELETE";
+  headers?: { [key: string]: string };
+  body?: unknown;
+};
+
+function describeRequest(req: ApiRequest): string {
+  const hasBody = req.body !== undefined ? " with body" : "";
+  const headerCount = req.headers ? Object.keys(req.headers).length : 0;
+  return \`\${req.method} \${req.url}\${hasBody} (\${headerCount} headers)\`;
 }
-interface TestConfig {
-  timeout: number;   // Merged! TestConfig now has BOTH baseUrl AND timeout
-}
-const config: TestConfig = { baseUrl: "https://example.com", timeout: 30000 };
 
-// ── Rule of Thumb ────────────────────────────────────────────────────
-// Use 'interface' for: object shapes, class contracts, public API types
-// Use 'type' for: unions, intersections, primitives, tuples, computed types
+const loginReq: ApiRequest = {
+  url: "/api/login",
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: { email: "test@example.com", password: "secret" },
+};
 
-type BrowserName = "chromium" | "firefox" | "webkit";   // literal union — use type
-interface PageObject {                                    // class shape — use interface
-  navigate(url: string): Promise<void>;
-}
+const listReq: ApiRequest = {
+  url: "/api/users",
+  method: "GET",
+};
 
-console.log(config.baseUrl);    // https://example.com
-console.log(config.timeout);    // 30000`,
-        expected: "https://example.com\n30000",
-      },
-      {
-        type: "heading",
-        content: "Interactive Example: TestResult Interface + TestCase Enum",
-      },
-      {
-        type: "code",
-        language: "typescript",
-        label: "Full typed test result object",
-        content: `// Putting it all together — enum + interface + typed array
+console.log(describeRequest(loginReq));
+console.log(describeRequest(listReq));` },
+      { type: "quiz", question: { tr: "TypeScript object type'ta '?' ile işaretlenmiş property ne anlama gelir?", en: "What does a '?' after a property name mean in a TypeScript object type?" }, options: [{ id: "a", text: { tr: "readonly", en: "readonly" } }, { id: "b", text: { tr: "Opsiyonel — tanımsız olabilir", en: "Optional — may be undefined" } }, { id: "c", text: { tr: "Null olamaz", en: "Cannot be null" } }, { id: "d", text: { tr: "Zorunlu alan", en: "Required field" } }], correct: "b", explanation: { tr: "'?' property'yi opsiyonel yapar — değer olmayabilir (undefined). Java'da @Nullable annotation'ına benzer. timeout?: number yazınca timeout veya undefined olabilir.", en: "'?' makes a property optional — the value may not be present (undefined). Similar to Java's @Nullable annotation. timeout?: number means it can be a number or undefined." } },
 
-// Enum for test case status (string values for readable output)
+      // ═══════════════════════════════════════════════════════════════════════
+      // W3Schools Topic 6 — Enums
+      // ═══════════════════════════════════════════════════════════════════════
+      { type: "heading", text: "Enums", difficulty: "🟢 Beginner" },
+      { type: "simple-box", emoji: "🎯", title: { tr: "Bunu 10 yaşındaki birine anlatalım:", en: "Simply put:" }, content: { tr: "Enum, izin verilen değerlerin sabit listesi. 'Test durumu sadece PASS, FAIL veya SKIP olabilir — başka bir şey yazarsan hata alırsın.' Java'da enum zaten vardı — TypeScript'te de aynı mantık.", en: "An enum is a fixed list of allowed values. 'Test status can only be PASS, FAIL, or SKIP — write anything else and you get an error.' Java already had enums — TypeScript works the same way." } },
+      { type: "text", content: { tr: "Java'da enum çok güçlü — method'u, field'ı olabilir. TypeScript'te numeric enum (0,1,2) ve string enum var. QA'de string enum tercih edilir çünkü debug edilmesi kolay: TestStatus.PASS = 'PASS' string değeri taşır.", en: "Java enums are powerful — they can have methods and fields. TypeScript has numeric enums (0,1,2) and string enums. In QA, string enums are preferred because they are easy to debug: TestStatus.PASS carries the string value 'PASS'." } },
+      { type: "code", language: "typescript", code: `// TypeScript Enums — QA Test Status Example
+
+// String enum (preferred in QA — readable in logs)
 enum TestStatus {
-  PASS = "PASS",
+  PASS = "PASS",      // value = string literal
   FAIL = "FAIL",
   SKIP = "SKIP",
+  PENDING = "PENDING"
 }
 
-// Interface defining the shape of a test result
-interface TestResult {
-  readonly id: number;        // immutable after creation
-  title: string;              // test case title
-  status: TestStatus;         // must be one of the enum values
-  duration: number;           // execution time in ms
-  errorMessage?: string;      // optional — only present when status is FAIL
+// Numeric enum (auto-increments from 0)
+enum Priority {
+  LOW,      // = 0
+  MEDIUM,   // = 1
+  HIGH,     // = 2
+  CRITICAL  // = 3
 }
 
-// Create strongly typed test results
-const results: TestResult[] = [
-  { id: 1, title: "Login with valid credentials", status: TestStatus.PASS, duration: 1240 },
-  { id: 2, title: "Login with invalid password",  status: TestStatus.FAIL, duration: 890, errorMessage: "Expected URL /dashboard, got /login" },
-  { id: 3, title: "Register new user",            status: TestStatus.SKIP, duration: 0 },
+interface TestCase {
+  name: string;
+  status: TestStatus;
+  priority: Priority;
+}
+
+const tc: TestCase = {
+  name: "login_test",
+  status: TestStatus.PASS,   // type-safe: only PASS/FAIL/SKIP/PENDING allowed
+  priority: Priority.HIGH,
+};
+
+console.log(tc.status);                 // PASS (string enum)
+console.log(tc.priority);               // 2   (numeric enum)
+console.log(Priority[2]);               // HIGH (reverse lookup works for numeric)
+
+// Use in switch
+function getStatusIcon(status: TestStatus): string {
+  switch (status) {
+    case TestStatus.PASS:    return "✅";
+    case TestStatus.FAIL:    return "❌";
+    case TestStatus.SKIP:    return "⏭️";
+    case TestStatus.PENDING: return "⏳";
+  }
+}
+
+console.log(getStatusIcon(TestStatus.FAIL));  // ❌` },
+      { type: "editor", lang: "typescript", defaultCode: `enum HttpMethod {
+  GET = "GET",
+  POST = "POST",
+  PUT = "PUT",
+  DELETE = "DELETE",
+  PATCH = "PATCH",
+}
+
+enum StatusCode {
+  OK = 200,
+  CREATED = 201,
+  BAD_REQUEST = 400,
+  UNAUTHORIZED = 401,
+  NOT_FOUND = 404,
+  SERVER_ERROR = 500,
+}
+
+interface ApiCall {
+  method: HttpMethod;
+  endpoint: string;
+  expectedStatus: StatusCode;
+}
+
+const apiTests: ApiCall[] = [
+  { method: HttpMethod.GET, endpoint: "/api/users", expectedStatus: StatusCode.OK },
+  { method: HttpMethod.POST, endpoint: "/api/users", expectedStatus: StatusCode.CREATED },
+  { method: HttpMethod.DELETE, endpoint: "/api/users/1", expectedStatus: StatusCode.OK },
 ];
 
-// Type-safe iteration — IDE knows every field
-results.forEach((r) => {
-  const err = r.errorMessage ? \` — \${r.errorMessage}\` : "";
-  console.log(\`[\${r.status}] \${r.title} (\${r.duration}ms)\${err}\`);
-});`,
-        expected:
-          "[PASS] Login with valid credentials (1240ms)\n[FAIL] Login with invalid password (890ms) — Expected URL /dashboard, got /login\n[SKIP] Register new user (0ms)",
-      },
+apiTests.forEach(t => {
+  console.log(\`\${t.method} \${t.endpoint} → expected \${t.expectedStatus}\`);
+});` },
+      { type: "comparison", title: { tr: "Java ile Karşılaştırma", en: "Java vs TypeScript — Enums" }, columns: ["Java", "TypeScript"], rows: [
+        { concept: { tr: "Temel enum", en: "Basic enum" }, java: "enum Status { PASS, FAIL }", typescript: "enum Status { PASS = 'PASS', FAIL = 'FAIL' }" },
+        { concept: { tr: "Metod", en: "Methods" }, java: "Can have methods/fields", typescript: "No methods (use namespace for that)" },
+        { concept: { tr: "Kullanım", en: "Usage" }, java: "Status.PASS", typescript: "Status.PASS" },
+        { concept: { tr: "Switch", en: "Switch" }, java: "switch(s) { case PASS: }", typescript: "switch(s) { case Status.PASS: }" },
+      ]},
+      { type: "quiz", question: { tr: "QA testlerinde string enum neden numeric enum'a tercih edilir?", en: "Why are string enums preferred over numeric enums in QA tests?" }, options: [{ id: "a", text: { tr: "Daha hızlı", en: "They are faster" } }, { id: "b", text: { tr: "Log ve debug'da değer okunabilir (PASS görürsün, 0 değil)", en: "Values are readable in logs and debug (you see PASS, not 0)" } }, { id: "c", text: { tr: "Daha az bellek kullanır", en: "They use less memory" } }, { id: "d", text: { tr: "Zorunlu — TypeScript'te numeric enum yok", en: "Required — TypeScript has no numeric enums" } }], correct: "b", explanation: { tr: "String enum'da TestStatus.PASS = 'PASS' — log dosyasında 'PASS' görürsün. Numeric enum'da TestStatus.PASS = 0 — log'da 0 görürsün, anlamak zor. QA araçlarında okunabilirlik önemli.", en: "With string enum, TestStatus.PASS = 'PASS' — you see 'PASS' in logs. With numeric enum, TestStatus.PASS = 0 — you see 0 in logs, hard to understand. Readability matters in QA tools." } },
+
+      // ─── Interview Questions for Foundations ──────────────────────────────
+      { type: "interview-questions", topic: "TypeScript Foundations", questions: [
+        { level: "basic", q: { tr: "TypeScript neden JavaScript'e üstündür? Ne zaman tercih edilir?", en: "Why is TypeScript better than JavaScript? When should you prefer it?" }, a: { tr: "TypeScript compile-time type checking sağlar — hatalar çalıştırmadan önce yakalanır. Büyük ekiplerde, uzun vadeli projelerde, framework geliştirmede tercih edilir. Playwright ve Angular TypeScript ile yazılmıştır. Küçük scriptler için overkill olabilir.", en: "TypeScript provides compile-time type checking — bugs are caught before running. Preferred for large teams, long-term projects, framework development. Playwright and Angular are written in TypeScript. May be overkill for small scripts." } },
+        { level: "basic", q: { tr: "TypeScript'te 'any' tipini neden kaçınmalısın?", en: "Why should you avoid the 'any' type in TypeScript?" }, a: { tr: "'any' tipin tüm type checking'i devre dışı bırakır — TypeScript'i JavaScript gibi yapar. 'any' değişkeni her metodu çağırabilir, hiçbiri kontrol edilmez. Bunun yerine 'unknown' kullan: önce typeof kontrolü yapman gerekir. Codebase'de any'nin yayılması tip güvenliğini tamamen mahveder.", en: "'any' disables all type checking — makes TypeScript behave like JavaScript. An 'any' variable can call any method with no checks. Use 'unknown' instead: it requires a typeof check first. Spreading 'any' through a codebase completely destroys type safety." } },
+        { level: "intermediate", q: { tr: "TypeScript'te tuple ne zaman kullanılmalı?", en: "When should you use a tuple in TypeScript?" }, a: { tr: "Sabit sayıda eleman ve her pozisyonun tipi farklı olduğunda. Örneğin: [string, number, boolean] — name, age, active gibi. Genellikle fonksiyon dönüş değerleri için kullanılır: function useState<T>(init: T): [T, (v: T) => void]. Nesne daha okunabilirse, tuple yerine obje tercih et.", en: "When you have a fixed number of elements and each position has a different type. Example: [string, number, boolean] — like name, age, active. Often used for function return values: function useState<T>(init: T): [T, (v: T) => void]. If an object would be more readable, prefer that over a tuple." } },
+      ]},
     ],
   },
 
-  // ─────────────────────────────────────────────
-  // SECTION 3 — Intermediate 🟡
-  // ─────────────────────────────────────────────
   {
     title: "Intermediate TypeScript",
     blocks: [
-      {
-        type: "heading",
-        content: "Typed Functions",
-        difficulty: "🟡 Intermediate",
-      },
-      {
-        type: "code",
-        language: "typescript",
-        label: "Function type annotations — params, return type, optional, default",
-        content: `// ── Basic typed function ─────────────────────────────────────────
-function navigateTo(url: string): Promise<void> {   // param type, return type
-  console.log(\`Navigating to: \${url}\`);
-  return Promise.resolve();
+
+      // ═══════════════════════════════════════════════════════════════════════
+      // W3Schools Topic 7 — Aliases & Interfaces
+      // ═══════════════════════════════════════════════════════════════════════
+      { type: "heading", text: "Aliases & Interfaces", difficulty: "🟡 Intermediate" },
+      { type: "simple-box", emoji: "📝", title: { tr: "Bunu 10 yaşındaki birine anlatalım:", en: "Simply put:" }, content: { tr: "Type alias, bir tip için kısayol isim. Interface, nesnelerin nasıl görünmesi gerektiğini tanımlayan sözleşme. İkisi de benzer görünür ama interface genişletilebilir — büyük projelerde interface tercih edilir.", en: "A type alias is a shortcut name for a type. An interface is a contract defining what an object must look like. Both look similar but interfaces are extendable — preferred in large projects." } },
+      { type: "text", content: { tr: "Java'da interface çok önemli — OOP'un temeli. TypeScript'te interface benzer görevi görür ama daha basit. Type alias ise Java'daki typedef gibi. Temel kural: obje şekli için interface, union/intersection için type alias kullan.", en: "Java interfaces are central to OOP. TypeScript interfaces serve a similar role. Type aliases are like typedef in Java. General rule: use interface for object shapes, type alias for unions/intersections." } },
+      { type: "code", language: "typescript", code: `// Type Alias — creates a new name for any type
+type UserId = number;
+type Status = "PASS" | "FAIL" | "SKIP";
+type Callback = (msg: string) => void;
+
+// Interface — defines object shape (like Java interface)
+interface TestResult {
+  testId: number;
+  name: string;
+  status: Status;
+  duration: number;
 }
 
-// ── Optional parameter (?) ────────────────────────────────────────
-function login(email: string, password: string, remember?: boolean): void {
-  const rememberMe = remember ?? false;   // use ?? to handle undefined
-  console.log(\`Login: \${email}, remember: \${rememberMe}\`);
+// Interface extends — like Java extends
+interface ExtendedResult extends TestResult {
+  browserName: string;
+  screenshots: string[];
 }
-login("user@test.com", "pass");           // 'remember' is undefined — OK
-login("user@test.com", "pass", true);     // 'remember' is true
 
-// ── Default parameter ─────────────────────────────────────────────
-function retry(action: () => Promise<void>, times: number = 3): void {
-  console.log(\`Will retry up to \${times} times\`);
-}
-retry(async () => {});          // uses default 3
-retry(async () => {}, 5);       // overrides to 5
-
-// ── Arrow function with types ─────────────────────────────────────
-const getTitle = async (url: string): Promise<string> => {
-  return \`Page title for \${url}\`;
+const result: ExtendedResult = {
+  testId: 1,
+  name: "login_test",
+  status: "PASS",
+  duration: 342,
+  browserName: "chrome",
+  screenshots: ["step1.png", "step2.png"],
 };
-
-// ── Function type as a variable type ─────────────────────────────
-type TestStep = (page: string) => Promise<void>;   // describes a function shape
-const clickLogin: TestStep = async (page) => {
-  console.log(\`Clicking login on \${page}\`);
-};
-
-login("user@test.com", "pass");`,
-        expected: "Login: user@test.com, remember: false",
-      },
-      {
-        type: "heading",
-        content: "Union and Intersection Types",
-      },
-      {
-        type: "code",
-        language: "typescript",
-        label: "Union (|) and intersection (&) types",
-        content: `// ── Union Types — value can be ONE of several types ──────────────
-type TestId = string | number;            // can be "TC-001" or 1
-type Status = "pass" | "fail" | "skip";   // literal string union
-type MaybeString = string | null;         // string or null
-
-function formatId(id: TestId): string {
-  // Union forces you to handle both cases
-  if (typeof id === "number") {
-    return \`TC-\${id.toString().padStart(3, "0")}\`;  // TC-001
-  }
-  return id;   // already a string
+console.log(result.name, result.status, result.browserName);` },
+      { type: "editor", lang: "typescript", defaultCode: `interface ApiTest {
+  name: string;
+  method: "GET" | "POST" | "PUT" | "DELETE";
+  endpoint: string;
+  expectedStatus: number;
+  auth?: boolean;
 }
 
-console.log(formatId(1));       // TC-001
-console.log(formatId("TC-99")); // TC-99
+interface ApiTestResult extends ApiTest {
+  actualStatus: number;
+  passed: boolean;
+  responseTimeMs: number;
+}
 
-// ── Intersection Types — value must satisfy ALL types simultaneously ──
-interface HasId    { id: number }
-interface HasTitle { title: string }
-interface HasStatus { status: Status }
+const tests: ApiTest[] = [
+  { name: "Get users", method: "GET", endpoint: "/api/users", expectedStatus: 200, auth: true },
+  { name: "Login", method: "POST", endpoint: "/api/login", expectedStatus: 200 },
+];
 
-// TestCase must have id AND title AND status
-type TestCase = HasId & HasTitle & HasStatus;
+const results: ApiTestResult[] = tests.map(t => ({
+  ...t,
+  actualStatus: t.expectedStatus,
+  passed: true,
+  responseTimeMs: Math.floor(Math.random() * 500),
+}));
 
-const tc: TestCase = { id: 1, title: "Checkout flow", status: "pass" };
-console.log(\`\${tc.id}: \${tc.title} [\${tc.status}]\`);  // 1: Checkout flow [pass]
+results.forEach(r => console.log(
+  (r.passed ? "PASS" : "FAIL") + " " + r.name + " (" + r.responseTimeMs + "ms)"
+));` },
+      { type: "comparison", title: { tr: "Java ile Karşılaştırma", en: "Java vs TypeScript — Interfaces" }, columns: ["Java", "TypeScript"], rows: [
+        { concept: "Define interface", java: "interface IUser { String email; }", typescript: "interface User { email: string; }" },
+        { concept: "Implement", java: "class A implements IUser", typescript: "const a: User = { email: '...' }" },
+        { concept: "Extend", java: "interface B extends A", typescript: "interface B extends A" },
+        { concept: "Optional field", java: "@Nullable String field;", typescript: "field?: string;" },
+      ]},
+      { type: "quiz", question: { tr: "TypeScript'te interface ve type alias arasındaki önemli fark nedir?", en: "What is an important difference between interface and type alias in TypeScript?" }, options: [{ id: "a", text: { tr: "Interface sadece class için kullanılır", en: "Interface can only be used with classes" } }, { id: "b", text: { tr: "Interface extends edilebilir ve declaration merging destekler", en: "Interface supports extends and declaration merging; type alias cannot be reopened" } }, { id: "c", text: { tr: "Type alias daha hızlıdır", en: "Type aliases are faster" } }, { id: "d", text: { tr: "Hiçbir fark yok", en: "No difference" } }], correct: "b", explanation: { tr: "Interface 'declaration merging' destekler — aynı isimle iki interface tanımlarsan birleşirler. Type alias desteklemez. Bu nedenle kütüphane tiplerini genişletmek için interface tercih edilir.", en: "Interfaces support declaration merging — if you declare the same interface name twice, they merge. Type aliases cannot be reopened. This is why interfaces are preferred for extending library types." } },
 
-// ── Nullable types in function return ──────────────────────────────
-function findTest(id: number, tests: TestCase[]): TestCase | null {
-  return tests.find(t => t.id === id) ?? null;   // null if not found
-}`,
-        expected: "TC-001\nTC-99\n1: Checkout flow [pass]",
-      },
-      {
-        type: "heading",
-        content: "Type Guards",
-      },
-      {
-        type: "code",
-        language: "typescript",
-        label: "typeof, instanceof, and 'in' type guards",
-        content: `// Type guards narrow a union type to a specific type inside a branch
+      // ═══════════════════════════════════════════════════════════════════════
+      // W3Schools Topic 8 — Union Types
+      // ═══════════════════════════════════════════════════════════════════════
+      { type: "heading", text: "Union Types", difficulty: "🟡 Intermediate" },
+      { type: "simple-box", emoji: "🔀", title: { tr: "Bunu 10 yaşındaki birine anlatalım:", en: "Simply put:" }, content: { tr: "Union type, 'bu ya şu ya bu' demek. ID ya number ya string olabilir. Java'da bunu generic ya da overload ile yapardın — TypeScript daha zarif.", en: "A union type means 'this OR that.' An ID can be either a number or a string. In Java you'd use generics or overloads — TypeScript is more elegant." } },
+      { type: "code", language: "typescript", code: `// Union Types — value can be one of multiple types
+type TestStatus = "PASS" | "FAIL" | "SKIP";     // literal union
 
-// ── typeof guard — for primitives ────────────────────────────────
-function printTestId(id: string | number): void {
-  if (typeof id === "string") {
-    console.log(id.toUpperCase());   // TypeScript knows: id is string here
+function formatId(id: string | number): string {
+  if (typeof id === "number") {           // type narrowing
+    return "TC-" + id.toString().padStart(4, "0");
+  }
+  return id.startsWith("TC-") ? id : "TC-" + id;
+}
+console.log(formatId(42));          // TC-0042
+console.log(formatId("LOGIN-001")); // TC-LOGIN-001
+
+// Discriminated union — best pattern for modeling variants
+type ApiResponse =
+  | { status: "success"; data: unknown; statusCode: 200 }
+  | { status: "error"; message: string; statusCode: 400 | 401 | 404 | 500 };
+
+function handleResponse(res: ApiResponse): void {
+  if (res.status === "success") {
+    console.log("Data:", res.data);
   } else {
-    console.log(id.toFixed(0));      // TypeScript knows: id is number here
-  }
-}
-printTestId("tc-001");   // TC-001
-printTestId(42);         // 42
-
-// ── instanceof guard — for class instances ─────────────────────────
-class NetworkError extends Error {
-  statusCode: number;
-  constructor(msg: string, code: number) {
-    super(msg);
-    this.statusCode = code;
-  }
-}
-class TimeoutError extends Error {
-  timeoutMs: number;
-  constructor(msg: string, ms: number) {
-    super(msg);
-    this.timeoutMs = ms;
+    console.error("Error " + res.statusCode + ": " + res.message);
   }
 }
 
-function handleTestError(err: NetworkError | TimeoutError): void {
-  if (err instanceof NetworkError) {
-    console.log(\`Network error \${err.statusCode}: \${err.message}\`);
-  } else {
-    console.log(\`Timeout after \${err.timeoutMs}ms: \${err.message}\`);
+handleResponse({ status: "success", data: { users: 5 }, statusCode: 200 });
+handleResponse({ status: "error", message: "Not found", statusCode: 404 });` },
+      { type: "editor", lang: "typescript", defaultCode: `// Model test events with discriminated union
+type TestEvent =
+  | { type: "start"; testName: string; timestamp: number }
+  | { type: "pass"; testName: string; durationMs: number }
+  | { type: "fail"; testName: string; errorMessage: string; durationMs: number }
+  | { type: "skip"; testName: string; reason: string };
+
+function logEvent(event: TestEvent): void {
+  switch (event.type) {
+    case "start":
+      console.log("Starting: " + event.testName);
+      break;
+    case "pass":
+      console.log("PASS: " + event.testName + " (" + event.durationMs + "ms)");
+      break;
+    case "fail":
+      console.log("FAIL: " + event.testName + " — " + event.errorMessage);
+      break;
+    case "skip":
+      console.log("SKIP: " + event.testName + " — " + event.reason);
+      break;
   }
 }
 
-handleTestError(new NetworkError("Not Found", 404));   // Network error 404: Not Found
+const events: TestEvent[] = [
+  { type: "start", testName: "login_test", timestamp: Date.now() },
+  { type: "pass", testName: "login_test", durationMs: 342 },
+  { type: "fail", testName: "checkout_test", errorMessage: "Timeout", durationMs: 5000 },
+  { type: "skip", testName: "payment_test", reason: "Feature not ready" },
+];
+events.forEach(logEvent);` },
+      { type: "quiz", question: { tr: "TypeScript'te 'type narrowing' ne anlama gelir?", en: "What does 'type narrowing' mean in TypeScript?" }, options: [{ id: "a", text: { tr: "Tipi daraltmak (kötü)", en: "Making the type smaller (bad thing)" } }, { id: "b", text: { tr: "typeof/instanceof kontrolleri sonrası TypeScript'in daha spesifik tip bilmesi", en: "TypeScript knowing a more specific type after typeof/instanceof checks" } }, { id: "c", text: { tr: "Tipi any'ye çevirmek", en: "Converting to any type" } }, { id: "d", text: { tr: "Union'dan bir tip kaldırmak", en: "Removing a type from a union" } }], correct: "b", explanation: { tr: "Type narrowing: typeof kontrolü sonrası TypeScript değişkenin tipini bilir. if (typeof x === 'number') içinde TypeScript x'in number olduğunu garanti eder.", en: "Type narrowing: after a typeof check, TypeScript knows the variable's specific type. Inside if (typeof x === 'number'), TypeScript guarantees x is a number." } },
 
-// ── 'in' guard — check if property exists ─────────────────────────
-interface UITest   { selector: string; page: string }
-interface ApiTest  { endpoint: string; method: string }
-
-function describeTest(test: UITest | ApiTest): void {
-  if ("selector" in test) {
-    console.log(\`UI test: \${test.selector} on \${test.page}\`);
-  } else {
-    console.log(\`API test: \${test.method} \${test.endpoint}\`);
-  }
-}`,
-        expected: "TC-001\n42\nNetwork error 404: Not Found",
-      },
-      {
-        type: "heading",
-        content: "Generics",
-      },
-      {
-        type: "code",
-        language: "typescript",
-        label: "Generic functions and interfaces for reusable test utilities",
-        content: `// Generics let you write ONE function/interface that works with ANY type
-// while preserving full type information (unlike 'any' which throws it away)
-
-// ── Generic function ───────────────────────────────────────────────
-function first<T>(items: T[]): T | undefined {
-  return items[0];   // T is preserved — return type matches input element type
+      // ═══════════════════════════════════════════════════════════════════════
+      // W3Schools Topic 9 — Functions
+      // ═══════════════════════════════════════════════════════════════════════
+      { type: "heading", text: "Functions", difficulty: "🟡 Intermediate" },
+      { type: "simple-box", emoji: "⚙️", title: { tr: "Bunu 10 yaşındaki birine anlatalım:", en: "Simply put:" }, content: { tr: "TypeScript fonksiyonları Java metodlarına çok benzer — ama daha kısa syntax. Parametre tipleri ve dönüş tipi belirtilir.", en: "TypeScript functions are very similar to Java methods — but with shorter syntax. Parameter types and return types are specified." } },
+      { type: "code", language: "typescript", code: `// TypeScript Functions — all key patterns
+function add(a: number, b: number): number {
+  return a + b;
 }
 
-const firstBrowser = first(["chromium", "firefox"]);   // inferred: string | undefined
-const firstId      = first([1, 2, 3]);                  // inferred: number | undefined
+// Arrow function
+const multiply = (a: number, b: number): number => a * b;
 
-// ── Generic interface ──────────────────────────────────────────────
-interface ApiResponse<T> {
-  data: T;
-  status: number;
-  ok: boolean;
-  timestamp: string;
+// Optional and default parameters
+function createTestUser(
+  email: string,
+  role: "admin" | "user" = "user",    // default value
+  active?: boolean                      // optional
+): { email: string; role: string; active: boolean } {
+  return { email, role, active: active ?? true };
 }
 
-interface UserData { id: number; name: string; email: string }
-const userResponse: ApiResponse<UserData> = {
-  data: { id: 1, name: "Alice", email: "alice@test.com" },
-  status: 200,
-  ok: true,
-  timestamp: "2024-01-01T00:00:00Z",
-};
+console.log(JSON.stringify(createTestUser("alice@example.com")));
+console.log(JSON.stringify(createTestUser("admin@example.com", "admin")));
 
-console.log(userResponse.data.name);   // Alice — typed correctly
-
-// ── Generic constraints (T extends ...) ────────────────────────────
-// Constrain T so we know it has at least the properties we need
-interface HasId { id: number }
-
-function findById<T extends HasId>(items: T[], id: number): T | undefined {
-  return items.find(item => item.id === id);
+// Rest parameters (like Java varargs)
+function joinLogs(...messages: string[]): string {
+  return messages.join(" | ");
 }
+console.log(joinLogs("PASS", "login", "342ms"));
 
-const users = [{ id: 1, name: "Alice" }, { id: 2, name: "Bob" }];
-const found = findById(users, 1);
-console.log(found?.name);   // Alice`,
-        expected: "Alice\nAlice",
-      },
-      {
-        type: "heading",
-        content: "Classes with Access Modifiers",
-      },
-      {
-        type: "code",
-        language: "typescript",
-        label: "TypeScript class modifiers in a Page Object context",
-        content: `// Access modifiers control visibility:
-// public    — accessible anywhere (default)
-// private   — only accessible inside this class
-// protected — accessible inside this class and subclasses
-// readonly  — can be set in constructor, never changed after
+// Function type
+type Validator = (value: string) => boolean;
 
-class BasePage {
-  protected readonly baseUrl: string;    // subclasses can read it, no one can change it
-  private _isLoaded: boolean = false;    // internal state — no outside access
-  public readonly name: string;          // public + readonly — visible, immutable
+const isEmail: Validator = (v) => v.includes("@") && v.includes(".");
+const isPhone: Validator = (v) => /^[0-9]{10,11}$/.test(v);
 
-  constructor(baseUrl: string, name: string) {
-    this.baseUrl = baseUrl;   // set in constructor — readonly allows this
-    this.name = name;
-  }
-
-  // private method — only this class can call it
-  private log(message: string): void {
-    console.log(\`[\${this.name}] \${message}\`);
-  }
-
-  // protected method — this class and subclasses can call it
-  protected async waitForLoad(): Promise<void> {
-    this._isLoaded = true;
-    this.log("Page loaded");
-  }
-
-  // public method — anyone can call it
-  public async navigate(): Promise<void> {
-    this.log(\`Navigating to \${this.baseUrl}\`);
-    await this.waitForLoad();
+console.log(isEmail("test@example.com"));  // true
+console.log(isPhone("05551234567"));       // true` },
+      { type: "editor", lang: "typescript", defaultCode: `// Generic assertion helper with typed parameters
+function assertEqual<T>(actual: T, expected: T, message?: string): void {
+  const passed = JSON.stringify(actual) === JSON.stringify(expected);
+  const label = message ?? "assertEqual";
+  const icon = passed ? "PASS" : "FAIL";
+  console.log(icon + ": " + label);
+  if (!passed) {
+    console.log("  Expected: " + JSON.stringify(expected));
+    console.log("  Actual:   " + JSON.stringify(actual));
   }
 }
 
-class LoginPage extends BasePage {
-  constructor(baseUrl: string) {
-    super(baseUrl, "LoginPage");
-  }
+assertEqual(2 + 2, 4, "2+2=4");
+assertEqual("hello".toUpperCase(), "HELLO", "toUpperCase");
+assertEqual([1, 2, 3].length, 3, "array length");
+assertEqual("test".includes("es"), false, "includes check"); // fails` },
+      { type: "comparison", title: { tr: "Java ile Karşılaştırma", en: "Java vs TypeScript — Functions" }, columns: ["Java", "TypeScript"], rows: [
+        { concept: "Basic function", java: "public int add(int a, int b)", typescript: "function add(a: number, b: number): number" },
+        { concept: "Arrow/lambda", java: "(a, b) -> a + b", typescript: "(a, b) => a + b" },
+        { concept: "Default param", java: "Not supported (use overload)", typescript: "function f(x: number = 0)" },
+        { concept: "Varargs", java: "void f(String... msgs)", typescript: "function f(...msgs: string[])" },
+      ]},
+      { type: "quiz", question: { tr: "TypeScript'te parametre sonundaki '?' ne anlama gelir?", en: "What does '?' at the end of a parameter name mean in TypeScript?" }, options: [{ id: "a", text: { tr: "Parametre nullable", en: "Parameter is nullable" } }, { id: "b", text: { tr: "Parametre opsiyonel — undefined olabilir, geçilmeyebilir", en: "Parameter is optional — can be undefined, can be omitted" } }, { id: "c", text: { tr: "Parametre bir string", en: "Parameter is a string" } }, { id: "d", text: { tr: "Return type optional", en: "Return type is optional" } }], correct: "b", explanation: { tr: "function f(x?: number) yazınca x hem number hem undefined olabilir ve çağırırken geçilmeyebilir. f() ve f(42) ikisi de geçerli.", en: "function f(x?: number) means x can be number or undefined, and can be omitted. f() and f(42) are both valid." } },
 
-  async login(email: string, password: string): Promise<void> {
-    console.log(\`Logging in as \${email}\`);
-    await this.waitForLoad();    // protected — OK from subclass
-    // this._isLoaded;           // Error — private, not accessible here
-    // this.log("test");         // Error — private, not accessible here
-  }
-}
+      // ═══════════════════════════════════════════════════════════════════════
+      // W3Schools Topic 10 — Casting
+      // ═══════════════════════════════════════════════════════════════════════
+      { type: "heading", text: "Casting", difficulty: "🟡 Intermediate" },
+      { type: "simple-box", emoji: "🔄", title: { tr: "Bunu 10 yaşındaki birine anlatalım:", en: "Simply put:" }, content: { tr: "Casting, TypeScript'e 'Biliyorum bu any tipinde görünüyor ama aslında string — güven bana' demek. 'as' keyword'ü kullanılır. Java'daki (String) obj gibi.", en: "Casting tells TypeScript 'I know this looks like any but it is actually a string — trust me.' Uses the 'as' keyword. Like (String) obj in Java." } },
+      { type: "code", language: "typescript", code: `// TypeScript Casting (Type Assertions)
+// as keyword — tells TypeScript what type to treat a value as
+// NOTE: no actual runtime conversion — purely compile-time hint
 
-const page = new LoginPage("https://example.com");
-page.navigate();
-// page._isLoaded;               // Error — private
-// page.waitForLoad();           // Error — protected`,
-        expected: "[LoginPage] Navigating to https://example.com\n[LoginPage] Page loaded",
-      },
-      {
-        type: "heading",
-        content: "Abstract Classes — Base POM Pattern",
-      },
-      {
-        type: "code",
-        language: "typescript",
-        label: "Abstract class as reusable Page Object base",
-        content: `// Abstract classes define shared structure but CANNOT be instantiated directly
-// Perfect for Page Object base classes — every page shares navigate() but implements getTitle() differently
-
-abstract class PageBase {
-  constructor(protected readonly url: string) {}
-
-  // Concrete method — shared by all pages
-  async navigate(): Promise<void> {
-    console.log(\`Navigating to: \${this.url}\`);
-  }
-
-  // Abstract method — each subclass MUST implement this
-  abstract getTitle(): string;
-
-  // Abstract method — each page has a different heading selector
-  abstract getHeadingSelector(): string;
-}
-
-class HomePage extends PageBase {
-  constructor() {
-    super("/");
-  }
-
-  getTitle(): string {
-    return "Home — My App";   // must implement — or TypeScript compile error
-  }
-
-  getHeadingSelector(): string {
-    return "h1.hero-title";
-  }
-}
-
-class LoginPage2 extends PageBase {
-  constructor() {
-    super("/login");
-  }
-
-  getTitle(): string {
-    return "Login — My App";
-  }
-
-  getHeadingSelector(): string {
-    return "h1.login-heading";
-  }
-}
-
-// const base = new PageBase("/");   // Error: Cannot create an instance of an abstract class
-const home = new HomePage();
-console.log(home.getTitle());          // Home — My App
-console.log(home.getHeadingSelector()); // h1.hero-title`,
-        expected: "Home — My App\nh1.hero-title",
-      },
-      {
-        type: "heading",
-        content: "Modules: Export, Import, and Barrel Files",
-      },
-      {
-        type: "code",
-        language: "typescript",
-        label: "Module patterns for Playwright test projects",
-        content: `// ── Named exports (pages/LoginPage.ts) ──────────────────────────────
-export interface LoginCredentials {
+interface User {
+  id: number;
   email: string;
-  password: string;
+  role: string;
 }
 
-export class LoginPage {
-  async login(creds: LoginCredentials): Promise<void> {
-    console.log(\`Logging in: \${creds.email}\`);
-  }
-}
-
-// ── Default export (pages/HomePage.ts) ───────────────────────────────
-// export default class HomePage { ... }
-
-// ── Re-exports / Barrel file (pages/index.ts) ────────────────────────
-// A barrel file re-exports everything so callers import from one place:
-// export { LoginPage, LoginCredentials } from './LoginPage';
-// export { default as HomePage } from './HomePage';
-// export { ProductPage } from './ProductPage';
-
-// ── Importing ────────────────────────────────────────────────────────
-// import { LoginPage, LoginCredentials } from './pages';     // from barrel
-// import { LoginPage } from './pages/LoginPage';             // direct
-// import type { LoginCredentials } from './pages/LoginPage'; // type-only import (no runtime code)
-
-const creds: LoginCredentials = { email: "qa@test.com", password: "Pass123" };
-const login = new LoginPage();
-login.login(creds);`,
-        expected: "Logging in: qa@test.com",
-      },
-      {
-        type: "heading",
-        content: "Interactive Example: Typed Page Object with Interface",
-      },
-      {
-        type: "code",
-        language: "typescript",
-        label: "Full typed Page Object base class",
-        content: `// A production-ready, fully typed Page Object base class
-
-interface IPage {
-  navigate(): Promise<void>;
-  isLoaded(): Promise<boolean>;
-}
-
-class TypedPageBase implements IPage {
-  // private: internal locator strings — only this class accesses them
-  private readonly loadedSelector: string;
-
-  // constructor shorthand: 'protected' creates + assigns in one line
-  constructor(
-    protected readonly baseUrl: string,
-    protected readonly path: string,
-    loadedSelector: string
+// Casting from unknown (common with API responses)
+function toUser(raw: unknown): User | null {
+  if (
+    typeof raw === "object" && raw !== null &&
+    "id" in raw && "email" in raw && "role" in raw
   ) {
-    this.loadedSelector = loadedSelector;
+    return raw as User;      // safe: we checked the shape
   }
+  return null;
+}
 
-  // Satisfies IPage contract
-  async navigate(): Promise<void> {
-    const fullUrl = \`\${this.baseUrl}\${this.path}\`;
-    console.log(\`→ Navigate to: \${fullUrl}\`);
+const apiData: unknown = { id: 1, email: "alice@example.com", role: "admin" };
+const user = toUser(apiData);
+if (user) {
+  console.log("User:", user.email, user.role);
+}
+
+// DOM casting (when working in browsers)
+// const input = document.getElementById("username") as HTMLInputElement;
+// input.value  — works because TypeScript now knows it's HTMLInputElement
+
+// Danger: double casting bypasses safety (avoid!)
+const a: string = "hello";
+const b = a as unknown as number;  // compiles, but bad practice
+console.log(typeof b);             // "string" — cast did NOT convert!` },
+      { type: "editor", lang: "typescript", defaultCode: `interface Config {
+  baseUrl: string;
+  timeout: number;
+  retries: number;
+}
+
+function parseConfig(raw: unknown): Config {
+  if (typeof raw !== "object" || raw === null) {
+    throw new Error("Config must be an object");
   }
+  const obj = raw as Record<string, unknown>;
+  if (typeof obj.baseUrl !== "string") throw new Error("baseUrl must be string");
+  if (typeof obj.timeout !== "number") throw new Error("timeout must be number");
+  if (typeof obj.retries !== "number") throw new Error("retries must be number");
+  return obj as unknown as Config;
+}
 
-  // Satisfies IPage contract
-  async isLoaded(): Promise<boolean> {
-    console.log(\`→ Checking selector: \${this.loadedSelector}\`);
-    return true;   // would be: await page.locator(this.loadedSelector).isVisible()
-  }
+const valid = { baseUrl: "https://api.example.com", timeout: 5000, retries: 3 };
+const parsed = parseConfig(valid);
+console.log("Config: " + parsed.baseUrl + ", timeout: " + parsed.timeout);` },
+      { type: "quiz", question: { tr: "TypeScript'te 'as' keyword'ü ne yapar?", en: "What does the 'as' keyword do in TypeScript?" }, options: [{ id: "a", text: { tr: "Değeri gerçekten dönüştürür", en: "Actually converts the value" } }, { id: "b", text: { tr: "TypeScript'e tip hakkında bilgi verir — runtime'da etkisi yok", en: "Tells TypeScript about the type — no effect at runtime" } }, { id: "c", text: { tr: "Null kontrolü yapar", en: "Performs a null check" } }, { id: "d", text: { tr: "Değeri clone'lar", en: "Clones the value" } }], correct: "b", explanation: { tr: "'as' compile-time'da TypeScript'e tipi söyler — runtime'da hiçbir şey olmaz. Java'daki (String) obj gerçekten cast eder. TypeScript'te 'as' yanlış tipte kullanılsa bile runtime'da ClassCastException atmaz.", en: "'as' tells TypeScript the type at compile-time — nothing happens at runtime. Java's (String) obj actually converts. TypeScript 'as' with a wrong type causes wrong behavior at runtime, not an explicit crash." } },
 
-  // Reusable helper for all pages
-  protected async waitAndVerify(): Promise<void> {
-    const loaded = await this.isLoaded();
-    if (!loaded) throw new Error(\`Page not loaded: \${this.path}\`);
-    console.log(\`→ Page verified: \${this.path}\`);
+      // ═══════════════════════════════════════════════════════════════════════
+      // W3Schools Topic 11 — Classes
+      // ═══════════════════════════════════════════════════════════════════════
+      { type: "heading", text: "Classes", difficulty: "🟡 Intermediate" },
+      { type: "simple-box", emoji: "🏗️", title: { tr: "Bunu 10 yaşındaki birine anlatalım:", en: "Simply put:" }, content: { tr: "TypeScript class'ları Java class'larına çok benzer ama daha kısa syntax. Java'da field tanımla, constructor'da this.field = value yaz. TypeScript'te constructor parametresine 'public' yaz — ikisi birden yapılır.", en: "TypeScript classes are very similar to Java classes but with shorter syntax. In Java, declare field, then write this.field = value. In TypeScript, add 'public' to constructor parameters — it does both at once." } },
+      { type: "code", language: "typescript", code: `// TypeScript Classes — constructor shorthand
+class User {
+  constructor(
+    public readonly id: number,       // public + readonly in one line!
+    public email: string,
+    private role: string = "user",    // private with default
+  ) {}
+
+  getRole(): string { return this.role; }
+
+  toString(): string {
+    return "User(" + this.id + ": " + this.email + ", " + this.role + ")";
   }
 }
 
-class CheckoutPage extends TypedPageBase {
-  constructor(baseUrl: string) {
-    super(baseUrl, "/checkout", "h1.checkout-title");
+// Inheritance
+class AdminUser extends User {
+  constructor(id: number, email: string, private permissions: string[]) {
+    super(id, email, "admin");
   }
 
-  async fillShippingForm(name: string, address: string): Promise<void> {
-    console.log(\`→ Filling shipping: \${name}, \${address}\`);
-    await this.waitAndVerify();
+  hasPermission(perm: string): boolean {
+    return this.permissions.includes(perm);
   }
 }
 
-const checkout = new CheckoutPage("https://staging.example.com");
-checkout.navigate();
-checkout.fillShippingForm("Alice", "123 Main St");`,
-        expected:
-          "→ Navigate to: https://staging.example.com/checkout\n→ Filling shipping: Alice, 123 Main St\n→ Checking selector: h1.checkout-title\n→ Page verified: /checkout",
-      },
+const u = new User(1, "alice@example.com");
+const admin = new AdminUser(2, "admin@example.com", ["delete", "manage"]);
+
+console.log(u.toString());
+console.log(admin.toString());
+console.log(admin.hasPermission("delete"));   // true
+
+// Abstract class
+abstract class BaseTest {
+  abstract run(): void;
+  log(msg: string): void { console.log("[TEST] " + msg); }
+}
+
+class LoginTest extends BaseTest {
+  run(): void { this.log("Running login test"); }
+}
+new LoginTest().run();` },
+      { type: "editor", lang: "typescript", defaultCode: `class TestSuite {
+  private tests: Array<{ name: string; fn: () => boolean }> = [];
+
+  constructor(public readonly name: string) {}
+
+  addTest(name: string, fn: () => boolean): this {
+    this.tests.push({ name, fn });
+    return this;
+  }
+
+  run(): { passed: number; failed: number; total: number } {
+    let passed = 0, failed = 0;
+    for (const test of this.tests) {
+      const ok = test.fn();
+      console.log("  " + (ok ? "PASS" : "FAIL") + " " + test.name);
+      if (ok) passed++; else failed++;
+    }
+    return { passed, failed, total: this.tests.length };
+  }
+}
+
+const suite = new TestSuite("Math Tests")
+  .addTest("2+2=4", () => 2 + 2 === 4)
+  .addTest("5>3", () => 5 > 3)
+  .addTest("string check", () => typeof "hello" === "string")
+  .addTest("intentional fail", () => 1 === 2);
+
+console.log("Suite: " + suite.name);
+const res = suite.run();
+console.log("Result: " + res.passed + "/" + res.total + " passed");` },
+      { type: "comparison", title: { tr: "Java ile Karşılaştırma", en: "Java vs TypeScript — Classes" }, columns: ["Java", "TypeScript"], rows: [
+        { concept: "Field + constructor", java: "String x; MyClass(String x) { this.x = x; }", typescript: "constructor(public x: string) {} (one line!)" },
+        { concept: "Access modifiers", java: "public, protected, private, default", typescript: "public, protected, private" },
+        { concept: "Readonly", java: "final String x;", typescript: "readonly x: string;" },
+        { concept: "Abstract", java: "abstract class A { abstract void run(); }", typescript: "abstract class A { abstract run(): void; }" },
+      ]},
+      { type: "quiz", question: { tr: "TypeScript constructor parametresinde 'public' yazmanın avantajı nedir?", en: "What is the advantage of writing 'public' in a TypeScript constructor parameter?" }, options: [{ id: "a", text: { tr: "Hiç avantajı yok", en: "No advantage" } }, { id: "b", text: { tr: "Field tanımlama ve atamayı tek satırda yapar", en: "Defines and assigns the field in one line (Java's 2 steps become 1)" } }, { id: "c", text: { tr: "Performansı artırır", en: "Improves performance" } }, { id: "d", text: { tr: "Sadece string için çalışır", en: "Only works for strings" } }], correct: "b", explanation: { tr: "Java'da: 'String email; MyClass(String email) { this.email = email; }' — 2 adım. TypeScript'te: 'constructor(public email: string)' — 1 adım. Constructor shorthand field tanımlamayı ve atamayı aynı anda yapar.", en: "In Java: field declaration + constructor assignment = 2 steps. In TypeScript: 'constructor(public email: string)' = 1 step. Constructor shorthand defines and assigns simultaneously." } },
+
+      // ─── Interview Questions ──────────────────────────────────────────────
+      { type: "interview-questions", topic: "TypeScript Intermediate", questions: [
+        { level: "basic", q: { tr: "TypeScript'te interface ve type alias ne zaman kullanılır?", en: "When do you use interface vs type alias in TypeScript?" }, a: { tr: "Interface: obje şekilleri ve class contracts için. Declaration merging gerektiğinde. Type alias: union types, intersection types için. Basit kural: obje yapısı tarif ediyorsan interface, 'bu ya şu' diyorsan type alias.", en: "Interface: for object shapes and class contracts, especially when you need declaration merging. Type alias: for union types, intersections. Simple rule: if describing an object shape, use interface; if saying 'this OR that,' use type alias." } },
+        { level: "intermediate", q: { tr: "Discriminated union nedir? QA'de nasıl kullanılır?", en: "What is a discriminated union? How is it used in QA?" }, a: { tr: "Her varyantın ortak bir literal tip discriminant field'ı olan union. Örnek: { status: 'pass', data: T } | { status: 'fail', error: string }. QA'de test olaylarını modellemek için harika — start | pass | fail | skip her biri farklı field'a sahip.", en: "A union where each variant has a shared literal-type 'discriminant' field. Example: { status: 'pass', data: T } | { status: 'fail', error: string }. Great in QA for modeling test events — start, pass, fail, skip each have different fields." } },
+        { level: "advanced", q: { tr: "TypeScript 'private' Java 'private'den nasıl farklı?", en: "How does TypeScript 'private' differ from Java 'private'?" }, a: { tr: "TypeScript 'private' sadece compile-time'da enforced — JavaScript'te runtime'da erişilebilir. Java 'private' runtime'da da enforced. Gerçek runtime gizlilik için JS private field syntax kullanılır: #field. TypeScript bu syntax'ı destekler.", en: "TypeScript 'private' is only compile-time enforced — accessible at runtime in JavaScript. Java 'private' is runtime-enforced. For true runtime privacy, use JS private field syntax: #field. TypeScript supports this syntax." } },
+      ]},
     ],
   },
 
-  // ─────────────────────────────────────────────
-  // SECTION 4 — Advanced 🔴
-  // ─────────────────────────────────────────────
   {
     title: "Advanced TypeScript",
     blocks: [
-      {
-        type: "heading",
-        content: "Utility Types",
-        difficulty: "🔴 Advanced",
-      },
-      {
-        type: "code",
-        language: "typescript",
-        label: "Built-in utility types for test automation patterns",
-        content: `// TypeScript ships utility types that transform existing types
-// — these are the most useful ones for test automation
 
-interface TestConfig {
-  baseUrl: string;
-  timeout: number;
-  headless: boolean;
-  retries: number;
-  reporter: string;
+      // ═══════════════════════════════════════════════════════════════════════
+      // W3Schools Topic 12 — Basic Generics
+      // ═══════════════════════════════════════════════════════════════════════
+      { type: "heading", text: "Basic Generics", difficulty: "🔴 Advanced" },
+      { type: "simple-box", emoji: "🧩", title: { tr: "Bunu 10 yaşındaki birine anlatalım:", en: "Simply put:" }, content: { tr: "Generic, doldurulabilir şablon gibi. 'Liste' diyorsun ama ne listesi? Sayı listesi mi, isim listesi mi? Tip parametresi ile sonradan belirtiyorsun. Java'daki List<T> ile aynı mantık.", en: "A generic is like a fill-in-the-blank template. 'A list' — but a list of what? Numbers? Names? You specify the type later with a type parameter. Same concept as Java's List<T>." } },
+      { type: "text", content: { tr: "Java'da generics: ArrayList<String>, Map<String, Integer>. TypeScript'te aynı şey: Array<string>, Map<string, number>. Fonksiyon generic'leri: function identity<T>(x: T): T. Java'dan zaten tanıdık — sözdizimi biraz farklı.", en: "Java generics: ArrayList<String>, Map<String, Integer>. TypeScript is the same: Array<string>, Map<string, number>. Function generics: function identity<T>(x: T): T. Already familiar from Java — just slightly different syntax." } },
+      { type: "code", language: "typescript", code: `// TypeScript Generics — reusable code with type safety
+
+// Generic function — like Java <T> method
+function identity<T>(value: T): T {
+  return value;
+}
+console.log(identity<string>("hello"));  // hello
+console.log(identity<number>(42));       // 42
+// TypeScript infers T automatically: identity("hello")
+
+// Generic container — like Java class Box<T>
+class Box<T> {
+  constructor(private value: T) {}
+  get(): T { return this.value; }
+  toString(): string { return "Box(" + String(this.value) + ")"; }
 }
 
-// Partial<T> — all properties become optional (great for config overrides)
-type PartialConfig = Partial<TestConfig>;
-const devOverride: PartialConfig = { headless: false };   // only override what you need
+const strBox = new Box<string>("TypeScript");
+const numBox = new Box<number>(42);
+console.log(strBox.toString());    // Box(TypeScript)
+console.log(numBox.toString());    // Box(42)
 
-// Required<T> — all optional properties become required
-interface MaybeUser { name?: string; email?: string }
-type FullUser = Required<MaybeUser>;   // name and email are now required
-
-// Pick<T, K> — pick only specific properties
-type NetworkConfig = Pick<TestConfig, "baseUrl" | "timeout">;
-const net: NetworkConfig = { baseUrl: "https://api.example.com", timeout: 5000 };
-
-// Omit<T, K> — remove specific properties
-type ConfigWithoutRetries = Omit<TestConfig, "retries" | "reporter">;
-
-// Record<K, V> — typed key-value map
-type BrowserTimeouts = Record<string, number>;
-const timeouts: BrowserTimeouts = { chromium: 30000, firefox: 45000, webkit: 30000 };
-
-// Readonly<T> — all properties become readonly (immutable)
-type FrozenConfig = Readonly<TestConfig>;
-const cfg: FrozenConfig = { baseUrl: "https://prod.com", timeout: 30000, headless: true, retries: 2, reporter: "html" };
-// cfg.baseUrl = "changed";   // Error: Cannot assign to 'baseUrl' — it is read-only
-
-// ReturnType<F> — extract the return type of a function
-async function fetchUser(): Promise<{ id: number; name: string }> {
-  return { id: 1, name: "Alice" };
+// Generic with constraint — like Java <T extends Comparable<T>>
+function findMax<T extends { value: number }>(items: T[]): T {
+  return items.reduce((max, item) => item.value > max.value ? item : max);
 }
-type UserResult = Awaited<ReturnType<typeof fetchUser>>;   // { id: number; name: string }
 
-// Parameters<F> — extract the parameter types of a function
-function createTest(title: string, tags: string[], timeout: number): void {}
-type CreateTestParams = Parameters<typeof createTest>;     // [string, string[], number]
+const tests = [
+  { name: "login", value: 342 },
+  { name: "checkout", value: 891 },
+  { name: "profile", value: 215 },
+];
+const slowest = findMax(tests);
+console.log("Slowest:", slowest.name, slowest.value + "ms");` },
+      { type: "editor", lang: "typescript", defaultCode: `// Generic Result type — common QA pattern
+type Result<T> =
+  | { success: true; data: T }
+  | { success: false; error: string };
 
-console.log(net.baseUrl);   // https://api.example.com`,
-        expected: "https://api.example.com",
-      },
-      {
-        type: "heading",
-        content: "Conditional Types",
-      },
-      {
-        type: "code",
-        language: "typescript",
-        label: "Conditional types — T extends U ? X : Y",
-        content: `// Conditional types let you choose a type based on a condition
-// Syntax: T extends U ? TrueType : FalseType
+function parseJSON<T>(raw: string): Result<T> {
+  try {
+    const data = JSON.parse(raw) as T;
+    return { success: true, data };
+  } catch (e) {
+    return { success: false, error: "Invalid JSON: " + String(e) };
+  }
+}
 
-// ── Basic conditional type ────────────────────────────────────────
-type IsString<T> = T extends string ? "yes" : "no";
-type A = IsString<string>;   // "yes"
-type B = IsString<number>;   // "no"
+interface User { id: number; email: string; }
 
-// ── NonNullable — built-in utility built with conditional types ───
-type NonNullableT<T> = T extends null | undefined ? never : T;
-type SafeString = NonNullableT<string | null>;   // string (null removed)
+const good = parseJSON<User>('{"id": 1, "email": "alice@example.com"}');
+const bad = parseJSON<User>("not json");
 
-// ── Practical: IsAsync — detect if a function returns a Promise ──
-type IsAsync<T> = T extends (...args: any[]) => Promise<any> ? true : false;
-type CheckNav   = IsAsync<(url: string) => Promise<void>>;   // true
-type CheckSync  = IsAsync<(x: number) => number>;             // false
+if (good.success) console.log("User:", good.data.email);
+if (!bad.success) console.log("Error:", bad.error);` },
+      { type: "comparison", title: { tr: "Java ile Karşılaştırma", en: "Java vs TypeScript — Generics" }, columns: ["Java", "TypeScript"], rows: [
+        { concept: "Generic class", java: "class Box<T> { T get() {...} }", typescript: "class Box<T> { get(): T {...} }" },
+        { concept: "Generic method", java: "<T> T identity(T x)", typescript: "function identity<T>(x: T): T" },
+        { concept: "Constraint", java: "<T extends Comparable<T>>", typescript: "<T extends { compareTo: (a: T) => number }>" },
+        { concept: "Multiple params", java: "Map<K, V>", typescript: "Map<K, V> / function f<K, V>" },
+      ]},
+      { type: "quiz", question: { tr: "TypeScript'te <T extends { length: number }> ne anlama gelir?", en: "What does <T extends { length: number }> mean in TypeScript generics?" }, options: [{ id: "a", text: { tr: "T sadece number olabilir", en: "T can only be a number" } }, { id: "b", text: { tr: "T, 'length' adında number özelliği olan herhangi bir tip olabilir", en: "T can be any type that has a 'length' property of type number" } }, { id: "c", text: { tr: "T bir array olmak zorunda", en: "T must be an array" } }, { id: "d", text: { tr: "T'nin uzunluğu belirtiliyor", en: "The length of T is being specified" } }], correct: "b", explanation: { tr: "Generic constraint ile T'nin hangi özelliklere sahip olması gerektiği belirtilir. string, array, hatta { length: number } olan herhangi bir obje T olabilir. Java'daki <T extends Comparable<T>> gibi.", en: "Generic constraints specify what properties T must have. string, array, or any object with { length: number } can be T. Similar to Java's <T extends Comparable<T>>." } },
 
-// ── Unwrap a Promise type ────────────────────────────────────────
-type Unwrap<T> = T extends Promise<infer U> ? U : T;
-type StringResult = Unwrap<Promise<string>>;   // string
-type NumberResult = Unwrap<number>;             // number (not a promise — passthrough)
-
-// ── TestResponse — conditional return based on input ─────────────
-type ApiResult<T, E extends boolean = false> =
-  E extends true
-    ? { error: string; data: null }
-    : { error: null; data: T };
-
-type SuccessResult = ApiResult<{ id: number }, false>;   // { error: null; data: { id: number } }
-type ErrorResult   = ApiResult<never, true>;              // { error: string; data: null }
-
-const ok: SuccessResult  = { error: null, data: { id: 1 } };
-const err: ErrorResult   = { error: "Not Found", data: null };
-console.log(ok.data.id);    // 1
-console.log(err.error);     // Not Found`,
-        expected: "1\nNot Found",
-      },
-      {
-        type: "heading",
-        content: "Mapped Types",
-      },
-      {
-        type: "code",
-        language: "typescript",
-        label: "Mapped types — transform every property of a type",
-        content: `// Mapped types iterate over the keys of a type and produce a new type
-// Syntax: { [K in keyof T]: NewType }
+      // ═══════════════════════════════════════════════════════════════════════
+      // W3Schools Topic 13 — Utility Types
+      // ═══════════════════════════════════════════════════════════════════════
+      { type: "heading", text: "Utility Types", difficulty: "🔴 Advanced" },
+      { type: "simple-box", emoji: "🔧", title: { tr: "Bunu 10 yaşındaki birine anlatalım:", en: "Simply put:" }, content: { tr: "Utility types, hazır tip dönüştürücüler. Bir tipin tüm alanlarını opsiyonel yap (Partial), sadece belirli alanları al (Pick), bir alanı çıkar (Omit). Java'da bunları manuel yapardın.", en: "Utility types are ready-made type transformers. Make all fields optional (Partial), pick specific fields (Pick), remove a field (Omit). In Java you'd do these manually." } },
+      { type: "code", language: "typescript", code: `// TypeScript Utility Types — powerful type transformations
 
 interface TestCase {
-  title: string;
-  timeout: number;
+  id: number;
+  name: string;
+  status: "PASS" | "FAIL" | "SKIP";
+  duration: number;
   tags: string[];
 }
 
-// Make every property a string (e.g. for serialization)
-type Stringified<T> = { [K in keyof T]: string };
-type StringTestCase = Stringified<TestCase>;
-// Result: { title: string; timeout: string; tags: string; }
+// Partial — all fields optional (useful for updates)
+type PartialTestCase = Partial<TestCase>;
+const update: PartialTestCase = { status: "PASS" };  // only some fields
 
-// Add readonly to every property
-type DeepReadonly<T> = { readonly [K in keyof T]: T[K] };
-type ReadonlyTestCase = DeepReadonly<TestCase>;
+// Required — all fields required (reverse of Partial)
+// Pick — select specific fields only
+type TestSummary = Pick<TestCase, "id" | "name" | "status">;
+const summary: TestSummary = { id: 1, name: "login", status: "PASS" };
 
-// Make every property optional (same as built-in Partial<T>)
-type Optional<T> = { [K in keyof T]?: T[K] };
+// Omit — remove specific fields
+type TestWithoutId = Omit<TestCase, "id">;
 
-// Make every property nullable
-type Nullable<T> = { [K in keyof T]: T[K] | null };
-type NullableTestCase = Nullable<TestCase>;
+// Readonly — make all fields readonly
+type ImmutableTest = Readonly<TestCase>;
 
-// ── Practical: form field validation types ────────────────────────
-interface LoginForm {
-  email: string;
-  password: string;
-  rememberMe: boolean;
-}
-
-// Map each field to its validation error (string) or null (no error)
-type FormErrors<T> = { [K in keyof T]: string | null };
-type LoginErrors = FormErrors<LoginForm>;
-
-const errors: LoginErrors = {
-  email: "Invalid email format",
-  password: null,               // no error
-  rememberMe: null,
+// Record — create key-value map type
+type TestResults = Record<string, "PASS" | "FAIL" | "SKIP">;
+const results: TestResults = {
+  login_test: "PASS",
+  checkout_test: "FAIL",
 };
 
-console.log(errors.email);      // Invalid email format
-console.log(errors.password);   // null`,
-        expected: "Invalid email format\nnull",
-      },
-      {
-        type: "heading",
-        content: "Template Literal Types",
-      },
-      {
-        type: "code",
-        language: "typescript",
-        label: "Template literal types for typed string patterns",
-        content: `// Template literal types use backtick syntax to build string types from other types
-// They are like template literals but at the TYPE level
+// ReturnType — get return type of a function
+function createUser() { return { id: 1, email: "a@b.com" }; }
+type UserType = ReturnType<typeof createUser>;  // { id: number; email: string }
 
-// ── Basic template literal type ───────────────────────────────────
-type EventName = \`on\${string}\`;   // must start with "on"
-const click: EventName = "onClick";
-const hover: EventName = "onHover";
-// const bad: EventName = "click";   // Error: "click" doesn't start with "on"
-
-// ── Combining string literal unions ───────────────────────────────
-type Action   = "click" | "fill" | "check";
-type Target   = "Button" | "Input" | "Checkbox";
-type StepName = \`\${Action}\${Target}\`;
-// StepName = "clickButton" | "clickInput" | "clickCheckbox" | "fillButton" | ...
-
-// ── API route typing ──────────────────────────────────────────────
-type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
-type ApiPath    = \`/api/\${string}\`;
-type ApiRoute   = \`\${HttpMethod} \${ApiPath}\`;
-
-const route: ApiRoute = "GET /api/users";
-// const bad2: ApiRoute = "PATCH /api/users";  // Error: PATCH not in HttpMethod
-
-// ── CSS selector validation ────────────────────────────────────────
-type DataTestId  = \`[data-testid="\${string}"]\`;
-const sel: DataTestId = '[data-testid="login-button"]';
-
-// ── Environment-aware URL builder ─────────────────────────────────
-type Env      = "dev" | "staging" | "prod";
-type BaseUrl  = \`https://\${Env}.myapp.com\`;
-const staging: BaseUrl = "https://staging.myapp.com";
-
-console.log(route);    // GET /api/users
-console.log(sel);      // [data-testid="login-button"]
-console.log(staging);  // https://staging.myapp.com`,
-        expected: "GET /api/users\n[data-testid=\"login-button\"]\nhttps://staging.myapp.com",
-      },
-      {
-        type: "heading",
-        content: "Type Assertions and Non-Null Assertion",
-      },
-      {
-        type: "code",
-        language: "typescript",
-        label: "as, non-null assertion (!), and when to use each",
-        content: `// ── Type assertion with 'as' ─────────────────────────────────────
-// You tell TypeScript "trust me, I know this is type X"
-// Use when: you have info the compiler doesn't (e.g. API response)
-
-const rawResponse: unknown = { id: 1, name: "Alice", email: "alice@test.com" };
-interface UserRecord { id: number; name: string; email: string }
-
-const user = rawResponse as UserRecord;   // assert the shape
-console.log(user.name);   // Alice — TypeScript trusts the assertion
-
-// ── Double assertion for incompatible types ────────────────────────
-// When TS won't accept a direct assertion: first assert to 'unknown'
-// const x = someValue as unknown as TargetType;
-
-// ── Non-null assertion operator (!) ────────────────────────────────
-// Tells TypeScript "this value is NOT null/undefined — trust me"
-// Use sparingly — it disables null safety for that expression
-
-function getElementText(selector: string): string | null {
-  // In tests, locators can return null if element not found
-  return selector ? "Login" : null;
+// Practical: build update payload type
+function updateTest(id: number, changes: Partial<Omit<TestCase, "id">>): void {
+  console.log("Updating test " + id + ":", JSON.stringify(changes));
+}
+updateTest(1, { status: "PASS", duration: 342 });` },
+      { type: "editor", lang: "typescript", defaultCode: `interface Config {
+  baseUrl: string;
+  timeout: number;
+  retries: number;
+  apiKey: string;
+  debug: boolean;
 }
 
-const text1 = getElementText("#btn");     // type: string | null
-const text2 = getElementText("#btn")!;    // type: string  (non-null asserted)
+// Use utility types to create derived types
+type PublicConfig = Omit<Config, "apiKey">;  // hide secret key
+type PartialUpdate = Partial<Config>;         // all optional for PATCH
+type RequiredCore = Required<Pick<Config, "baseUrl" | "timeout">>;  // subset required
 
-// !! DANGER: if the value IS null/undefined, you get a runtime crash
-// Only use (!) when you have VERIFIED the value is not null at this point
+const baseConfig: RequiredCore = { baseUrl: "https://api.example.com", timeout: 5000 };
+const publicView: PublicConfig = { baseUrl: "https://api.example.com", timeout: 5000, retries: 3, debug: false };
+const patchPayload: PartialUpdate = { timeout: 10000 };
 
-// ── Safer alternative: optional chaining + nullish coalescing ─────
-const safe = getElementText("#btn")?.toUpperCase() ?? "NOT FOUND";
-console.log(safe);   // LOGIN
+console.log("Base:", JSON.stringify(baseConfig));
+console.log("Public:", JSON.stringify(publicView));
+console.log("Patch:", JSON.stringify(patchPayload));` },
+      { type: "quiz", question: { tr: "TypeScript'te Partial<T> ne yapar?", en: "What does Partial<T> do in TypeScript?" }, options: [{ id: "a", text: { tr: "T'nin tüm alanlarını siler", en: "Removes all fields from T" } }, { id: "b", text: { tr: "T'nin tüm alanlarını opsiyonel (?) yapar", en: "Makes all fields of T optional (?)" } }, { id: "c", text: { tr: "T'nin sadece kısmi alanlarını seçer", en: "Selects only some fields of T" } }, { id: "d", text: { tr: "T'yi readonly yapar", en: "Makes T readonly" } }], correct: "b", explanation: { tr: "Partial<T> tüm alanları opsiyonel yapar. PATCH endpoint'lerinde sadece değişen alanları göndermek için idealdir. Java'da bu tipi manuel olarak oluşturman gerekirdi.", en: "Partial<T> makes all fields optional. Ideal for PATCH endpoints where you only send changed fields. In Java you'd have to create this type manually." } },
 
-// ── satisfies operator (TS 4.9+) ─────────────────────────────────
-// Validates type without widening — best of both worlds
-const config = {
-  baseUrl: "https://example.com",
-  timeout: 30000,
-} satisfies { baseUrl: string; timeout: number };
-// config.baseUrl is still typed as string literal (not widened to string)`,
-        expected: "Alice\nLOGIN",
-      },
-      {
-        type: "heading",
-        content: "Declaration Files (.d.ts) and Module Augmentation",
-      },
-      {
-        type: "code",
-        language: "typescript",
-        label: ".d.ts files and augmenting Playwright types",
-        content: `// .d.ts files contain ONLY type information — no runtime code
-// Purpose: add types for JavaScript libraries that have no types built in
-// OR extend existing types from third-party packages
-
-// ── Example: augmenting Playwright's test fixtures ────────────────
-// In a file like: src/types/playwright.d.ts
-
-// import { Page } from '@playwright/test';
-//
-// declare module '@playwright/test' {
-//   interface TestFixtures {
-//     // Add custom fixture types — now available in every test file
-//     loginPage: import('../pages/LoginPage').LoginPage;
-//     testUser: { email: string; password: string; role: string };
-//   }
-// }
-
-// ── Example: global type augmentation ─────────────────────────────
-// In src/types/global.d.ts:
-//
-// declare global {
-//   // Add a global type available without importing
-//   interface Window {
-//     __testMode: boolean;    // custom window property for test helpers
-//   }
-// }
-
-// ── Why .d.ts matters for automation ──────────────────────────────
-// When you install: npm install some-js-lib
-// And TS complains: "Could not find a declaration file for module 'some-js-lib'"
-// Solution: npm install @types/some-js-lib  (the DefinitelyTyped types package)
-
-// You'll often install these for Playwright projects:
-// npm install -D @types/node              // Node.js built-in types (fs, path, etc.)
-// @playwright/test includes its own types — no separate install needed
-
-console.log("Declaration files provide types — no runtime output");`,
-        expected: "Declaration files provide types — no runtime output",
-      },
-      {
-        type: "heading",
-        content: "Advanced Generics: Multiple Type Params and Defaults",
-      },
-      {
-        type: "code",
-        language: "typescript",
-        label: "Multiple generic parameters with defaults",
-        content: `// Multiple type parameters — like multiple generic slots
-interface Repository<T, ID = number> {   // ID defaults to number
-  findById(id: ID): Promise<T | null>;
-  findAll(): Promise<T[]>;
-  save(entity: T): Promise<T>;
+      // ═══════════════════════════════════════════════════════════════════════
+      // W3Schools Topic 14 — Keyof
+      // ═══════════════════════════════════════════════════════════════════════
+      { type: "heading", text: "Keyof", difficulty: "🔴 Advanced" },
+      { type: "simple-box", emoji: "🔑", title: { tr: "Bunu 10 yaşındaki birine anlatalım:", en: "Simply put:" }, content: { tr: "keyof, bir nesnenin tüm anahtar isimlerini tip olarak alır. 'Bu fonksiyon TestCase'in herhangi bir alanı ile çağrılabilir, ama sadece gerçek alan isimleriyle' — TypeScript bunu garantiler.", en: "keyof gets all the key names of an object as a type. 'This function can be called with any field of TestCase, but only with real field names' — TypeScript guarantees this." } },
+      { type: "code", language: "typescript", code: `// keyof — get all keys of a type as a union
+interface TestCase {
+  id: number;
+  name: string;
+  status: "PASS" | "FAIL" | "SKIP";
+  duration: number;
 }
 
-interface Product { id: number; name: string; price: number }
-interface TestRun { id: string; status: string; startedAt: Date }   // string ID
+type TestCaseKeys = keyof TestCase;  // "id" | "name" | "status" | "duration"
 
-// Both satisfy Repository with different type params
-// class ProductRepo implements Repository<Product> { ... }
-// class TestRunRepo implements Repository<TestRun, string> { ... }
-
-// ── Generic with multiple constraints ─────────────────────────────
-interface HasId    { id: number }
-interface HasTitle { title: string }
-
-// T must have BOTH id AND title
-function logItem<T extends HasId & HasTitle>(item: T): void {
-  console.log(\`[#\${item.id}] \${item.title}\`);
+// Practical use: type-safe property accessor
+function getField<T, K extends keyof T>(obj: T, key: K): T[K] {
+  return obj[key];
 }
 
-logItem({ id: 1, title: "Login test", status: "pass" });  // extra props OK
+const tc: TestCase = { id: 1, name: "login_test", status: "PASS", duration: 342 };
+console.log(getField(tc, "name"));      // "login_test" — TypeScript knows type is string
+console.log(getField(tc, "duration"));  // 342 — TypeScript knows type is number
+// getField(tc, "invalid");             // ERROR: "invalid" not in keyof TestCase
 
-// ── Conditional generic return type ────────────────────────────────
-function parse<T>(json: string): T {
-  return JSON.parse(json) as T;   // cast after parsing
+// Sort array by any field — type-safe
+function sortBy<T>(items: T[], key: keyof T): T[] {
+  return [...items].sort((a, b) => {
+    if (a[key] < b[key]) return -1;
+    if (a[key] > b[key]) return 1;
+    return 0;
+  });
 }
 
-interface ApiUser { id: number; name: string }
-const parsed = parse<ApiUser>('{"id":1,"name":"Alice"}');
-console.log(parsed.name);   // Alice — typed correctly`,
-        expected: "[#1] Login test\nAlice",
-      },
-      {
-        type: "heading",
-        content: "Interactive Example: Generic ApiResponse<T> and Test Data Factory",
-      },
-      {
-        type: "code",
-        language: "typescript",
-        label: "Generic API response wrapper + typed test data factory",
-        content: `// ── Generic API response wrapper ──────────────────────────────────
-interface ApiResponse<T> {
-  data: T;
-  status: number;
-  ok: boolean;
-  error: string | null;
-  timestamp: string;
+const tests: TestCase[] = [
+  { id: 3, name: "profile", status: "PASS", duration: 215 },
+  { id: 1, name: "login", status: "PASS", duration: 342 },
+  { id: 2, name: "checkout", status: "FAIL", duration: 891 },
+];
+
+const byName = sortBy(tests, "name");
+const byDuration = sortBy(tests, "duration");
+console.log(byName.map(t => t.name));      // ["checkout", "login", "profile"]
+console.log(byDuration.map(t => t.name));  // ["profile", "login", "checkout"]` },
+      { type: "editor", lang: "typescript", defaultCode: `interface User {
+  id: number;
+  email: string;
+  role: "admin" | "user";
+  active: boolean;
 }
 
-// Factory function — create properly typed API response objects
-function createApiResponse<T>(data: T, status: number): ApiResponse<T> {
-  return {
-    data,
-    status,
-    ok: status >= 200 && status < 300,
-    error: status >= 400 ? \`HTTP \${status}\` : null,
-    timestamp: new Date().toISOString(),
+// Build a type-safe filter function using keyof
+function filterBy<T>(
+  items: T[],
+  key: keyof T,
+  value: T[keyof T]
+): T[] {
+  return items.filter(item => item[key] === value);
+}
+
+const users: User[] = [
+  { id: 1, email: "alice@example.com", role: "admin", active: true },
+  { id: 2, email: "bob@example.com", role: "user", active: true },
+  { id: 3, email: "carol@example.com", role: "user", active: false },
+  { id: 4, email: "dave@example.com", role: "admin", active: false },
+];
+
+const admins = filterBy(users, "role", "admin");
+const activeUsers = filterBy(users, "active", true);
+
+console.log("Admins:", admins.map(u => u.email));
+console.log("Active:", activeUsers.map(u => u.email));` },
+      { type: "quiz", question: { tr: "keyof TestCase nedir? interface TestCase { id: number; name: string; }", en: "What is keyof TestCase if interface TestCase { id: number; name: string; }?" }, options: [{ id: "a", text: 'number | string' }, { id: "b", text: '"id" | "name"' }, { id: "c", text: '{ id: number; name: string }' }, { id: "d", text: 'TestCase' }], correct: "b", explanation: { tr: "keyof, nesnenin anahtar isimlerini string literal union olarak döner. TestCase için keyof = 'id' | 'name'. Java'da böyle bir built-in operatör yok — reflection ile benzer şeyler yapılır.", en: "keyof returns the key names as a string literal union. For TestCase, keyof = 'id' | 'name'. Java has no built-in equivalent — similar things are done with reflection." } },
+
+      // ═══════════════════════════════════════════════════════════════════════
+      // W3Schools Topic 15 — Null (Null Safety)
+      // ═══════════════════════════════════════════════════════════════════════
+      { type: "heading", text: "Null Safety", difficulty: "🔴 Advanced" },
+      { type: "simple-box", emoji: "🚫", title: { tr: "Bunu 10 yaşındaki birine anlatalım:", en: "Simply put:" }, content: { tr: "TypeScript null hataları derleme sırasında yakalar. Java'da NullPointerException çalışma sırasında patlardı — TypeScript bunu derlerken söyler. strictNullChecks açıksa, null/undefined kontrolü yapmadan değer kullanman engellenir.", en: "TypeScript catches null errors at compile time. Java's NullPointerException would crash at runtime — TypeScript warns you during compilation. With strictNullChecks enabled, you cannot use a value without checking for null/undefined first." } },
+      { type: "code", language: "typescript", code: `// TypeScript Null Safety with strictNullChecks
+// (tsconfig.json: "strictNullChecks": true)
+
+// Nullable types — must be explicit
+let name: string | null = null;   // string OR null
+let age: number | undefined;      // number or undefined (not initialized)
+
+// Optional chaining — safe navigation (like Java ?. or Kotlin ?.))
+interface User {
+  id: number;
+  profile?: {           // profile may not exist
+    email: string;
+    phone?: string;     // phone may not exist
   };
 }
 
-interface UserApiData { id: number; name: string; email: string }
-const userResp = createApiResponse<UserApiData>(
-  { id: 1, name: "Alice", email: "alice@test.com" },
-  200
-);
-console.log(\`OK: \${userResp.ok}, User: \${userResp.data.name}\`);   // OK: true, User: Alice
-
-// ── Generic test data factory ──────────────────────────────────────
-function createTestData<T>(defaults: T, overrides?: Partial<T>): T {
-  return { ...defaults, ...overrides };   // spread: overrides win over defaults
+function getPhone(user: User): string {
+  return user.profile?.phone ?? "No phone";  // ?. + ?? operator
 }
 
-interface TestUser {
+const u1: User = { id: 1, profile: { email: "a@b.com", phone: "555-1234" } };
+const u2: User = { id: 2 };  // no profile
+console.log(getPhone(u1));   // 555-1234
+console.log(getPhone(u2));   // No phone
+
+// Nullish coalescing ?? vs || difference
+const zero = 0;
+console.log(zero || "default");   // "default" — 0 is falsy!
+console.log(zero ?? "default");   // 0 — ?? only checks null/undefined
+
+// Non-null assertion operator ! (use carefully)
+function getLength(s: string | null): number {
+  return s!.length;   // tells TypeScript: "I guarantee s is not null"
+  // But if s IS null at runtime → crash! Use only when absolutely certain
+}
+
+// Safer approach: type guard
+function safeLength(s: string | null | undefined): number {
+  return s?.length ?? 0;
+}` },
+      { type: "editor", lang: "typescript", defaultCode: `// Practice null-safe API response handling
+interface ApiUser {
   id: number;
-  email: string;
-  password: string;
-  role: string;
-  isActive: boolean;
+  name: string;
+  email?: string;
+  address?: {
+    city: string;
+    country?: string;
+  };
 }
 
-const defaultUser: TestUser = {
-  id: 1,
-  email: "test@example.com",
-  password: "TestPass123",
-  role: "viewer",
-  isActive: true,
+function formatUser(user: ApiUser | null): string {
+  if (user === null) return "No user";
+  const email = user.email ?? "No email";
+  const city = user.address?.city ?? "Unknown city";
+  const country = user.address?.country ?? "Unknown country";
+  return user.name + " | " + email + " | " + city + ", " + country;
+}
+
+const fullUser: ApiUser = {
+  id: 1, name: "Alice", email: "alice@example.com",
+  address: { city: "Istanbul", country: "Turkey" }
+};
+const partialUser: ApiUser = { id: 2, name: "Bob" };
+
+console.log(formatUser(fullUser));
+console.log(formatUser(partialUser));
+console.log(formatUser(null));` },
+      { type: "quiz", question: { tr: "TypeScript'te '??' ve '||' operatörleri arasındaki fark nedir?", en: "What is the difference between '??' and '||' operators in TypeScript?" }, options: [{ id: "a", text: { tr: "Hiçbir fark yok", en: "No difference" } }, { id: "b", text: { tr: "?? sadece null/undefined'ı kontrol eder, || 0, '', false'ı da falsy sayar", en: "?? only checks for null/undefined, while || also treats 0, '', false as falsy" } }, { id: "c", text: { tr: "|| daha güvenli", en: "|| is safer" } }, { id: "d", text: { tr: "?? sadece TypeScript'te var, JS'de yok", en: "?? only exists in TypeScript, not JS" } }], correct: "b", explanation: { tr: "0 || 'default' = 'default' (0 falsy). 0 ?? 'default' = 0 (0 null/undefined değil). QA testlerinde sıfır değer kontrol ediyorsanız ?? kullanın — || sıfırı da default'a düşürür.", en: "0 || 'default' = 'default' (0 is falsy). 0 ?? 'default' = 0 (0 is not null/undefined). In QA tests checking for zero values, use ?? — || would incorrectly treat 0 as missing." } },
+
+      // ═══════════════════════════════════════════════════════════════════════
+      // Advanced: Conditional & Mapped Types
+      // ═══════════════════════════════════════════════════════════════════════
+      { type: "heading", text: "Conditional & Mapped Types", difficulty: "🔴 Advanced" },
+      { type: "simple-box", emoji: "🗺️", title: { tr: "Bunu 10 yaşındaki birine anlatalım:", en: "Simply put:" }, content: { tr: "Conditional type, 'eğer X ise A, değilse B' mantığında çalışan tip. Mapped type, bir nesnenin tüm alanlarını dönüştürür — her alanı opsiyonel yap, her alanı string yap gibi. Partial<T> aslında bir mapped type.", en: "A conditional type works like 'if X then A, else B' for types. A mapped type transforms all fields of an object — make every field optional, make every field a string. Partial<T> is actually a mapped type." } },
+      { type: "code", language: "typescript", code: `// Conditional Types — ternary for types
+type IsString<T> = T extends string ? "yes" : "no";
+
+type A = IsString<string>;   // "yes"
+type B = IsString<number>;   // "no"
+
+// NonNullable (built-in utility — implemented as conditional type)
+type NonNull<T> = T extends null | undefined ? never : T;
+
+// Mapped Types — transform all properties
+interface User { id: number; name: string; active: boolean; }
+
+// Make all fields optional (same as Partial<T>)
+type Optional<T> = { [K in keyof T]?: T[K] };
+
+// Make all fields readonly (same as Readonly<T>)
+type Immutable<T> = { readonly [K in keyof T]: T[K] };
+
+// Make all fields strings (type transformation)
+type Stringified<T> = { [K in keyof T]: string };
+
+type StringUser = Stringified<User>;
+const su: StringUser = { id: "1", name: "Alice", active: "true" };
+
+// Practical: validation schema
+type ValidationRules<T> = {
+  [K in keyof T]?: (value: T[K]) => string | null;  // null = valid
 };
 
-// Create variations without repeating the full object
-const adminUser = createTestData(defaultUser, { role: "admin", id: 99 });
-const inactiveUser = createTestData(defaultUser, { isActive: false, email: "inactive@test.com" });
+const userValidation: ValidationRules<User> = {
+  name: (v) => v.length < 2 ? "Name too short" : null,
+  id: (v) => v <= 0 ? "ID must be positive" : null,
+};
 
-console.log(\`Admin role: \${adminUser.role}, id: \${adminUser.id}\`);
-console.log(\`Inactive: \${inactiveUser.isActive}, email: \${inactiveUser.email}\`);`,
-        expected:
-          "OK: true, User: Alice\nAdmin role: admin, id: 99\nInactive: false, email: inactive@test.com",
-      },
+function validate<T>(obj: T, rules: ValidationRules<T>): string[] {
+  const errors: string[] = [];
+  for (const key in rules) {
+    const rule = rules[key];
+    const error = rule ? rule(obj[key]) : null;
+    if (error) errors.push(key + ": " + error);
+  }
+  return errors;
+}
+
+const u: User = { id: 1, name: "A", active: true };
+console.log(validate(u, userValidation));  // ["name: Name too short"]` },
+      { type: "editor", lang: "typescript", defaultCode: `// Build a DeepReadonly mapped type
+type DeepReadonly<T> = {
+  readonly [K in keyof T]: T[K] extends object ? DeepReadonly<T[K]> : T[K];
+};
+
+interface Config {
+  server: {
+    host: string;
+    port: number;
+    ssl: boolean;
+  };
+  database: {
+    url: string;
+    poolSize: number;
+  };
+}
+
+const config: DeepReadonly<Config> = {
+  server: { host: "localhost", port: 3000, ssl: true },
+  database: { url: "postgres://localhost/testdb", poolSize: 5 },
+};
+
+console.log("Host:", config.server.host);
+console.log("Port:", config.server.port);
+
+// This would be a TypeScript error:
+// config.server.port = 9000;  // Cannot assign to readonly` },
+      { type: "quiz", question: { tr: "TypeScript'te { [K in keyof T]?: T[K] } ne yapar?", en: "What does { [K in keyof T]?: T[K] } do in TypeScript?" }, options: [{ id: "a", text: { tr: "T'nin tüm alanlarını siler", en: "Removes all fields from T" } }, { id: "b", text: { tr: "T'nin tüm alanlarını opsiyonel yapar (Partial<T> ile aynı)", en: "Makes all fields of T optional (same as Partial<T>)" } }, { id: "c", text: { tr: "T'nin alanlarını string'e dönüştürür", en: "Converts T's fields to strings" } }, { id: "d", text: { tr: "T'yi array'e dönüştürür", en: "Converts T to an array" } }], correct: "b", explanation: { tr: "[K in keyof T] ile T'nin tüm keylerini iterate edersin. ?: her birini opsiyonel yapar. T[K] ile orijinal tipi korursun. Bu tam olarak Partial<T>'nin implementation'ı.", en: "[K in keyof T] iterates over all keys of T. ?: makes each optional. T[K] preserves the original type. This is exactly how Partial<T> is implemented." } },
+
+      // ─── Interview Questions for Advanced ─────────────────────────────────
+      { type: "interview-questions", topic: "TypeScript Advanced", questions: [
+        { level: "basic", q: { tr: "TypeScript Generics neden kullanılır? Java'dan farkı nedir?", en: "Why are TypeScript Generics used? How do they differ from Java?" }, a: { tr: "Generic'ler tip-güvenli, yeniden kullanılabilir kod yazmak için. function identity<T>(x: T): T — her tip için aynı kodu kullanabilirsin. Java generic'leriyle aynı mantık. Fark: TypeScript structural typing kullanır, Java nominal typing. TypeScript'te <T extends { length: number }> ile duck typing yapılabilir.", en: "Generics write type-safe, reusable code. function identity<T>(x: T): T — same code works for every type. Same concept as Java generics. Difference: TypeScript uses structural typing, Java uses nominal typing. TypeScript allows duck typing: <T extends { length: number }>." } },
+        { level: "intermediate", q: { tr: "Utility types nedir? En çok kullandığın hangisi ve neden?", en: "What are utility types? Which do you use most and why?" }, a: { tr: "Built-in tip dönüştürücüler: Partial<T>, Required<T>, Pick<T,K>, Omit<T,K>, Record<K,V>, Readonly<T>. En çok: Partial<T> — PUT/PATCH API endpoint'lerinde tüm alanların opsiyonel olduğu update payload'lar için. Ve Omit<T, 'password'|'secret'> — hassas alanları response'dan çıkarmak için.", en: "Built-in type transformers: Partial<T>, Required<T>, Pick<T,K>, Omit<T,K>, Record<K,V>, Readonly<T>. Most used: Partial<T> — for update payloads in PUT/PATCH endpoints where all fields are optional. And Omit<T, 'password'|'secret'> — removing sensitive fields from API responses." } },
+        { level: "advanced", q: { tr: "Conditional types ne zaman kullanılmalı?", en: "When should conditional types be used?" }, a: { tr: "Conditional types: T extends U ? X : Y — tipler üzerinde if/else gibi. Kullanım: 1) Utility types yazmak (NonNullable gibi). 2) Discriminated unions üzerinde çalışmak. 3) Function overload signatures yerine. Karmaşık olabilir — önce simpler çözüm dene. QA framework'lerinde genellikle result types için kullanılır.", en: "Conditional types: T extends U ? X : Y — if/else logic for types. Use cases: 1) Writing utility types (like NonNullable). 2) Working with discriminated unions. 3) Instead of function overload signatures. Can be complex — try simpler solutions first. In QA frameworks, often used for result types." } },
+      ]},
     ],
   },
 
-  // ─────────────────────────────────────────────
-  // SECTION 5 — QA Use Cases 🧪
-  // ─────────────────────────────────────────────
   {
     title: "QA Use Cases",
     blocks: [
@@ -2037,6 +1984,76 @@ console.log(\`Auth only: \${minimalFixture.email}\`);`,
         expected:
           "Admin: admin, perms: read, write, delete\nEU locale: de-DE, tz: Europe/Berlin\nAuth only: qa@test.com",
       },
+      {
+        type: "heading",
+        content: "🏗️ Playwright POM Architecture — Class Hierarchy",
+        difficulty: "🟡 Intermediate",
+      },
+      {
+        type: "visual", variant: "flow",
+        title: "TypeScript POM Class Hierarchy — Layer by Layer",
+        note: "Each layer inherits from the one above. Tests only call public methods — selectors are hidden inside page classes.",
+        steps: [
+          { num: "1", label: "IPage Interface", desc: "navigate(), login(), getError() — the public contract", highlight: true },
+          { num: "2", label: "PageBase (abstract)", desc: "Shared helpers: waitForLoad(), expectUrl(), getLocator()" },
+          { num: "3", label: "LoginPage extends PageBase", desc: "Implements IPage — owns all selectors + actions" },
+          { num: "4", label: "test fixture (test.extend)", desc: "loginPage: async({page}, use) => { ... }" },
+          { num: "5", label: "Test file", desc: "test('login', async({ loginPage }) => { await loginPage.login(...) })", highlight: true },
+        ],
+      },
+      {
+        type: "comparison",
+        left: {
+          label: "❌ Untyped — Runtime Surprises",
+          code: `// JavaScript / untyped Playwright
+test('login', async ({ page }) => {
+  await page.fill('#emal', 'user@test.com');  // typo: #emal
+  await page.click('#submit-btn');
+
+  // crashes at runtime — no IDE warning
+  const result = await page.locator('.dashbord').textContent();
+  //                                  ^ typo — no error until test runs
+  expect(result).toBe('Welcome!');
+});`,
+          note: "Selector typos and wrong method calls discovered at runtime — expensive CI failures",
+        },
+        right: {
+          label: "✅ Typed POM — Caught at Compile Time",
+          code: `// TypeScript Playwright POM
+export class LoginPage {
+  private readonly emailInput: Locator;    // typed field
+  constructor(private readonly page: Page) {
+    this.emailInput = page.locator('[data-testid="email"]');
+  }
+  async login(email: string, password: string): Promise<void> {
+    await this.emailInput.fill(email);   // IDE shows fill() options
+    // loginPage.fill(email)  ← compiler error: method doesn't exist
+  }
+}
+
+test('login', async ({ loginPage }) => {
+  await loginPage.login('user@test.com', 'pass');
+  // loginPage.navigate(42) ← Error: number not assignable to void
+});`,
+          note: "Selector changes cascade safely — compiler shows every broken call site",
+        },
+      },
+      {
+        type: "visual", variant: "boxes",
+        title: "Typed Fixture Pipeline — From Config to Test",
+        items: [
+          { icon: "⚙️", label: "playwright.config.ts", desc: "baseURL, timeout, retries" },
+          { arrow: true },
+          { icon: "🔧", label: "test.extend<MyFixtures>", desc: "loginPage, testUser, apiBaseUrl" },
+          { arrow: true },
+          { icon: "📄", label: "LoginPage class", desc: "private Locators, typed methods" },
+          { arrow: true },
+          { icon: "🧪", label: "Test function", desc: "async ({ loginPage, testUser }) => {}" },
+          { arrow: true },
+          { icon: "✅", label: "Type-safe assertions", desc: "expect().toHaveURL(), toHaveText()" },
+        ],
+        note: "Every arrow is a typed boundary — passing wrong types triggers a compile error, not a runtime crash.",
+      },
     ],
   },
 
@@ -2259,6 +2276,145 @@ export { TestStatus, Browser, Environment } from "../enums";
 // In test file:
 import type { User } from "../types";             // type-only import
 import { TestStatus, Browser } from "../types";   // value import (enum)`,
+      },
+      { type: "heading", content: "☕ If You Know Java: Interview Q Bridge" },
+      {
+        type: "java-compare",
+        topic: "interface: Structural vs Nominal Typing (Q2 Deep Dive)",
+        why: "Q2 covers interface vs type — but the bigger surprise for Java devs is HOW TypeScript interfaces work. Java uses nominal typing (class must say 'implements'). TypeScript uses structural typing — any object with the right shape satisfies an interface automatically.",
+        why_en: "Q2 covers interface vs type — but the bigger surprise for Java devs is HOW TypeScript interfaces work. Java uses nominal typing (class must say 'implements'). TypeScript uses structural typing — any object with the right shape satisfies an interface automatically.",
+        java: `// Java: NOMINAL typing — must explicitly declare
+interface Clickable {
+    void click();
+}
+
+// MUST say "implements Clickable":
+class Button implements Clickable {
+    public void click() { System.out.println("clicked"); }
+}
+
+// This would NOT satisfy Clickable — no "implements":
+class Link {
+    public void click() { System.out.println("link clicked"); }
+}
+// new Clickable link = new Link(); // Compile error!`,
+        typescript: `// TypeScript: STRUCTURAL typing — shape is all that matters
+interface Clickable {
+  click(): void;
+}
+
+// No "implements" needed — has click() → satisfies Clickable!
+class Button {
+  click() { console.log("clicked"); }
+}
+
+class Link {
+  click() { console.log("link clicked"); }
+  href = "/home";   // extra props are fine
+}
+
+// Both work — structural match is enough:
+function doClick(item: Clickable) { item.click(); }
+doClick(new Button());  // ✅
+doClick(new Link());    // ✅ — extra href is ignored
+
+// Even plain objects work!
+doClick({ click: () => console.log("inline") }); // ✅`,
+        note: 'This is the most important TypeScript concept for Java devs. You rarely write "implements" in TS — if the shape matches, it satisfies the interface. Great for mocking in tests: just pass an object with the right methods.',
+        note_en: 'This is the most important TypeScript concept for Java devs. You rarely write "implements" in TS — if the shape matches, it satisfies the interface. Great for mocking in tests: just pass an object with the right methods.',
+      },
+      {
+        type: "java-compare",
+        topic: "Generics <T>: Java vs TypeScript (Q7 Deep Dive)",
+        why: "Q7 covers generics — the good news: TypeScript generics look almost identical to Java generics. Same <T> syntax, same extends constraints. Key difference: TypeScript adds union types and conditional types that Java doesn't have.",
+        why_en: "Q7 covers generics — the good news: TypeScript generics look almost identical to Java generics. Same <T> syntax, same extends constraints. Key difference: TypeScript adds union types and conditional types that Java doesn't have.",
+        java: `// Java generics — the model TypeScript is based on
+interface ApiResponse<T> {
+    T getData();
+    int getStatus();
+    boolean isOk();
+}
+
+// Bounded generic (extends):
+<T extends Comparable<T>> T max(T a, T b) {
+    return a.compareTo(b) > 0 ? a : b;
+}
+
+// Generic class:
+public class Repository<T> {
+    private List<T> items = new ArrayList<>();
+    public void add(T item) { items.add(item); }
+    public List<T> getAll() { return items; }
+}`,
+        typescript: `// TypeScript generics — nearly identical syntax!
+interface ApiResponse<T> {
+  data:   T;       // same as Java getData()
+  status: number;
+  ok:     boolean;
+}
+
+// Bounded generic (extends — same keyword!):
+function max<T extends { compareTo(other: T): number }>(
+  a: T, b: T
+): T {
+  return a.compareTo(b) > 0 ? a : b;
+}
+
+// Generic class (same syntax):
+class Repository<T> {
+  private items: T[] = [];
+  add(item: T): void  { this.items.push(item); }
+  getAll(): T[]       { return this.items; }
+}
+
+// TypeScript bonus — Java doesn't have this:
+type MaybeNull<T> = T | null;           // union generic
+type Keys<T> = keyof T;                 // mapped type key
+type Unwrap<T> = T extends Promise<infer R> ? R : T;  // conditional`,
+        note: 'If you know Java generics, TypeScript generics will feel instantly familiar. The extra power (union types, infer, conditional types) comes naturally once you are comfortable with the basics.',
+        note_en: 'If you know Java generics, TypeScript generics will feel instantly familiar. The extra power (union types, infer, conditional types) comes naturally once you are comfortable with the basics.',
+      },
+      {
+        type: "java-compare",
+        topic: "readonly vs final — and Readonly<T> utility (Q10 Deep Dive)",
+        why: "Q10 covers readonly — Java developers know 'final' prevents reassignment. TypeScript 'readonly' is the compile-time equivalent. Key additions: Readonly<T> utility type makes every property readonly at once, and 'as const' freezes literal values.",
+        why_en: "Q10 covers readonly — Java developers know 'final' prevents reassignment. TypeScript 'readonly' is the compile-time equivalent. Key additions: Readonly<T> utility type makes every property readonly at once, and 'as const' freezes literal values.",
+        java: `// Java: final — prevents reassignment
+public class LoginPage {
+    private final String url;           // must assign in constructor
+    private final Page page;
+
+    public LoginPage(Page page) {
+        this.url  = "/login";           // must set here
+        this.page = page;
+    }
+    // this.url = "/other"; would be compile error
+
+    // Java has no built-in "make all fields final" utility
+    // You manually mark each field final — verbose!
+}`,
+        typescript: `// TypeScript: readonly — same guarantee, cleaner syntax
+class LoginPage {
+  readonly url  = "/login";       // like Java final field
+  readonly page: Page;            // must assign in constructor
+
+  constructor(page: Page) {
+    this.page = page;
+    // this.url = "/other";  // Compile error!
+  }
+}
+
+// Readonly<T> — make EVERY property readonly at once:
+interface Config { baseUrl: string; retries: number; }
+type FrozenConfig = Readonly<Config>;
+const cfg: FrozenConfig = { baseUrl: "https://app.com", retries: 2 };
+// cfg.baseUrl = "x";  // Error — no Java equivalent (must mark each field)
+
+// "as const" — literal type + readonly (no Java equivalent):
+const STATUS = ["PASS", "FAIL", "SKIP"] as const;
+// type: readonly ["PASS", "FAIL", "SKIP"]  — values AND type frozen`,
+        note: '"readonly" = Java "final" for fields. "Readonly<T>" = automatic final on all fields — no Java equivalent. "as const" freezes both the type AND the value — very useful for test status enums.',
+        note_en: '"readonly" = Java "final" for fields. "Readonly<T>" = automatic final on all fields — no Java equivalent. "as const" freezes both the type AND the value — very useful for test status enums.',
       },
     ],
   },
@@ -2578,7 +2734,889 @@ demoPage.navigate().then(async () => {
       },
     ],
   },
+
+  // ── 8. JAVA → TYPESCRIPT ──────────────────────────────────────────────────
+  {
+    title: "☕ Java → TypeScript: Great News — Very Similar!",
+    blocks: [
+      // 0
+      { type: "text", content: "TypeScript is much easier for Java developers than Python! class, interface, access modifiers, generics, enums — all will feel familiar. There are only a few critical differences. This section explains these differences from a Java perspective." },
+      // 1
+      { type: "heading", text: "1. Basic Types — Very Similar to Java" },
+      // 2
+      {
+        type: "java-compare",
+        topic: "Basic Types",
+        why: "Java'da int, long, float, double gibi ayrı sayısal tipler vardır. TypeScript'te tüm sayılar için tek tip kullanılır: number. string küçük harf (Java'nın String objesi değil), boolean aynı.",
+        java: `// Java: separate numeric types
+int count = 5;          // 32-bit integer
+long bigNum = 999L;     // 64-bit integer
+float rate = 3.14f;     // 32-bit float
+double price = 99.99;   // 64-bit double
+String name = "test";   // immutable Object
+boolean active = true;`,
+        typescript: `// TypeScript: simplified!
+let count: number = 5;       // ALL numbers: one type
+let bigNum: number = 999;    // no 'L' suffix
+let rate: number = 3.14;     // no 'f' suffix
+let price: number = 99.99;   // same type
+let name: string = "test";   // lowercase! (not String)
+let active: boolean = true;  // identical!
+
+// Type inference (Java's 'var' equivalent):
+let count2 = 5;       // inferred: number
+let name2 = "Alice";  // inferred: string`,
+        note: '"number" = Java\'nın int/long/float/double hepsi. "string" (küçük harf) ≠ Java String (büyük harf). TypeScript\'te ayrıca "any" (Object gibi, kaçış kapısı — kaçın!) ve "unknown" (daha güvenli any) var.',
+        why_en: 'In Java there are separate numeric types: int, long, float, double. TypeScript uses a single type for all numbers: number. string is lowercase (not Java\'s String object), and boolean is identical.',
+        note_en: '"number" = all of Java\'s int/long/float/double in one type. "string" (lowercase) ≠ Java String (uppercase). TypeScript also has "any" (like Object — an escape hatch, avoid it!) and "unknown" (safer any).',
+      },
+      // 3
+      { type: "heading", text: "2. Interface — Structural Typing (The Most Important Difference!)" },
+      // 4
+      {
+        type: "java-compare",
+        topic: "interface (structural typing!)",
+        why: "TypeScript interface Java'dakilere benzer ama kritik bir fark var: TypeScript 'structural typing' (yapısal tipleme) kullanır. Nesnenin 'implements' bildirmesine gerek yoktur — doğru shape'e sahip her nesne interface'i karşılar.",
+        java: `// Java: nominal typing
+// Class MUST declare "implements"
+interface Testable {
+    void run();
+    String getName();
+    default int getTimeout() { return 30000; }
+}
+
+// Explicitly declares: "implements Testable"
+public class LoginTest implements Testable {
+    public void run() { /* test logic */ }
+    public String getName() { return "Login Test"; }
+}`,
+        typescript: `// TypeScript: structural typing!
+interface Testable {
+    run(): void;
+    getName(): string;
+    timeout?: number;  // optional (no 'default' — use ?: instead)
+}
+
+// No "implements" needed if shape matches:
+const loginTest = {
+    run: () => { /* test logic */ },
+    getName: () => "Login Test"
+};
+// ✅ TypeScript accepts loginTest as Testable!
+
+// But you CAN use implements for clarity:
+class SignupTest implements Testable {
+    run() { /* test logic */ }
+    getName() { return "Signup Test"; }
+}`,
+        note: 'Java = nominal typing ("implements" bildirimi zorunlu). TypeScript = structural typing ("doğru şekle sahip olman yeterli"). Bu TypeScript\'in en güçlü ve en farklı konsepti.',
+        why_en: 'TypeScript interfaces look like Java\'s but have one critical difference: TypeScript uses structural typing. An object does NOT need to declare "implements" — any object with the right shape satisfies the interface.',
+        note_en: 'Java = nominal typing ("implements" declaration required). TypeScript = structural typing ("having the right shape is enough"). This is TypeScript\'s most powerful and most distinctive concept.',
+      },
+      // 5
+      { type: "heading", text: "3. Classes — Nearly Identical!" },
+      // 6
+      {
+        type: "java-compare",
+        topic: "class (nearly identical!)",
+        why: "TypeScript class sözdizimi Java'ya o kadar benzer ki sadece küçük farklılıklar var: 'constructor' anahtar kelimesi, 'readonly' (final yerine), ve constructor shorthand (tek satırda hem declare hem assign).",
+        java: `// Java class
+public class PageObject {
+    private final WebDriver driver; // final = immutable
+    protected String baseUrl;
+
+    public PageObject(WebDriver driver) {
+        this.driver = driver;
+        this.baseUrl = "https://example.com";
+    }
+
+    protected void click(By locator) {
+        driver.findElement(locator).click();
+    }
+
+    public static PageObject create(WebDriver d) {
+        return new PageObject(d);
+    }
+}`,
+        typescript: `// TypeScript class — almost identical!
+class PageObject {
+    private readonly driver: WebDriver; // readonly = final
+    protected baseUrl: string;
+
+    constructor(driver: WebDriver) {    // NOT class name!
+        this.driver = driver;
+        this.baseUrl = "https://example.com";
+    }
+
+    protected click(locator: Locator): void {
+        locator.click();
+    }
+
+    static create(d: WebDriver): PageObject {
+        return new PageObject(d);
+    }
+}
+
+// Constructor shorthand (saves boilerplate!):
+class Test {
+    constructor(
+        private readonly driver: WebDriver, // declare + assign
+        public name: string                 // declare + assign
+    ) {}
+}`,
+        note: '"readonly" = Java "final". Constructor shorthand: "constructor(private x: T)" hem field\'ı tanımlar hem atar — Java\'ya kıyasla büyük boilerplate tasarrufu.',
+        why_en: 'TypeScript class syntax is so similar to Java that there are only minor differences: the "constructor" keyword, "readonly" (instead of final), and constructor shorthand (declare and assign in one line).',
+        note_en: '"readonly" = Java "final". Constructor shorthand: "constructor(private x: T)" both declares the field and assigns it — a big boilerplate saving compared to Java.',
+      },
+      // 7
+      { type: "heading", text: "4. Access Modifiers — Identical!" },
+      // 8
+      {
+        type: "java-compare",
+        topic: "access modifiers (same keywords!)",
+        why: "TypeScript access modifier'ları Java ile birebir aynı keyword'ler: public, private, protected. Java'dan farklı olarak 'package-private' kavramı yoktur. Ve iyi haber: Python'un aksine TypeScript gerçekten derleme zamanında zorlar!",
+        java: `// Java access modifiers
+public class BankTest {
+    public String testId;      // anyone
+    protected String env;      // subclasses + package
+    private String apiKey;     // only this class
+
+    public void run() { }
+    protected void setup() { }
+    private void loadKey() { }
+
+    // Package-private (no keyword):
+    String internalName;
+}`,
+        typescript: `// TypeScript access modifiers — same keywords!
+class BankTest {
+    public testId: string;     // anyone (default)
+    protected env: string;     // subclasses only
+    private apiKey: string;    // only this class
+    // No "package-private" in TypeScript
+
+    public run(): void { }
+    protected setup(): void { }
+    private loadKey(): void { }
+}
+
+// Constructor shorthand applies here too:
+class ApiTest {
+    constructor(
+        public name: string,
+        private apiKey: string,
+        protected env: string = "staging"
+    ) {}
+}`,
+        note: 'TypeScript derleme zamanında private/protected\'ı zorlar (Java gibi). Python\'un aksine bu gerçek bir kısıtlamadır. "package-private" yok — modüllerde internal için "export" kullanılmaz.',
+        why_en: 'TypeScript access modifiers use the exact same keywords as Java: public, private, protected. Unlike Java there is no "package-private". And good news: unlike Python, TypeScript actually enforces this at compile time!',
+        note_en: 'TypeScript enforces private/protected at compile time (like Java). Unlike Python, this is a real constraint. No "package-private" — for internal module use, simply don\'t export.',
+      },
+      // 9
+      { type: "heading", text: "5. Generics — Very Similar to Java Generics" },
+      // 10
+      {
+        type: "java-compare",
+        topic: "Generics <T>",
+        why: "TypeScript generic'leri Java generic'leri ile neredeyse aynı sözdizimini kullanır. <T>, kısıtlar (extends), ve tip parametresi tümü tanıdık gelecek.",
+        java: `// Java Generics
+public class ApiResponse<T> {
+    private T data;
+    private boolean success;
+    public T getData() { return data; }
+}
+
+// With bounds:
+public <T extends Comparable<T>> T max(T a, T b) {
+    return a.compareTo(b) > 0 ? a : b;
+}
+
+// Usage:
+ApiResponse<User> resp = service.getUser(1);
+User user = resp.getData();`,
+        typescript: `// TypeScript Generics — very similar!
+interface ApiResponse<T> {
+    data: T;
+    success: boolean;
+}
+
+// With bounds (extends):
+function max<T extends { id: number }>(a: T, b: T): T {
+    return a.id > b.id ? a : b;
+}
+
+// Usage:
+const resp: ApiResponse<User> = await api.getUser(1);
+const user = resp.data;  // TypeScript knows: User
+
+// Playwright uses generics everywhere:
+async function getData<T>(url: string): Promise<T> {
+    const res = await fetch(url);
+    return res.json() as T;
+}`,
+        note: 'TypeScript generics aynı <T> sözdizimini kullanır. "T extends X" = Java "T extends X". TypeScript ayrıca union types ve mapped types gibi Java\'da olmayan güçlü özellikler ekler.',
+        why_en: 'TypeScript generics use nearly identical syntax to Java generics. <T>, constraints (extends), and type parameters will all feel familiar.',
+        note_en: 'TypeScript generics use the same <T> syntax. "T extends X" = Java "T extends X". TypeScript also adds powerful features Java lacks, like union types and mapped types.',
+      },
+      // 11
+      { type: "heading", text: "6. Enum — Similar to Java But Different Variants" },
+      // 12
+      {
+        type: "java-compare",
+        topic: "enum",
+        why: "Java enum'ları tam teşekküllü sınıflardır. TypeScript'te numeric enum (Java'ya benzer) ve string enum var. QA'da genellikle string enum tercih edilir çünkü log'larda okunabilir değerler üretir.",
+        java: `// Java enum (full-featured class)
+public enum TestStatus {
+    PASS("✅"), FAIL("❌"), SKIP("⏭️");
+
+    private final String icon;
+    TestStatus(String icon) { this.icon = icon; }
+    public String getIcon() { return icon; }
+}
+
+TestStatus status = TestStatus.PASS;
+status.getIcon();  // "✅"
+status.name();     // "PASS"`,
+        typescript: `// TypeScript: two enum styles + union type
+
+// 1. String enum (most similar to Java):
+enum TestStatus {
+    PASS = "PASS",    // log'da görünür değer
+    FAIL = "FAIL",
+    SKIP = "SKIP"
+}
+TestStatus.PASS // === "PASS"
+
+// 2. Numeric enum (Java numeric enum gibi):
+enum Priority { LOW, MEDIUM, HIGH }  // 0, 1, 2
+
+// 3. Union type (TypeScript idiomu — daha yaygın):
+type Status = "PASS" | "FAIL" | "SKIP";
+// No enum import needed! Compiler checks all cases.`,
+        note: 'Java enum = TypeScript string enum. Ama TypeScript\'te union type (type Status = "PASS" | "FAIL") daha kısa ve tree-shakeable. QA\'de string enum kullan — log\'larda "PASS" görünür, 0 değil.',
+        why_en: 'Java enums are full-featured classes. TypeScript has numeric enums (similar to Java) and string enums. In QA, string enums are preferred because they produce readable values in logs.',
+        note_en: 'Java enum = TypeScript string enum. But TypeScript\'s union type (type Status = "PASS" | "FAIL") is shorter and tree-shakeable. Use string enums in QA — logs show "PASS" not 0.',
+      },
+      // 13
+      { type: "heading", text: "7. Null Safety — Optional → Optional Chaining" },
+      // 14
+      {
+        type: "java-compare",
+        topic: "null safety & Optional chaining",
+        why: "Java'da null NullPointerException'a yol açar. TypeScript'te de aynı risk var ama optional chaining (?.) ile çok daha kısa ve temiz handle edilir. Java Optional'ın tüm gücü tek bir operatörde.",
+        java: `// Java null — NPE risk
+String name = user.getName();  // NPE if user is null!
+
+// Java 8+ Optional (verbose):
+Optional.ofNullable(user)
+    .map(u -> u.getAddress())
+    .map(a -> a.getCity())
+    .orElse("Unknown");
+
+// Or null check (long form):
+if (user != null && user.getAddress() != null) {
+    city = user.getAddress().getCity();
+}`,
+        typescript: `// TypeScript: optional chaining ?. (much cleaner!)
+const name = user?.getName(); // undefined if user is null
+const city = user?.address?.city ?? "Unknown";
+// No NPE! Returns undefined instead of crashing.
+
+// ?? = nullish coalescing (null/undefined → default)
+// Like Java's orElse() built into the language
+
+// TypeScript strict null checks (tsconfig.json):
+// "strictNullChecks": true
+function greet(user: User | null): string {
+    if (user === null) return "Guest"; // must handle null
+    return user.getName(); // TypeScript: definitely not null
+}`,
+        note: '"?." = Java Optional.map(). "??" = Java .orElse(). tsconfig\'da "strictNullChecks: true" aç — Java\'nın null-safety derleme zamanı kontrolü gibi çalışır.',
+        why_en: 'In Java, null causes NullPointerException. TypeScript has the same risk but optional chaining (?.) handles it much more concisely. All the power of Java Optional in a single operator.',
+        note_en: '"?." = Java Optional.map(). "??" = Java .orElse(). Enable "strictNullChecks: true" in tsconfig — it works like Java\'s compile-time null-safety control.',
+      },
+      // 15
+      { type: "heading", text: "8. Union Types — No Java Equivalent" },
+      // 16
+      {
+        type: "java-compare",
+        topic: "union types (no Java equivalent!)",
+        why: "TypeScript'in Java'ya göre en güçlü özelliklerinden biri. Bir değişkenin birden fazla tip tutabilmesini tip güvenli şekilde ifade eder. Java'da bunu Object veya abstract class ile yapmak zorunda kalırsın.",
+        java: `// Java: no union types
+// Must use Object (loses type safety):
+void handle(Object result) {
+    if (result instanceof String s) {
+        // string logic
+    } else if (result instanceof Integer i) {
+        // int logic
+    }
+    // No compile-time guarantee all cases handled
+}
+
+// Sealed classes (Java 17+) are closest:
+sealed interface Result permits Ok, Err {}
+record Ok(String data) implements Result {}
+record Err(String msg) implements Result {}`,
+        typescript: `// TypeScript union types — elegant!
+type ApiResult =
+    | { status: "ok";    data: string  }
+    | { status: "error"; message: string };
+
+function handle(result: ApiResult) {
+    if (result.status === "ok") {
+        console.log(result.data);    // TS knows: has 'data'
+    } else {
+        console.log(result.message); // TS knows: has 'message'
+    }
+    // TypeScript ensures ALL cases are covered!
+}
+
+// Simple union (very common):
+function log(level: "info" | "warn" | "error"): void { ... }
+let id: string | number = getIdFromApi();`,
+        note: '"Discriminated union" (status field ile) = Java sealed classes, ama çok daha kısa. TypeScript switch/if ile tüm case\'lerin ele alındığını derleme zamanında kontrol eder.',
+        why_en: 'One of TypeScript\'s most powerful features compared to Java. Expresses in a type-safe way that a variable can hold more than one type. In Java you\'d have to use Object or an abstract class.',
+        note_en: '"Discriminated union" (using a status field) = Java sealed classes, but much shorter. TypeScript verifies at compile time that all cases are handled in switch/if.',
+      },
+      // 17
+      { type: "heading", text: "9. Async/Await — CompletableFuture → Promise" },
+      // 18
+      {
+        type: "java-compare",
+        topic: "async/await & Promise",
+        why: "TypeScript (ve JavaScript) ağ, dosya işlemleri için async/await kullanır. Java'da CompletableFuture karşılığıdır. TypeScript versiyonu çok daha temizdir. Playwright tamamen async-first'tir — her sayfa işlemi await gerektirir.",
+        java: `// Java CompletableFuture (verbose)
+CompletableFuture<Response> future =
+    httpClient.getAsync(url);
+
+future.thenApply(response -> processResponse(response))
+      .thenAccept(result -> System.out.println(result))
+      .exceptionally(e -> {
+          System.err.println("Error: " + e);
+          return null;
+      });`,
+        typescript: `// TypeScript async/await (clean!)
+async function fetchTests(url: string): Promise<Test[]> {
+    try {
+        const response = await fetch(url);   // waits
+        const data = await response.json();  // waits
+        return data as Test[];
+    } catch (error) {
+        console.error("Error:", error);
+        throw error;  // re-throw
+    }
+}
+
+// Playwright — all async:
+test("login works", async ({ page }) => {
+    await page.goto("https://example.com/login");
+    await page.fill("#email", "user@test.com");
+    await page.click("#submit");
+    await expect(page).toHaveURL("/dashboard");
+});`,
+        note: '"await" = .get() on CompletableFuture (blocker until done). "async function" = CompletableFuture<T>. Playwright, Axios, fetch API tümü async-first. "await" olmadan Promise objesi alırsın, sonuç değil!',
+        why_en: 'TypeScript (and JavaScript) uses async/await for network and file operations. The Java equivalent is CompletableFuture. The TypeScript version is much cleaner. Playwright is entirely async-first — every page operation requires await.',
+        note_en: '"await" = .get() on CompletableFuture (blocks until done). "async function" returns Promise<T>. Playwright, Axios, and fetch API are all async-first. Without "await" you get a Promise object, not the result!',
+      },
+      // 19
+      { type: "heading", text: "Quick Comparison Table" },
+      // 20
+      {
+        type: "table",
+        headers: ["Concept", "Java", "TypeScript", "Similarity"],
+        rows: [
+          ["Numeric types", "int, long, double", "number", "⚠️ all one 'number' type"],
+          ["Text type", "String (capital S)", "string (lowercase s)", "⚠️ lowercase!"],
+          ["Boolean", "boolean", "boolean", "✅ identical"],
+          ["Class", "class Foo { }", "class Foo { }", "✅ nearly identical"],
+          ["Constructor", "public Foo(args)", "constructor(args)", "⚠️ different keyword"],
+          ["Interface", "interface I { }", "interface I { }", "⚠️ structural vs nominal"],
+          ["Implements", "implements I", "implements I", "✅ same keyword"],
+          ["Extends", "extends Base", "extends Base", "✅ same keyword"],
+          ["Access modifier", "public/private/protected", "public/private/protected", "✅ same!"],
+          ["Final field", "final int x", "readonly x: number", "⚠️ 'readonly' not 'final'"],
+          ["Static", "static void foo()", "static foo(): void", "✅ same concept"],
+          ["Generics", "class Box<T>", "class Box<T>", "✅ same syntax"],
+          ["Enum", "enum Status { A, B }", "enum Status { A = 'A' }", "⚠️ string value required"],
+          ["Null", "null", "null / undefined", "⚠️ TS has both null and undefined"],
+          ["Optional", "Optional.ofNullable()", "value?.property", "✅ much shorter ?."],
+          ["Async", "CompletableFuture<T>", "Promise<T>", "✅ same concept, clean syntax"],
+          ["Checked exceptions", "throws IOException", "(none)", "✅ no checked exceptions in TS"],
+          ["Union type", "(none — Object/sealed)", "string | number", "🆕 TypeScript exclusive"],
+        ],
+      },
+    ],
+  },
 ];
+
+// ─────────────────────────────────────────────────────────────────────────────
+// TRANSLATION HELPER
+// ─────────────────────────────────────────────────────────────────────────────
+function applyTr(enSection, overrides) {
+  return {
+    title: overrides.title ?? enSection.title,
+    blocks: enSection.blocks.map((block, i) => {
+      const o = overrides.blocks?.[i]
+      if (!o) return block
+      return { ...block, ...o }
+    })
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// TURKISH SECTIONS
+// ─────────────────────────────────────────────────────────────────────────────
+const trSections = [
+  applyTr(sections[0], {
+    title: "TypeScript Nedir & Neden Kullanmalı?",
+    blocks: {
+      0: { content: "TypeScript vs JavaScript" },
+      1: { content: "TypeScript, Microsoft tarafından geliştirilen, statik olarak tiplenmiş bir JavaScript üst kümesidir. Her geçerli JavaScript dosyası aynı zamanda geçerli bir TypeScript dosyasıdır — tüm kod tabanınızı yeniden yazmadan kademeli olarak benimseyebilirsiniz. TypeScript, tür hatalarını, tanımsız özellik erişimlerini ve yanlış argüman tiplerini kodunuz çalışmadan önce yakalayan bir derleme adımı ekler." },
+      2: { content: "Test Otomasyonu için Neden TypeScript?", difficulty: "🟢 Başlangıç" },
+      3: { items: [
+        { icon: "🐛", label: "Hataları Erken Yakala", desc: "Tür hataları IDE'nizde derleme zamanında ortaya çıkar — CI'da gece 2'de test paketi başarısız olduğunda değil." },
+        { icon: "💡", label: "IDE Otomatik Tamamlama", desc: "Playwright'ın Page, Locator, Browser ve kendi Page Object'leriniz için tam IntelliSense — metod adlarını artık tahmin etmek yok." },
+        { icon: "🔧", label: "Güvenli Yeniden Düzenleme", desc: "Bir metod adını veya seçici tipini değiştirin; TypeScript etkilenen tüm çağrı noktalarını anında gösterir." },
+        { icon: "📖", label: "Kendini Belgeleyen Kod", desc: "Tip imzaları satır içi dokümantasyon görevi görür. `(user: User): Promise<void>` olarak tiplenmiş bir fonksiyon kendini açıklar." },
+        { icon: "👥", label: "Takım Ölçeği", desc: "Büyük QA takımları en çok yararlanır — tipli interface'ler page object'ler, fixture'lar ve test data factory'leri arasındaki sözleşmeleri zorunlu kılar." },
+        { icon: "🎭", label: "Playwright Native", desc: "Playwright TypeScript ile yazılmıştır ve birinci sınıf .d.ts tanımları içerir. TypeScript, Playwright için resmi olarak önerilen dildir." },
+      ]},
+      4: { content: "TypeScript vs JavaScript: Özellik Karşılaştırması" },
+      5: {
+        headers: ["Özellik", "JavaScript", "TypeScript"],
+        rows: [
+          ["Tür güvenliği", "Yok (dinamik)", "Statik, isteğe bağlı"],
+          ["IDE desteği", "Temel", "Tam IntelliSense + otomatik tamamlama"],
+          ["Derleme adımı", "Yok — doğrudan çalışır", "tsc ile .js'e derlenir"],
+          ["Öğrenme eğrisi", "Düşük", "Düşük→Orta (tipler kavram ekler)"],
+          ["Playwright desteği", "Destekleniyor", "Birinci sınıf, önerilen"],
+          ["Hata algılama zamanı", "Çalışma zamanı (testler başarısız)", "Derleme zamanı (çalıştırmadan önce)"],
+        ]
+      },
+      6: { content: "Test Ekosisteminde TypeScript" },
+      7: {
+        headers: ["Araç", "TS Desteği", "Notlar"],
+        rows: [
+          ["Playwright", "Birinci sınıf", "TS ile yazılmış; tüm tipler pakette mevcut"],
+          ["Jest", "Mükemmel (ts-jest ile)", "ts-jest + @types/jest kur"],
+          ["Cypress", "İyi", "tsconfig ekle; bazı any-ağırlıklı iç kısımlar"],
+          ["Vitest", "Native", "Vite üzerine kurulu; sıfır konfigürasyon TypeScript"],
+        ]
+      },
+      8: { content: "Bugün yeni bir Playwright projesi başlatıyorsanız, ilk `npm init playwright@latest` komutundan TypeScript'i seçin. Büyük bir JS test paketine sonradan tip eklemek, baştan tipli başlamaktan çok daha zordur." },
+    }
+  }),
+  applyTr(sections[1], {
+    title: "Kurulum & Yapılandırma",
+    blocks: {
+      0: { content: "Adım 1 — Node.js LTS Kurulumu", difficulty: "🟢 Başlangıç" },
+      1: { content: "TypeScript, Node.js üzerinde çalışır. Her zaman LTS (Uzun Vadeli Destek) sürümünü kurun — bu en kararlı versiyondur ve CI/CD ortamlarının kullandığı sürümdür. https://nodejs.org adresinden indirin ve 'LTS' düğmesini seçin." },
+      2: { items: [
+        "Windows: nodejs.org'dan .msi yükleyicisini indirin, çalıştırın, tüm varsayılanları bırakın, 'Add to PATH' kutusunu işaretleyin",
+        "macOS: Homebrew kullanın — `brew install node` — veya nodejs.org'dan .pkg indirin",
+        "Linux (Ubuntu/Debian): `curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash - && sudo apt-get install -y nodejs`",
+        "Aşağıdaki komutları çalıştırarak her iki aracın da kurulu olduğunu doğrulayın",
+      ]},
+      4: { content: "Adım 2 — TypeScript'i Global Kurma" },
+      6: { content: "Adım 3 — tsconfig.json Oluşturma" },
+      7: { content: "tsconfig.json, TypeScript derleyicisine projenizi nasıl derleyeceğini söyler. Her TypeScript projesi bir tane gerektirir. `tsc --init` ile bir başlangıç şablonu oluşturabilir veya Playwright için optimize edilmiş aşağıdaki açıklamalı şablonu kullanabilirsiniz." },
+      9: { content: "Adım 4 — VS Code Uzantıları" },
+      10: { items: [
+        { label: "TypeScript Language Features", desc: "Uzantı ID: vscode.typescript-language-features — VS Code'da yerleşik, IntelliSense, tanıma gitme ve yeniden düzenleme sağlar." },
+        { label: "ESLint", desc: "Uzantı ID: dbaeumer.vscode-eslint — tür hatalarının ötesinde kod kalitesi sorunları için TypeScript'i lint eder." },
+        { label: "Prettier", desc: "Uzantı ID: esbenp.prettier-vscode — kayıt sırasında TypeScript'i otomatik biçimlendirir." },
+        { label: "Playwright Test for VS Code", desc: "Uzantı ID: ms-playwright.playwright — VS Code içinde doğrudan GUI ile Playwright testlerini çalıştırın ve hata ayıklayın." },
+      ]},
+      11: { content: "Adım 5 — TypeScript'te Merhaba Dünya" },
+      14: { content: "Adım 6 — ts-node: Derleme Adımını Atla" },
+      16: { content: "Adım 7 — Playwright TypeScript Projesi Oluştur" },
+      17: { items: [
+        "Yeni klasör oluştur: `mkdir my-playwright-project && cd my-playwright-project`",
+        "Playwright yükleyicisini çalıştır: `npm init playwright@latest`",
+        "Soru: 'TypeScript mi JavaScript mi kullanmak istersiniz?' → TypeScript seçin",
+        "Soru: 'End-to-end testlerinizi nereye koymak istersiniz?' → Varsayılanı kabul edin: tests",
+        "Soru: 'GitHub Actions workflow eklensin mi?' → true seçin (önerilir)",
+        "Soru: 'Playwright tarayıcıları kurulsun mu?' → true seçin",
+        "Kurulum için bekleyin — Playwright Chromium, Firefox ve WebKit'i indirir",
+        "Örnek testi çalıştırın: `npx playwright test`",
+        "HTML raporu açın: `npx playwright show-report`",
+      ]},
+      19: { content: "`npm init playwright@latest` sonrasında `playwright.config.ts` dosyasını açın — zaten tam olarak tiplenmiş. `tests/` klasöründeki testleriniz `.spec.ts` dosyaları olacak. `page`, `expect`, `browser` ve tüm Playwright API'si için anında otomatik tamamlama kullanabilirsiniz." },
+    }
+  }),
+  applyTr(sections[2], {
+    title: "TypeScript Temelleri",
+    blocks: {
+      0: { content: "TypeScript vs JavaScript: Aynı Hata, İki Farklı Sonuç", difficulty: "🟢 Başlangıç" },
+      3: { content: "Temel Tipler" },
+      5: { content: "Tip Çıkarımı (Type Inference)" },
+      7: { content: "Diziler (Array)" },
+      9: { content: "Tuple'lar" },
+      11: { content: "Enum'lar — String Enum'lar Test için En İyisi" },
+      13: { content: "Interface'ler" },
+      15: { content: "Type Alias vs Interface" },
+      17: { content: "İnteraktif Örnek: TestResult Interface + TestCase Enum" },
+      19: { content: "TypeScript vs JavaScript — Yan Yana Karşılaştırma" },
+      20: {
+        title: "TypeScript Nasıl Derlenir",
+        items: [
+          { icon: "📝", label: "TypeScript", desc: ".ts kaynak dosyası" },
+          { arrow: true },
+          { icon: "⚙️", label: "tsc derleyici", desc: "Tür kontrolü", highlight: true },
+          { arrow: true },
+          { icon: "📦", label: "JavaScript", desc: ".js çıktı dosyası" },
+          { arrow: true },
+          { icon: "🌐", label: "Tarayıcı/Node", desc: "Çalışma zamanı" },
+        ],
+        note: "TypeScript hiçbir zaman doğrudan çalışmaz. Düz JavaScript'e derlenir. Tür bilgisi yalnızca derleme zamanında kullanılır ve nihai JS çıktısından silinir.",
+      },
+      21: {
+        left: {
+          label: "❌ JavaScript — Çalışma zamanı hatası",
+          code: `function sendRequest(url, options) {
+  // url her şey olabilir!
+  // options undefined olabilir!
+  return fetch(url, options);
+}
+
+// Yanlış çağrıldı — uyarı yok:
+sendRequest(42, "GET");
+// Hata yalnızca testler çalışırken bulunur!`,
+          note: "Hatalar çalışma zamanında bulunur (çok geç)",
+        },
+        right: {
+          label: "✅ TypeScript — Derleme zamanı hatası",
+          code: `interface RequestOptions {
+  method: "GET" | "POST";
+  timeout?: number;
+}
+
+function sendRequest(url: string, opts: RequestOptions) {
+  return fetch(url, opts);
+}
+
+// sendRequest(42, "GET");
+// Hata: number, string tipine atanamaz
+// Hata: string, RequestOptions tipine atanamaz`,
+          note: "Hatalar çalıştırmadan önce IDE'de bulunur!",
+        },
+      },
+      22: {
+        headers: ["TypeScript Özelliği", "Ne Yapar?", "Olmadan Yaşanırdı..."],
+        rows: [
+          ["Tip açıklamaları", "Değişken/parametre tiplerini bildir", "Çalışma zamanı TypeError'ları"],
+          ["interface", "Nesne şeklini tanımla", "Tanımsız özelliklere erişim"],
+          ["enum", "Adlandırılmış sabit kümesi", "'PASS'/'FAIL' gibi sihirli stringler"],
+          ["optional ?", "Alanları isteğe bağlı yap", "Eksik alanlarda hatalar"],
+          ["readonly", "Değişimi önle", "Yanlışlıkla veri değişiklikleri"],
+          ["union tip A | B", "Birden fazla tipe izin ver", "Aşırı esnek any tipi"],
+          ["generic'ler <T>", "Yeniden kullanılabilir tipli kod", "Tip başına yinelenen fonksiyonlar"],
+        ],
+      },
+      23: {
+        question: "TypeScript'te şu interface'de ? sembolü ne anlama gelir: interface Test { errorMessage?: string }",
+        options: [
+          "errorMessage null olabilir",
+          "errorMessage zorunludur ve string olmalıdır",
+          "errorMessage isteğe bağlıdır — bulunabilir veya bulunmayabilir",
+          "errorMessage herhangi bir tipte olabilir",
+        ],
+        correct: 2,
+        explanation: "? özelliği isteğe bağlı yapar. errorMessage sağlanmış olsun veya olmasın interface geçerlidir. Mevcut olduğunda string olmalıdır; yoksa undefined'dır. Bu, yalnızca başarısız testler için var olan hata mesajları gibi alanlar için mükemmeldir.",
+      },
+      24: { content: "☕ Java Biliyorsan: Tip Sistemi Köprüsü" },
+      25: { topic: "Temel Tipler", why: "Java'da ayrı sayısal tipler vardır (int, long, float, double). TypeScript tüm sayılar için tek 'number' tipini kullanır. 'string' küçük harf (Java'nın String objesi değil), 'boolean' aynı.", note: '"number" Java\'nın int/long/float/double\'ının hepsini karşılar. "string" küçük harf ≠ Java String büyük harf. Ayrıca: "any" (Object gibi — kaçın!) ve "unknown" (daha güvenli any) var.' },
+      26: { topic: "interface (yapısal tipleme!)", why: "TypeScript interface'leri Java'dakilere benzer ama kritik bir fark var: yapısal tipleme. Bir sınıfın 'implements' bildirmesi GEREKMİYOR — doğru şekle sahip her nesne interface'i karşılar.", note: 'Java = nominal tipleme ("implements" zorunlu). TypeScript = yapısal tipleme ("doğru şekle sahip olman yeterli"). Bu TypeScript\'in en güçlü ve en farklı konseptidir.' },
+      27: { topic: "erişim belirleyicileri (aynı keyword\'ler!)", why: "TypeScript erişim belirleyicileri Java ile birebir aynı keyword'leri kullanır: public, private, protected. Java'dan farklı olarak package-private yok. Python'un aksine TypeScript gerçekten derleme zamanında zorlar!", note: 'TypeScript derleme zamanında private/protected\'ı zorlar (Java gibi). "readonly" = Java "final". Constructor shorthand: "constructor(private x: T)" hem tanımlar hem atar — büyük boilerplate tasarrufu.' },
+    }
+  }),
+  applyTr(sections[3], {
+    title: "Orta Seviye TypeScript",
+    blocks: {
+      0: { content: "Tipli Fonksiyonlar", difficulty: "🟡 Orta Seviye" },
+      2: { content: "Union ve Intersection Tipleri" },
+      4: { content: "Type Guard'lar" },
+      6: { content: "Generic'ler" },
+      8: { content: "Access Modifier'lı Class'lar" },
+      10: { content: "Abstract Class'lar — Temel POM Kalıbı" },
+      12: { content: "Modüller: Export, Import ve Barrel Dosyaları" },
+      14: { content: "İnteraktif Örnek: Interface ile Tipli Page Object" },
+      16: { content: "☕ Java Biliyorsan: Class ve Generic Köprüsü" },
+      17: { topic: "class (neredeyse aynı!)", why: "TypeScript class sözdizimi Java'ya o kadar benzer ki sadece küçük farklılıklar var: 'constructor' keyword'ü, 'final' yerine 'readonly', ve constructor shorthand (tek satırda hem tanımla hem ata).", note: '"readonly" = Java "final". Constructor shorthand: "constructor(private x: T)" hem field\'ı tanımlar hem atar — Java\'ya kıyasla büyük boilerplate tasarrufu.' },
+      18: { topic: "Generic\'ler <T>", why: "TypeScript generic'leri Java generic'leri ile neredeyse aynı sözdizimini kullanır: <T>, kısıtlar (extends), tip parametresi — hepsi tanıdık gelecek. Playwright'ın kendisi de generic'leri yoğun kullanır.", note: 'TypeScript generic\'ler aynı <T> sözdizimini kullanır. "T extends X" = Java "T extends X". TypeScript ayrıca union types ve mapped types ekler — Java\'da olmayan özellikler.' },
+      19: {
+        left: {
+          label: '✅ Union Tip ( | ) — "VEYA"',
+          note: 'Union = "bunlardan biri". Türü daraltmak için typeof/instanceof/in guard kullanın.',
+        },
+        right: {
+          label: '✅ Intersection Tip ( & ) — "VE"',
+          note: 'Intersection = "hepsi aynı anda". Her tipin her alanı zorunludur.',
+        },
+      },
+      20: {
+        title: 'Page Object Model — TypeScript Sınıf Hiyerarşisi',
+        note: 'TypeScript, POM yapısını derleme zamanında zorlar: abstract doğrudan oluşturulmasını engeller, interface sözleşmeyi uygular, somut sayfalar her ikisini de uygular.',
+        steps: [
+          { num: '1', label: 'interface IPage', desc: 'navigate(), isLoaded() sözleşmesi' },
+          { num: '2', label: 'abstract PageBase', desc: 'IPage uygular, ortak yardımcılar' },
+          { num: '3', label: 'class LoginPage', desc: 'PageBase\'i genişletir, login() ekler', highlight: true },
+          { num: '4', label: 'class CheckoutPage', desc: 'PageBase\'i genişletir, fillForm() ekler', highlight: true },
+          { num: '5', label: 'test.spec.ts', desc: 'sadece LoginPage ve CheckoutPage kullanır' },
+        ],
+      },
+    }
+  }),
+  applyTr(sections[4], {
+    title: "İleri Seviye TypeScript",
+    blocks: {
+      0: { content: "Utility Type'lar", difficulty: "🔴 İleri" },
+      2: { content: "Conditional Type'lar (Koşullu Tipler)" },
+      4: { content: "Mapped Type'lar (Eşlenmiş Tipler)" },
+      6: { content: "Template Literal Type'lar" },
+      8: { content: "Type Assertion ve Non-Null Assertion" },
+      10: { content: "Declaration File'lar (.d.ts) ve Module Augmentation" },
+      12: { content: "İleri Seviye Generic'ler: Çoklu Tip Parametreleri ve Varsayılanlar" },
+      14: { content: "İnteraktif Örnek: Generic ApiResponse<T> ve Test Data Factory" },
+      16: {
+        title: 'TypeScript Yerleşik Utility Type\'lar — Tam Araç Seti',
+        note: 'Partial<TestConfig> override\'lar için, Readonly<User> test fixture\'ları için, Pick<User,"id"|"email"> daraltılmış API yanıtları için kullanın.',
+        items: [
+          { icon: '🟡', label: 'Partial<T>', desc: 'tüm alanlar opsiyonel' },
+          { arrow: true },
+          { icon: '🔴', label: 'Required<T>', desc: 'tüm alanlar zorunlu' },
+          { arrow: true },
+          { icon: '🔒', label: 'Readonly<T>', desc: 'değişiklik yapılamaz' },
+          { arrow: true },
+          { icon: '✂️', label: 'Pick<T,K>', desc: 'sadece K anahtarlarını tut' },
+          { arrow: true },
+          { icon: '🗑️', label: 'Omit<T,K>', desc: 'K anahtarlarını kaldır' },
+        ],
+      },
+      17: {
+        title: 'TypeScript Koşullu Tip — Nasıl Çalışır',
+        note: 'T extends U ? X : Y — üçlü operatör gibi okunur ama tip düzeyinde. TypeScript tüm ifadeyi derleme zamanında X veya Y\'ye çözümler.',
+        steps: [
+          { num: '1', label: 'T extends U ?', desc: 'T, U\'ya atanabilir mi?' },
+          { num: '2', label: 'X (doğru dal)', desc: 'Evet → tip X olarak çözümlenir', highlight: true },
+          { num: '3', label: 'Y (yanlış dal)', desc: 'Hayır → tip Y olarak çözümlenir', highlight: true },
+          { num: '4', label: 'infer R', desc: 'koşul içinde iç tipi çıkar' },
+          { num: '5', label: 'ReturnType<T>', desc: 'dahili olarak koşul + infer kullanır' },
+        ],
+      },
+    }
+  }),
+  applyTr(sections[5], {
+    title: "QA Kullanım Örnekleri",
+    blocks: {
+      0: { content: "1. Tam Tipli Page Object Model" },
+      2: { content: "2. Ortam, Tarayıcı ve Test Durumu için Enum'lar" },
+      4: { content: "3. API Yanıtı Doğrulaması için Interface" },
+      6: { content: "4. Generic Test Data Factory" },
+      8: { content: "5. Partial Override ile Type-Safe Config" },
+      10: { content: "6. Tipli Playwright Fixture'ları" },
+      12: { content: "7. Partial Override Testi için Utility Type'lar" },
+      14: { content: "🏗️ Playwright POM Mimarisi — Sınıf Hiyerarşisi", difficulty: "🟡 Orta Seviye" },
+      15: {
+        title: "TypeScript POM Sınıf Hiyerarşisi — Katman Katman",
+        note: "Her katman üsttekinden miras alır. Testler yalnızca public metodları çağırır — selector'lar sayfa sınıflarının içinde gizlidir.",
+        steps: [
+          { num: "1", label: "IPage Interface", desc: "navigate(), login(), getError() — public sözleşme", highlight: true },
+          { num: "2", label: "PageBase (abstract)", desc: "Paylaşılan yardımcılar: waitForLoad(), expectUrl(), getLocator()" },
+          { num: "3", label: "LoginPage extends PageBase", desc: "IPage'i uygular — tüm selector ve aksiyonlara sahip" },
+          { num: "4", label: "test fixture (test.extend)", desc: "loginPage: async({page}, use) => { ... }" },
+          { num: "5", label: "Test dosyası", desc: "test('login', async({ loginPage }) => { await loginPage.login(...) })", highlight: true },
+        ],
+      },
+      16: {
+        left: {
+          label: "❌ Tipsiz — Çalışma Zamanı Sürprizleri",
+          code: `// JavaScript / tipsiz Playwright
+test('login', async ({ page }) => {
+  await page.fill('#emal', 'user@test.com');  // yazım hatası
+  await page.click('#submit-btn');
+
+  // IDE uyarısı yok — çalışma zamanında çöküyor
+  const result = await page.locator('.dashbord').textContent();
+  //                                  ^ hata — test çalışana dek fark edilmiyor
+  expect(result).toBe('Welcome!');
+});`,
+          note: "Selector yazım hataları çalışma zamanında ortaya çıkar — pahalı CI başarısızlıkları",
+        },
+        right: {
+          label: "✅ Tipli POM — Derleme Zamanında Yakalanır",
+          code: `// TypeScript Playwright POM
+export class LoginPage {
+  private readonly emailInput: Locator;    // tipli alan
+  constructor(private readonly page: Page) {
+    this.emailInput = page.locator('[data-testid="email"]');
+  }
+  async login(email: string, password: string): Promise<void> {
+    await this.emailInput.fill(email);   // IDE fill() seçeneklerini gösterir
+    // loginPage.fill(email) ← derleyici hatası: metot yok
+  }
+}
+
+test('login', async ({ loginPage }) => {
+  await loginPage.login('user@test.com', 'pass');
+  // loginPage.navigate(42) ← Hata: number, void'e atanamaz
+});`,
+          note: "Selector değişiklikleri güvenle yayılır — derleyici her hatalı çağrıyı gösterir",
+        },
+      },
+      17: {
+        title: "Tipli Fixture Pipeline'ı — Config'den Teste",
+        items: [
+          { icon: "⚙️", label: "playwright.config.ts", desc: "baseURL, timeout, retries" },
+          { arrow: true },
+          { icon: "🔧", label: "test.extend<MyFixtures>", desc: "loginPage, testUser, apiBaseUrl" },
+          { arrow: true },
+          { icon: "📄", label: "LoginPage sınıfı", desc: "private Locator'lar, tipli metodlar" },
+          { arrow: true },
+          { icon: "🧪", label: "Test fonksiyonu", desc: "async ({ loginPage, testUser }) => {}" },
+          { arrow: true },
+          { icon: "✅", label: "Type-safe assertion'lar", desc: "expect().toHaveURL(), toHaveText()" },
+        ],
+        note: "Her ok tipli bir sınırdır — yanlış tip geçilmesi çalışma zamanı hatası değil, derleme hatası tetikler.",
+      },
+    }
+  }),
+  applyTr(sections[6], {
+    title: "Mülakat Soruları & Cevapları",
+    blocks: {
+      0: { content: "Temel Sorular (1–5)", difficulty: "🟢 Başlangıç" },
+      1: { question: "1. Test otomasyonu için TypeScript ile JavaScript arasındaki temel fark nedir?", answer: "TypeScript, derleme adımı ekleyen statik olarak tiplenmiş bir JavaScript üst kümesidir. Test otomasyonundaki temel avantajlar: tür hataları testler çalışmadan önce yakalanır (gece 3'te CI başarısızlığı yerine); IDE otomatik tamamlaması tüm Playwright API'lerinde, page object'lerde ve fixture'larda çalışır; yeniden düzenleme güvenlidir çünkü derleyici her hatalı çağrı noktasını anında gösterir. JavaScript'in derleme adımı yoktur — tüm tür hataları çalışma zamanı sürprizleri olur. Playwright'ın kendisi TypeScript ile yazılmış ve TypeScript, Playwright projeleri için resmi olarak önerilen dildir." },
+      2: { question: "2. TypeScript'te interface ile type alias arasındaki fark nedir?", answer: "Her ikisi de nesne şekillerini tanımlar ancak temel farkları vardır. interface declaration merging destekler — üçüncü taraf tipleri genişletmek için yararlıdır (Playwright'ın TestFixtures'ını genişletmek gibi). type, union tipleri (`string | number`), intersection tipleri (`A & B`), tuple tipleri ve mapped tipleri destekler — daha ifadeseldir.\n\nGenel kural: Class şekilleri ve public API'ler için interface; union'lar, primitifler ve karmaşık hesaplanmış tipler için type kullanın." },
+      3: { question: "3. 'any' nedir ve test otomasyonunda neden kaçınılmalıdır?", answer: "any, TypeScript'in tür denetimini tamamen devre dışı bırakan bir kaçış kapısıdır. Ona her şeyi atayabilir ve herhangi bir metodu çağırabilirsiniz — ancak bu hatalar derleme zamanı yerine çalışma zamanında ortaya çıkar. Test otomasyonunda any kullanmak TypeScript'in tüm amacını ortadan kaldırır: otomatik tamamlamayı kaybedersiniz, derleme zamanı güvenliğini kaybedersiniz. Gerçekten tipi bilmediğinizde any yerine unknown kullanın — kullanmadan önce tip daralması (type narrowing) yapmaya zorlar." },
+      4: { question: "4. Tip çıkarımı (type inference) nedir ve ne zaman çalışır?", answer: "Tip çıkarımı, TypeScript'in açık bir annotation gerektirmeden değişkenin tipini başlangıç değerinden veya bağlamdan otomatik olarak belirleyebilmesidir. Çalıştığı durumlar: başlangıç değeriyle yapılan değişken bildirimleri, fonksiyon dönüş tipleri, generic tip parametreleri ve dizi/nesne literalleri.\n\nAçık annotation kullanın: değer olmadan bildirim yapıldığında, çıkarılan tip çok geniş olduğunda ve fonksiyon parametrelerinde (hiçbir zaman çıkarılmaz)." },
+      5: { question: "5. Enum'lar nedir ve test odaklı bir kullanım örneği verin?", answer: "Enum'lar adlandırılmış sabit kümelerdir. String enum'lar (her üyenin açık bir string değeri olduğu) test otomasyonunda kesinlikle tercih edilir çünkü log ve test raporlarında okunabilir çıktı üretir. 0 değerli bir number enum test hata mesajında anlamsızdır; 'FAIL' değerli bir string enum anında anlaşılır. Yaygın test kullanım örnekleri: test durumu (PASS/FAIL/SKIP/BLOCKED), tarayıcı hedefi (chromium/firefox/webkit), ortam (staging/production). Enum kullanmak derleyicinin 'pase' gibi yazım hatalarını anında yakalamasını sağlar." },
+      6: { content: "Orta Seviye Sorular (6–10)", difficulty: "🟡 Orta Seviye" },
+      7: { question: "6. Union tipleri ile intersection tipleri arasındaki fark nedir?", answer: "Union tip (`A | B`): değer tiplerden BİRİ veya DİĞERİ olabilir — her iki durumu da ele almanız gerekir (genellikle type guard ile). Intersection tip (`A & B`): değer listelenen TÜM tipleri aynı anda karşılamalıdır — birden fazla tipin özelliklerini tek bir tipte birleştirir.\n\nUnion 'veya' senaryoları içindir; intersection 've' senaryoları içindir. Test otomasyonunda: union tipler birden fazla format kabul eden fonksiyon parametrelerinde yaygındır; intersection tipler bileşik page object veya config tipleri için yaygındır." },
+      8: { question: "7. Generic'ler nedir ve test otomasyonunda neden kullanışlıdır?", answer: "Generic'ler (`<T>` olarak yazılan) tip parametreleridir; herhangi bir tipte çalışan ve o tipin bilgisini kod boyunca koruyan fonksiyonlar, class'lar ve interface'ler yazmanızı sağlar. Test otomasyonunda en kullanışlı oldukları yerler: verinin tipini koruyan API yanıt sarmalayıcıları (`ApiResponse<User>` vs `ApiResponse<Product>`), kısmi override ile tipli nesneler oluşturan test data factory'leri ve birden fazla fixture tipi üzerinde çalışması gereken utility fonksiyonları." },
+      9: { question: "8. Access modifier'lar (public/private/protected/readonly) Page Object Model'de nasıl yardımcı olur?", answer: "Access modifier'lar POM class'larında kapsüllemeyi (encapsulation) zorunlu kılar. Locator özelliklerindeki private, test dosyalarının selector'lara doğrudan erişemeyeceği anlamına gelir — yalnızca page object metodları DOM ile etkileşir; böylece selector değişiklikleri tüm test dosyalarına yayılmaz. protected, base class'ların sağladığı metodları subclass'ların kullanmasına izin verir. readonly, baseUrl veya bağımlılıkların testler arasında yanlışlıkla değiştirilmesini önler. public, page object'in public API'sini işaretler — test kodunun çağırması gereken tek şeyler bunlardır." },
+      10: { question: "9. Type guard nedir ve test otomasyonunda ne zaman kullanılır?", answer: "Type guard'lar, union tipini bir kod dalı içinde belirli bir üyeye daraltan çalışma zamanı kontrolleridir. TypeScript, `typeof`, `instanceof`, `in` operatörü ve özel tip belirleyici fonksiyonları (`value is T`) type guard olarak tanır. Test otomasyonunda en sık görüldükleri yerler: bilinmeyen şekildeki API yanıtlarını doğrulama, birden fazla hata tipini ele alma ve birden fazla formatta gelen test sonuçlarını işleme." },
+      11: { question: "10. 'readonly' ne yapar ve test otomasyonunda ne zaman kullanılmalıdır?", answer: "readonly, bir özelliğin başlatmadan sonra yeniden atanmasını önler. Test otomasyonunda readonly en önemli: page object locator'ları (selector'lar construction'dan sonra değişmemeli), konfigürasyon nesneleri (testlerin paylaşılan config'i mutate etmesini önle), fixture'lara geçirilen ortam URL'leri ve kimlik bilgileri, ve factory'ler tarafından oluşturulan test veri nesneleri. `Readonly<T>` utility tipi eşdeğeridir — interface'i yeniden yazmadan mevcut bir tipin tüm özelliklerini readonly yapar." },
+      12: { content: "İleri Seviye Sorular (11–15)", difficulty: "🔴 İleri" },
+      13: { question: "11. Utility type'lar nedir ve en az dört tanesi için somut otomasyon örnekleri verin?", answer: "Utility type'lar, mevcut tipleri dönüştüren yerleşik generic tiplerdir. Test otomasyonunda en kullanışlılar: Partial<T> — tüm özellikleri isteğe bağlı yapar, config override'ları ve test data factory'leri için kullanılır. Pick<T,K> — belirli özellikleri seçer, tam user interface'inden auth-only fixture tipleri oluşturmak için. Omit<T,K> — özellikleri kaldırır, şifreler olmadan güvenli fixture tipleri için. Record<K,V> — tipli anahtar-değer haritası, ortam URL haritaları veya tarayıcı timeout config'leri için. Readonly<T> — değiştirilemez test config ve fixture verisi için dondurur." },
+      14: { question: "12. TypeScript'te olası hata durumlarıyla async fonksiyonlar nasıl doğru şekilde tiplendirilir?", answer: "TypeScript'in yerleşik bir Result/Either tipi yoktur, ancak açıkça modelleyebilirsiniz. Üç ana kalıp: (1) Union dönüş tipi — `Promise<Data | null>` veya `Promise<{ data: T } | { error: string }>`. (2) Tipli exception'lar — özel hata class'ları tanımlayın ve tutarlı kullanın. (3) Generic Result tipi — `type Result<T, E = Error> = { ok: true; data: T } | { ok: false; error: E }`. Kalıp 3 en açık olanıdır ve büyük Playwright framework'lerinde popülerdir. Async fonksiyon dönüş tiplerini her zaman `Promise<T>` olarak açıkça belirtin." },
+      15: { question: "13. Mapped type'lar nedir ve bir test framework'ünde nasıl kullanırsınız?", answer: "Mapped type'lar, mevcut bir tipin anahtarları üzerinde iterasyon yaparak her özelliği dönüştürerek yeni bir tip oluşturur. Sözdizimi: `{ [K in keyof T]: NewType }`. Test framework'ünde kullanışlı: form doğrulama hata tipleri oluşturma, mock/spy sarmalayıcı tipleri oluşturma ve config interface'inin env-var parsing için seri hale getirilmiş versiyonları." },
+      16: { question: "14. tsconfig.json'da 'strict' modu etkinleştirmek ne yapar ve test otomasyonu için neden önemlidir?", answer: "strict: true bir grup katılık denetimini aynı anda etkinleştirir: noImplicitAny (parametreler sessizce any olamaz), strictNullChecks (null ve undefined kendi tipleridir — açıkça ele almalısınız), strictFunctionTypes, strictBindCallApply ve daha fazlası. Test otomasyonu için strictNullChecks en etkili olanıdır — locator'ların element bulamayabileceği, API yanıtlarının null olabileceği veya isteğe bağlı config değerlerinin undefined olabileceği durumları ele almaya zorlar. Her zaman strict: true ile yeni Playwright projeleri başlatın." },
+      17: { question: "15. Büyük bir Playwright framework'ünde TypeScript tiplerini nasıl yapılandırırsınız?", answer: "Ölçeklenebilir yapı, tipleri sorumluluğa göre ayırır: (1) `src/types/` paylaşılan interface'ler ve type alias'lar için — domain'e göre bölün: `user.types.ts`, `api.types.ts`. (2) `src/enums/` string enum'lar için. (3) Her page object dosyası class'ın yanında kendi interface'ini dışa aktarır. (4) Barrel dosyası (`types/index.ts`) her şeyi yeniden dışa aktarır. (5) `playwright.d.ts` özel fixture tipleriyle Playwright'ın TestFixtures interface'ini genişletmek için. (6) Tipleri test dosyalarına asla koymayın. (7) Type-only import'lar için `import type { ... }` kullanın." },
+      18: { content: "☕ Java Biliyorsan: Mülakat Soruları Köprüsü" },
+      19: {
+        topic: "interface: Yapısal vs Nominal Tipleme (S2 Derinlemesine)",
+        why: "S2 interface vs type'ı kapsar — ama Java geliştiricileri için asıl sürpriz TypeScript interface'lerinin NASIL çalıştığıdır. Java nominal tipleme kullanır (sınıfın 'implements' demesi gerekir). TypeScript yapısal tipleme kullanır — doğru şekle sahip herhangi bir nesne interface'i otomatik olarak karşılar.",
+        note: "Bu Java geliştiricileri için en önemli TypeScript kavramıdır. TS'de neredeyse hiç 'implements' yazmıyorsunuz — şekil eşleşirse, interface'i karşılar. Testlerde mock yapmak için harika: sadece doğru metodlara sahip bir nesne iletin.",
+      },
+      20: {
+        topic: "Generic'ler <T>: Java vs TypeScript (S7 Derinlemesine)",
+        why: "S7 generic'leri kapsar — iyi haber: TypeScript generic'leri Java generic'lerine neredeyse aynı görünür. Aynı <T> sözdizimi, aynı extends kısıtlamaları. Temel fark: TypeScript Java'nın sahip olmadığı union type'ları ve conditional type'ları ekler.",
+        note: "Java generic'lerini biliyorsanız TypeScript generic'leri anında tanıdık gelecektir. Ekstra güç (union type'lar, infer, conditional type'lar) temellerle rahat olduğunuzda doğal olarak gelir.",
+      },
+      21: {
+        topic: "readonly vs final — ve Readonly<T> utility (S10 Derinlemesine)",
+        why: "S10 readonly'i kapsar — Java geliştiricileri 'final'in yeniden atamayı önlediğini bilir. TypeScript 'readonly' derleme zamanı eşdeğeridir. Temel eklemeler: Readonly<T> utility type tüm özellikleri bir anda readonly yapar ve 'as const' literal değerleri dondurur.",
+        note: "\"readonly\" = Java \"final\" alanlar için. \"Readonly<T>\" = tüm alanlarda otomatik final — Java eşdeğeri yok. \"as const\" hem tip hem değeri dondurur — test durumu enum'ları için çok kullanışlı.",
+      },
+    }
+  }),
+  applyTr(sections[7], {
+    title: "Pratik Alıştırmalar & Hızlı Referans",
+    blocks: {
+      0: { content: "Alıştırma 1 — TestCase Interface Tanımlama", difficulty: "🟢 Başlangıç" },
+      1: {
+        title: "Enum ve Interface ile TestCase Oluştur",
+        description: "LOW, MEDIUM, HIGH, CRITICAL değerlerine sahip `Priority` string enum'u ve PASS, FAIL, SKIP, BLOCKED değerlerine sahip `TestStatus` string enum'u tanımlayın. `TestCase` interface'ini tanımlayın: id (number, readonly), title (string), description (isteğe bağlı string), status (TestStatus), priority (Priority), tags (string dizisi), durationMs (number) ve assignee (isteğe bağlı string). İki TestCase nesnesi oluşturun: biri başarılı bir login testi, diğeri başarısız bir ödeme testi için.",
+        hint: "id için readonly, isteğe bağlı özellikler için ? kullanın ve string enum değerlerini Status.PASS = 'PASS' şeklinde yazın. Her iki enum'un da okunabilir test çıktısı için string enum olması gerektiğini unutmayın.",
+        explanation: "String enum'lar log ve raporlarda anlaşılmaz sayılar yerine okunabilir değerler ('PASS', 'CRITICAL') üretir. id üzerindeki readonly modifier, testlerin tanımlayıcıyı yanlışlıkla değiştirmesini önler. İsteğe bağlı alanlar (?) gereksiz kod yazmadan minimal test nesneleri oluşturmanıza olanak tanır.",
+      },
+      3: { content: "Alıştırma 2 — Generic ApiResponse<T> Sarmalayıcı", difficulty: "🟡 Orta Seviye" },
+      4: {
+        title: "Type Guard ile Generic API Yanıtı Sarmalayıcısı",
+        description: "data (T | null), status (number), ok (boolean), error (string | null), requestId (string) alanlarına sahip generic `ApiResponse<T>` interface'i oluşturun. Veri ve durum kodu alan ve doğru doldurulmuş ApiResponse<T> döndüren generic `createApiResponse<T>` factory fonksiyonu yazın. ok true ve data null değilse true döndüren `isSuccessResponse<T>` type guard fonksiyonu yazın. `ApiResponse<unknown>` alan ve bunun bir user olduğunu doğrulayan `parseUserResponse` fonksiyonu yazın.",
+        hint: "Type guard'ın imzası `(res: ApiResponse<T>): res is ApiResponse<NonNullable<T>>` olmalıdır. User doğrulama fonksiyonu için 'in' operatörü ve typeof kontrollerini kullanın.",
+        explanation: "Generic'ler tek bir `ApiResponse<T>` interface'inin veri alanını User, Product, Order veya herhangi başka bir tip olarak doğru şekilde tiplemesine izin verir. Type guard, kontrol sonrasında data'nın null olmadığını TypeScript'in bilmesi için tipi daraltır.",
+      },
+      6: { content: "Alıştırma 3 — Tipli Playwright POM Base Class", difficulty: "🔴 İleri" },
+      7: {
+        title: "Fixture'lı Generic Playwright POM Base Class",
+        description: "Constructor'ında Playwright'tan `Page` kabul eden abstract `PageObjectBase` class'ı oluşturun. Şunları içermeli: protected abstract `path` özelliği (string), `page.goto` çağıran `navigate()` metodu, generic `getElement<T extends Locator>(selector: string): T` metodu, protected `waitForSelector` yardımcısı ve `expectUrl` assertion yardımcısı. Ardından `LoginPage` somut class'ını oluşturun. Son olarak `test.extend<{loginPage: LoginPage}>` kullanarak tipli fixture uzantısını gösterin.",
+        hint: "`import { type Page, type Locator, test as base } from '@playwright/test'` kullanın. Abstract path özelliği her page'in kendi route'unu bildirmesini zorunlu kılar.",
+        explanation: "Abstract class'lar her sayfanın kendi yolunu bildirmesini zorunlu kılar. Yardımcılarda ve locator'larda protected/private erişim, public API'yi temiz tutar — test kodu yalnızca navigate, login, getErrorText ve isLoggedIn gibi public metodları görür. Fixture uzantısı kalıbı, tipli page object'i onu manuel olarak oluşturmadan her testte kullanılabilir kılar.",
+      },
+      8: { content: "Hızlı Referans: TypeScript Özellikleri", difficulty: "🟢 Başlangıç" },
+      9: {
+        headers: ["Özellik", "Söz Dizimi", "Ne Zaman Kullanılır"],
+        rows: [
+          ["String enum", "enum E { A = 'A' }", "Durum, tarayıcı, ortam sabitleri — loglarda okunabilir"],
+          ["Interface", "interface Foo { x: string }", "Nesne şekilleri, class sözleşmeleri, POM tipleri"],
+          ["Type alias", "type ID = string | number", "Union'lar, primitifler, hesaplanmış/karmaşık tipler"],
+          ["İsteğe bağlı özellik", "{ x?: string }", "Config override'lar, kısmi test veri nesneleri"],
+          ["Readonly özellik", "{ readonly id: number }", "Değişmemesi gereken ID'ler, URL'ler, token'lar"],
+          ["Generic fonksiyon", "function f<T>(x: T): T", "Factory'ler, sarmalayıcılar, utility fonksiyonlar"],
+          ["Generic interface", "interface R<T> { data: T }", "API yanıtları, repository'ler, koleksiyonlar"],
+          ["Partial<T>", "Partial<Config>", "Config override'lar, isteğe bağlı test data factory'leri"],
+          ["Pick<T,K>", "Pick<User, 'email'|'role'>", "Auth-only fixture'lar, ince DTO tipleri"],
+          ["Omit<T,K>", "Omit<User, 'password'>", "Hassas alanlar olmadan güvenli fixture tipleri"],
+          ["Record<K,V>", "Record<Browser, number>", "Tipli haritalar: tarayıcı başına timeout, ortam başına URL"],
+          ["Type guard", "x is MyType", "Çalışma zamanında bilinmeyen API yanıtlarını doğrula"],
+          ["Non-null assert", "value!", "Yalnızca değerin kesinlikle null/undefined olmadığından emin olduğunuzda"],
+          ["Satisfies", "obj satisfies Type", "Literal tipleri kaybetmeden config doğrula (TS 4.9+)"],
+          ["Template literal type", "`${Env}.myapp.com`", "Type-safe URL kalıpları, event adları, route string'leri"],
+        ]
+      },
+      10: { content: "typescriptlang.org/play adresindeki TypeScript Playground'u yer imlerine ekleyin — herhangi bir kod parçasını yapıştırın ve derlenmiş JavaScript'i, tür hatalarını ve hover tiplerini anında görün. Proje kurmadan TypeScript kavramlarını denemenin en hızlı yoludur." },
+    }
+  }),
+  applyTr(sections[8], {
+    title: "☕ Java → TypeScript: Harika Haber — Çok Benzer!",
+    blocks: {
+      0: { content: "TypeScript Java geliştiricileri için Python'dan çok daha kolay! class, interface, access modifiers, generics, enums — hepsi tanıdık gelecek. Sadece birkaç kritik fark var. Bu bölüm bu farkları Java perspektifinden açıklar." },
+      1: { text: "1. Temel Tipler — Java'ya Çok Benzer" },
+      2: { topic: "Temel Tipler", why: "Java'da int, long, float, double gibi ayrı sayısal tipler vardır. TypeScript'te tüm sayılar için tek tip kullanılır: number. string küçük harf, boolean aynı.", note: '"number" = Java\'nın int/long/float/double hepsi. "string" (küçük harf) ≠ Java String (büyük harf). TypeScript\'te ayrıca "any" (Object gibi — kaçın!) var.' },
+      3: { text: "2. Interface — Yapısal Tipleme (En Önemli Fark!)" },
+      4: { topic: "interface (yapısal tipleme!)", why: "TypeScript interface Java'dakilere benzer ama kritik fark: TypeScript 'structural typing' kullanır. Nesnenin 'implements' bildirmesine gerek yoktur — doğru shape her nesne interface'i karşılar.", note: "Java = nominal typing ('implements' zorunlu). TypeScript = structural typing ('doğru şekil yeterli'). Bu TypeScript'in en güçlü ve en farklı konsepti." },
+      5: { text: "3. Sınıflar — Neredeyse Aynı!" },
+      6: { topic: "class (neredeyse aynı!)", why: "TypeScript class sözdizimi Java'ya çok benzer: 'constructor' anahtar kelimesi, 'readonly' (final yerine), ve constructor shorthand (tek satırda hem declare hem assign).", note: '"readonly" = Java "final". Constructor shorthand: "constructor(private x: T)" hem field\'ı tanımlar hem atar — büyük boilerplate tasarrufu.' },
+      7: { text: "4. Erişim Belirleyicileri — Birebir Aynı!" },
+      8: { topic: "access modifiers (aynı keyword'ler!)", why: "TypeScript access modifier'ları Java ile birebir aynı: public, private, protected. Python'un aksine TypeScript gerçekten derleme zamanında zorlar!", note: 'TypeScript derleme zamanında private/protected\'ı zorlar (Java gibi). "package-private" yok.' },
+      9: { text: "5. Generics — Java Generics'e Çok Benzer" },
+      10: { topic: "Generics <T>", why: "TypeScript generic'leri Java generic'leri ile neredeyse aynı sözdizimini kullanır. <T>, kısıtlar (extends) tümü tanıdık.", note: "TypeScript aynı <T> sözdizimini kullanır. TypeScript ayrıca Java'da olmayan union types ve mapped types gibi güçlü özellikler ekler." },
+      11: { text: "6. Enum — Java'ya Benzer Ama Farklı Çeşitleri Var" },
+      12: { topic: "enum", why: "Java enum'ları tam teşekküllü sınıflardır. TypeScript'te numeric ve string enum var. QA'da genellikle string enum tercih edilir çünkü log'larda okunabilir değerler üretir.", note: "Java enum = TypeScript string enum. Ama TypeScript'te union type (type Status = \"PASS\" | \"FAIL\") daha kısa ve tree-shakeable. QA'de string enum kullan." },
+      13: { text: "7. Null Safety — Optional → Optional Chaining" },
+      14: { topic: "null safety & optional chaining", why: "Java'da null NullPointerException'a yol açar. TypeScript'te de aynı risk var ama optional chaining (?.) ile çok daha kısa handle edilir.", note: '"?." = Java Optional.map(). "??" = Java .orElse(). tsconfig\'da "strictNullChecks: true" aç — Java\'nın null-safety derleme zamanı kontrolü gibi çalışır.' },
+      15: { text: "8. Union Types — Java'da Karşılığı Yok" },
+      16: { topic: "union types (Java'da yok!)", why: "TypeScript'in Java'ya göre en güçlü özelliklerinden biri. Bir değişkenin birden fazla tip tutabilmesini tip güvenli şekilde ifade eder.", note: '"Discriminated union" = Java sealed classes, ama çok daha kısa. TypeScript tüm case\'lerin ele alındığını derleme zamanında kontrol eder.' },
+      17: { text: "9. Async/Await — CompletableFuture → Promise" },
+      18: { topic: "async/await & Promise", why: "TypeScript ağ/dosya işlemleri için async/await kullanır. Java'da CompletableFuture karşılığıdır. Playwright tamamen async-first'tir — her sayfa işlemi await gerektirir.", note: '"await" = .get() on CompletableFuture. "async function" = CompletableFuture<T>. Playwright, fetch API tümü async-first. "await" olmadan Promise objesi alırsın!' },
+      19: { text: "Hızlı Karşılaştırma Tablosu" },
+      20: {
+        headers: ["Kavram", "Java", "TypeScript", "Benzerlik"],
+        rows: [
+          ["Sayısal tipler", "int, long, double", "number", "⚠️ hepsi tek 'number'"],
+          ["Metin tipi", "String (büyük S)", "string (küçük s)", "⚠️ küçük harf!"],
+          ["Boolean", "boolean", "boolean", "✅ aynı"],
+          ["Class", "class Foo { }", "class Foo { }", "✅ neredeyse aynı"],
+          ["Constructor", "public Foo(args)", "constructor(args)", "⚠️ farklı anahtar kelime"],
+          ["Interface", "interface I { }", "interface I { }", "⚠️ structural vs nominal"],
+          ["Implements", "implements I", "implements I", "✅ aynı keyword"],
+          ["Extends", "extends Base", "extends Base", "✅ aynı keyword"],
+          ["Erişim modifier", "public/private/protected", "public/private/protected", "✅ aynı!"],
+          ["Final field", "final int x", "readonly x: number", "⚠️ 'readonly' değil 'final'"],
+          ["Static", "static void foo()", "static foo(): void", "✅ aynı kavram"],
+          ["Generics", "class Box<T>", "class Box<T>", "✅ aynı sözdizim"],
+          ["Enum", "enum Status { A, B }", "enum Status { A = 'A' }", "⚠️ string değer gerekli"],
+          ["Null", "null", "null / undefined", "⚠️ TS'de hem null hem undefined"],
+          ["Optional", "Optional.ofNullable()", "value?.property", "✅ çok daha kısa ?."],
+          ["Async", "CompletableFuture<T>", "Promise<T>", "✅ aynı kavram, temiz sözdizim"],
+          ["Checked exceptions", "throws IOException", "(yok)", "✅ TS'de checked exception yok"],
+          ["Union type", "(yok — Object/sealed)", "string | number", "🆕 TypeScript'e özgü"],
+        ],
+      },
+    },
+  }),
+]
 
 // ─────────────────────────────────────────────────────────────────────────────
 // TURKISH HERO
@@ -2602,6 +3640,7 @@ const trTabs = [
   "🧪 QA Kullanım",
   "💼 Mülakat",
   "📝 Pratik & Referans",
+  "☕ Java → TS",
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -2624,12 +3663,13 @@ export const typescriptData = {
       "🧪 QA Use Cases",
       "💼 Interview Q&A",
       "📝 Practice & Reference",
+      "☕ Java → TS",
     ],
     sections,
   },
   tr: {
     hero: trHero,
     tabs: trTabs,
-    sections,
+    sections: trSections,
   },
 };

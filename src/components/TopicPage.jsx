@@ -1,18 +1,32 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useLanguage } from '../context/LanguageContext'
 import TopicHeader from './TopicHeader'
 
-// ─── Primitive UI ─────────────────────────────────────────────────────────────
+// ─── CodeBlock ────────────────────────────────────────────────────────────────
 
-function CodeBlock({ code, darkMode }) {
+function CodeBlock({ code, language, darkMode }) {
     const [copied, setCopied] = useState(false)
+    const codeRef = useRef(null)
+    const prismLang = language ? language.toLowerCase().replace(/[\s/().]/g, '') : ''
+
+    useEffect(() => {
+        if (codeRef.current && window.Prism) {
+            window.Prism.highlightElement(codeRef.current)
+        }
+    })
+
     return (
         <div className="relative mt-3 group">
-            <pre className="p-4 rounded-lg font-mono text-xs overflow-x-auto leading-relaxed bg-gray-950 text-green-400 border border-gray-700">
-                <code>{code.trim()}</code>
+            {language && (
+                <div className="absolute top-2 left-3 z-10 text-xs px-2 py-0.5 rounded bg-gray-800 text-gray-400 border border-gray-700 font-mono select-none">
+                    {language}
+                </div>
+            )}
+            <pre className={`p-4 rounded-lg font-mono text-xs overflow-x-auto leading-relaxed bg-slate-800 text-slate-100 border border-slate-600 ${language ? 'pt-8' : ''} ${prismLang ? `language-${prismLang}` : ''}`} style={{ background: '#1e2030' }}>
+                <code ref={codeRef} className={prismLang ? `language-${prismLang}` : ''}>{(code || '').trim()}</code>
             </pre>
             <button
-                onClick={() => { navigator.clipboard.writeText(code.trim()); setCopied(true); setTimeout(() => setCopied(false), 2000) }}
+                onClick={() => { navigator.clipboard.writeText((code || '').trim()); setCopied(true); setTimeout(() => setCopied(false), 2000) }}
                 className="absolute top-2 right-2 px-2 py-1 rounded text-xs bg-gray-700 text-gray-300 hover:bg-gray-600 opacity-0 group-hover:opacity-100 transition-opacity"
             >
                 {copied ? '✅ Copied' : '📋 Copy'}
@@ -20,6 +34,8 @@ function CodeBlock({ code, darkMode }) {
         </div>
     )
 }
+
+// ─── ExerciseBlock ────────────────────────────────────────────────────────────
 
 function ExerciseBlock({ block, darkMode }) {
     const [showSolution, setShowSolution] = useState(false)
@@ -39,7 +55,7 @@ function ExerciseBlock({ block, darkMode }) {
             {block.hint && (
                 <div className="mb-3">
                     <button onClick={() => setShowHint(!showHint)} className="text-xs text-blue-400 hover:underline">
-                        {showHint ? '🙈 Hide hint' : '💡 Show hint'}
+                        {showHint ? '🙈 İpucunu Gizle' : '💡 İpucu Göster'}
                     </button>
                     {showHint && <p className={`mt-2 text-xs p-3 rounded-lg ${darkMode ? 'bg-blue-900/20 text-blue-300' : 'bg-blue-50 text-blue-700'}`}>{block.hint}</p>}
                 </div>
@@ -51,7 +67,7 @@ function ExerciseBlock({ block, darkMode }) {
                     : 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white hover:shadow-md'
                     }`}
             >
-                {showSolution ? '🙈 Hide Solution' : '👁 Show Solution'}
+                {showSolution ? '🙈 Çözümü Gizle' : '👁 Çözümü Göster'}
             </button>
             {showSolution && (
                 <div className="mt-3">
@@ -67,9 +83,871 @@ function ExerciseBlock({ block, darkMode }) {
     )
 }
 
+// ─── QuizBlock ────────────────────────────────────────────────────────────────
+
+function QuizBlock({ block, darkMode, language = 'en' }) {
+    const [selected, setSelected] = useState(null)
+    const [submitted, setSubmitted] = useState(false)
+    const isCorrect = selected === block.correct
+    // Support both plain string options and {id, text} object options
+    const normalizeOption = (opt, i) => {
+        if (typeof opt === 'string') return { id: String.fromCharCode(97 + i), text: opt }
+        return opt
+    }
+    const options = (block.options || []).map(normalizeOption)
+    return (
+        <div className={`mt-6 p-5 rounded-xl border-2 ${darkMode ? 'bg-gray-800 border-indigo-700' : 'bg-indigo-50 border-indigo-200'}`}>
+            <div className="flex items-center gap-2 mb-4">
+                <span className="text-xl">🧠</span>
+                <span className={`font-bold text-sm ${darkMode ? 'text-indigo-300' : 'text-indigo-700'}`}>Hızlı Quiz</span>
+            </div>
+            <p className={`text-sm font-semibold mb-4 leading-relaxed ${darkMode ? 'text-white' : 'text-gray-800'}`}>{tx(block.question, language)}</p>
+            <div className="space-y-2">
+                {options.map((opt, i) => {
+                    const isCorrectOpt = opt.id === block.correct
+                    const isSelected = selected === opt.id
+                    return (
+                        <button
+                            key={opt.id || i}
+                            onClick={() => !submitted && setSelected(opt.id)}
+                            className={`w-full text-left px-4 py-3 rounded-lg text-sm transition-all duration-200 border-2 ${submitted
+                                ? isCorrectOpt
+                                    ? 'bg-green-500/20 border-green-500 text-green-300 font-semibold'
+                                    : isSelected && !isCorrectOpt
+                                        ? 'bg-red-500/20 border-red-500 text-red-300'
+                                        : darkMode ? 'bg-gray-700 border-gray-600 text-gray-500' : 'bg-white border-gray-200 text-gray-400'
+                                : isSelected
+                                    ? darkMode ? 'bg-indigo-800 border-indigo-500 text-indigo-200' : 'bg-indigo-100 border-indigo-400 text-indigo-800'
+                                    : darkMode ? 'bg-gray-700 border-gray-600 text-gray-300 hover:bg-gray-600 hover:border-gray-500' : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50 hover:border-gray-300'
+                                }`}
+                        >
+                            <span className="font-mono font-bold mr-2">{opt.id?.toUpperCase() || String.fromCharCode(65 + i)}.</span>
+                            {tx(opt.text, language)}
+                            {submitted && isCorrectOpt && <span className="ml-2">✓</span>}
+                            {submitted && isSelected && !isCorrectOpt && <span className="ml-2">✗</span>}
+                        </button>
+                    )
+                })}
+            </div>
+            {!submitted && selected !== null && (
+                <button
+                    onClick={() => setSubmitted(true)}
+                    className="mt-4 px-5 py-2 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-lg text-sm font-semibold hover:shadow-md transition-all active:scale-95"
+                >
+                    Cevabı Kontrol Et →
+                </button>
+            )}
+            {submitted && (
+                <div className={`mt-4 p-4 rounded-lg text-sm leading-relaxed ${isCorrect ? (darkMode ? 'bg-green-900/30 text-green-300 border border-green-700' : 'bg-green-50 text-green-800 border border-green-200') : (darkMode ? 'bg-amber-900/30 text-amber-300 border border-amber-700' : 'bg-amber-50 text-amber-800 border border-amber-200')}`}>
+                    <span className="font-bold">{isCorrect ? '🎉 Doğru! ' : '💡 Yanlış — '}</span>
+                    {tx(block.explanation, language)}
+                </div>
+            )}
+        </div>
+    )
+}
+
+// ─── ComparisonBlock ──────────────────────────────────────────────────────────
+
+function ComparisonBlock({ block, darkMode, language = 'en' }) {
+    // Table-style comparison: { title, columns, rows: [{concept, java, python, typescript}] }
+    if (block.columns && block.rows) {
+        const cols = block.columns
+        return (
+            <div className={`mt-5 rounded-xl overflow-hidden border ${darkMode ? 'border-indigo-800' : 'border-indigo-200'}`}>
+                {block.title && (
+                    <div className={`px-4 py-2.5 text-sm font-bold flex items-center gap-2 ${darkMode ? 'bg-indigo-900/40 text-indigo-300' : 'bg-indigo-50 text-indigo-700'}`}>
+                        ⚖️ {tx(block.title, language)}
+                    </div>
+                )}
+                <div className="overflow-x-auto">
+                    <table className="w-full text-sm border-collapse">
+                        <thead>
+                            <tr className={darkMode ? 'bg-gray-700 text-gray-200' : 'bg-gray-100 text-gray-700'}>
+                                <th className={`p-3 text-left font-semibold border-b ${darkMode ? 'border-gray-600' : 'border-gray-300'}`}>
+                                    {language === 'tr' ? 'Kavram' : 'Concept'}
+                                </th>
+                                {cols.map((col, j) => (
+                                    <th key={j} className={`p-3 text-left font-semibold border-b font-mono ${darkMode ? 'border-gray-600' : 'border-gray-300'}`}>
+                                        {col}
+                                    </th>
+                                ))}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {block.rows.map((row, j) => (
+                                <tr key={j} className={`border-b ${darkMode ? 'border-gray-700 hover:bg-gray-700/50' : 'border-gray-200 hover:bg-gray-50'}`}>
+                                    <td className={`p-3 font-semibold text-xs ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                                        {tx(row.concept, language)}
+                                    </td>
+                                    {cols.map((col, k) => {
+                                        // 'Java (HashMap)' → 'java', 'Python (list)' → 'python'
+                                        const key = col.split(/[\s(]/)[0].toLowerCase()
+                                        const val = row[key] ?? row[col.toLowerCase()] ?? row[col] ?? ''
+                                        return (
+                                            <td key={k} className={`p-3 font-mono text-xs ${darkMode ? 'text-emerald-300' : 'text-emerald-700'}`}>
+                                                {val}
+                                            </td>
+                                        )
+                                    })}
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        )
+    }
+
+    // Code side-by-side comparison: { left: {label, code, note}, right: {label, code, note} }
+    return (
+        <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-4">
+            {[block.left, block.right].map((side, idx) => {
+                if (!side) return null
+                const isLeft = idx === 0
+                return (
+                    <div key={idx} className={`rounded-xl overflow-hidden border-2 ${isLeft ? 'border-red-500/60' : 'border-green-500/60'}`}>
+                        <div className={`px-4 py-2 text-sm font-bold ${isLeft ? (darkMode ? 'bg-red-900/30 text-red-400' : 'bg-red-50 text-red-600') : (darkMode ? 'bg-green-900/30 text-green-400' : 'bg-green-50 text-green-600')}`}>
+                            {tx(side.label, language)}
+                        </div>
+                        <div className="bg-slate-800 p-4">
+                            <pre className="font-mono text-xs text-slate-100 overflow-x-auto leading-relaxed whitespace-pre-wrap">{side.code}</pre>
+                        </div>
+                        {side.note && (
+                            <div className={`px-4 py-2 text-xs ${isLeft ? (darkMode ? 'text-red-400 bg-red-900/10' : 'text-red-600 bg-red-50') : (darkMode ? 'text-green-400 bg-green-900/10' : 'text-green-600 bg-green-50')}`}>
+                                {isLeft ? '❌ ' : '✅ '}{tx(side.note, language)}
+                            </div>
+                        )}
+                    </div>
+                )
+            })}
+        </div>
+    )
+}
+
+// ─── Visual Sub-components ────────────────────────────────────────────────────
+
+function JoinDiagram({ block, darkMode }) {
+    const [step, setStep] = useState(0)
+    const bg = darkMode ? 'bg-gray-750 border-gray-600' : 'bg-gray-50 border-gray-200'
+    const matchRow = darkMode ? 'bg-green-900/50 text-green-300 border-green-700' : 'bg-green-100 text-green-800 border-green-300'
+    const nullRow = darkMode ? 'bg-blue-900/30 text-blue-300 border-blue-700 italic' : 'bg-blue-50 text-blue-600 border-blue-200 italic'
+    const noRow = darkMode ? 'bg-gray-800 text-gray-500 border-gray-700 opacity-40' : 'bg-gray-100 text-gray-400 border-gray-200 opacity-50'
+    const normalRow = darkMode ? 'bg-gray-700 text-gray-300 border-gray-600' : 'bg-white text-gray-700 border-gray-200'
+
+    const getRowStyle = (row) => {
+        if (step === 0) return normalRow
+        if (row.matched) return matchRow
+        if (row.nullFill) return nullRow
+        return noRow
+    }
+
+    return (
+        <div className={`mt-5 p-5 rounded-xl border ${bg}`}>
+            <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
+                <div className={`font-mono font-bold text-sm px-3 py-1.5 rounded-lg ${darkMode ? 'bg-indigo-900 text-indigo-300' : 'bg-indigo-100 text-indigo-700'}`}>
+                    {block.joinType}
+                </div>
+                <div className="flex gap-2">
+                    {step < 2 ? (
+                        <button onClick={() => setStep(s => s + 1)} className="text-xs px-3 py-1.5 bg-indigo-500 text-white rounded-lg hover:bg-indigo-400 transition-all font-semibold">
+                            {step === 0 ? 'Eşleşmeleri Göster →' : 'Sonucu Göster →'}
+                        </button>
+                    ) : (
+                        <button onClick={() => setStep(0)} className="text-xs px-3 py-1.5 bg-gray-500 text-white rounded-lg hover:bg-gray-400 transition-all font-semibold">
+                            ↺ Sıfırla
+                        </button>
+                    )}
+                </div>
+            </div>
+
+            <div className="grid grid-cols-3 gap-3 items-start">
+                <div>
+                    <div className={`text-xs font-bold mb-2 text-center px-2 py-1.5 rounded-lg ${darkMode ? 'bg-blue-900/50 text-blue-300' : 'bg-blue-100 text-blue-700'}`}>
+                        📋 {block.leftTable.name}
+                    </div>
+                    {block.leftTable.rows.map((row, i) => (
+                        <div key={i} className={`text-xs px-2 py-1.5 rounded-lg mb-1.5 font-mono border transition-all duration-300 ${getRowStyle(row)}`}>
+                            {row.label}
+                        </div>
+                    ))}
+                </div>
+
+                <div className="flex flex-col items-center pt-8 gap-3">
+                    <div className="relative w-16 h-10">
+                        <div className={`absolute left-0 top-0 w-8 h-8 rounded-full border-2 ${darkMode ? 'border-blue-400' : 'border-blue-500'} opacity-70`} />
+                        <div className={`absolute right-0 top-0 w-8 h-8 rounded-full border-2 ${darkMode ? 'border-orange-400' : 'border-orange-500'} opacity-70`} />
+                        <div className={`absolute left-1/2 -translate-x-1/2 top-1 w-4 h-6 rounded-sm ${
+                            block.joinType?.includes('INNER') ? 'bg-green-500/60' :
+                            block.joinType?.includes('LEFT') ? 'bg-blue-500/60' :
+                            block.joinType?.includes('RIGHT') ? 'bg-orange-500/60' :
+                            'bg-purple-500/60'
+                        }`} />
+                    </div>
+                    <div className={`text-xs text-center font-semibold ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>ON</div>
+                </div>
+
+                <div>
+                    <div className={`text-xs font-bold mb-2 text-center px-2 py-1.5 rounded-lg ${darkMode ? 'bg-orange-900/50 text-orange-300' : 'bg-orange-100 text-orange-700'}`}>
+                        📋 {block.rightTable.name}
+                    </div>
+                    {block.rightTable.rows.map((row, i) => (
+                        <div key={i} className={`text-xs px-2 py-1.5 rounded-lg mb-1.5 font-mono border transition-all duration-300 ${getRowStyle(row)}`}>
+                            {row.label}
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            {step === 2 && block.resultRows && (
+                <div className="mt-4 transition-all duration-300">
+                    <div className={`text-xs font-bold mb-2 px-2 py-1 rounded-lg inline-block ${darkMode ? 'bg-green-900/50 text-green-300' : 'bg-green-100 text-green-700'}`}>
+                        ✅ Sorgu Sonucu — {block.resultRows.length} satır
+                    </div>
+                    <div className="overflow-x-auto rounded-lg border border-gray-700">
+                        <table className="w-full text-xs">
+                            <thead>
+                                <tr>
+                                    {block.resultHeaders?.map((h, j) => (
+                                        <th key={j} className={`px-3 py-2 text-left font-semibold ${darkMode ? 'bg-gray-700 text-gray-200' : 'bg-gray-100 text-gray-700'}`}>{h}</th>
+                                    ))}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {block.resultRows.map((row, j) => (
+                                    <tr key={j} className={`border-t ${darkMode ? 'border-gray-700 bg-indigo-900/20 text-indigo-300' : 'border-gray-200 bg-indigo-50 text-indigo-700'}`}>
+                                        {row.map((cell, k) => (
+                                            <td key={k} className="px-3 py-2 font-mono">{cell === null ? <span className="opacity-50 not-italic">NULL</span> : String(cell)}</td>
+                                        ))}
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            )}
+
+            {block.explanation && (
+                <p className={`mt-4 text-xs leading-relaxed ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                    💡 {block.explanation}
+                </p>
+            )}
+        </div>
+    )
+}
+
+function TableDiagram({ block, darkMode }) {
+    const bg = darkMode ? 'bg-gray-750 border-gray-600' : 'bg-gray-50 border-gray-200'
+    return (
+        <div className={`mt-5 p-4 rounded-xl border ${bg} overflow-x-auto`}>
+            {block.title && <div className={`text-sm font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-800'}`}>{block.title}</div>}
+            <div className="flex flex-wrap gap-6 items-start">
+                {block.tables?.map((table, t) => (
+                    <div key={t} className="flex-shrink-0">
+                        <div className={`text-xs font-bold px-3 py-1.5 rounded-t-lg text-center ${darkMode ? 'bg-indigo-900 text-indigo-300' : 'bg-indigo-600 text-white'}`}>
+                            📋 {table.name}
+                        </div>
+                        <table className="text-xs border-collapse">
+                            <thead>
+                                <tr>
+                                    {table.columns?.map((col, c) => (
+                                        <th key={c} className={`px-3 py-1.5 border text-left whitespace-nowrap ${darkMode ? 'bg-gray-700 border-gray-600 text-gray-200' : 'bg-gray-100 border-gray-300 text-gray-700'}`}>
+                                            {col.pk && <span className="mr-1">🔑</span>}
+                                            {col.fk && <span className="mr-1">🔗</span>}
+                                            {typeof col === 'string' ? col : col.name}
+                                            {col.type && <span className={`ml-1 font-normal text-xs ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>({col.type})</span>}
+                                        </th>
+                                    ))}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {table.rows?.map((row, r) => (
+                                    <tr key={r} className={row.highlighted ? (darkMode ? 'bg-yellow-900/30' : 'bg-yellow-50') : ''}>
+                                        {row.cells?.map((cell, c) => (
+                                            <td key={c} className={`px-3 py-1.5 border font-mono ${darkMode ? 'border-gray-600 text-gray-300' : 'border-gray-200 text-gray-600'}`}>
+                                                {cell === null ? <span className="opacity-40 italic">NULL</span> : String(cell)}
+                                            </td>
+                                        ))}
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                ))}
+            </div>
+            {block.note && <p className={`mt-3 text-xs italic ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>{block.note}</p>}
+        </div>
+    )
+}
+
+function FlowDiagram({ block, darkMode }) {
+    const bg = darkMode ? 'bg-gray-750 border-gray-600' : 'bg-gray-50 border-gray-200'
+    return (
+        <div className={`mt-5 p-4 rounded-xl border ${bg}`}>
+            {block.title && <div className={`text-sm font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-800'}`}>{block.title}</div>}
+            <div className="flex flex-wrap items-center gap-1 justify-center">
+                {block.steps?.map((step, i) => (
+                    <div key={i} className="flex items-center gap-1">
+                        <div className={`px-3 py-2.5 rounded-xl border-2 text-center text-xs min-w-[70px] transition-all ${step.highlight
+                            ? (darkMode ? 'bg-indigo-900 border-indigo-500 text-indigo-300' : 'bg-indigo-100 border-indigo-400 text-indigo-800')
+                            : (darkMode ? 'bg-gray-700 border-gray-600 text-gray-300' : 'bg-white border-gray-300 text-gray-700')
+                        }`}>
+                            {step.num && (
+                                <div className={`w-5 h-5 rounded-full flex items-center justify-center mx-auto mb-1 text-xs font-bold ${darkMode ? 'bg-indigo-700 text-white' : 'bg-indigo-600 text-white'}`}>
+                                    {step.num}
+                                </div>
+                            )}
+                            <div className="font-bold leading-tight">{step.label}</div>
+                            {step.desc && <div className={`mt-0.5 font-normal text-xs leading-tight ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>{step.desc}</div>}
+                        </div>
+                        {i < block.steps.length - 1 && (
+                            <span className={`text-lg font-bold ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>→</span>
+                        )}
+                    </div>
+                ))}
+            </div>
+            {block.note && <p className={`mt-3 text-xs text-center italic ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>{block.note}</p>}
+        </div>
+    )
+}
+
+function BoxesDiagram({ block, darkMode }) {
+    const bg = darkMode ? 'bg-gray-750 border-gray-600' : 'bg-gray-50 border-gray-200'
+    return (
+        <div className={`mt-5 p-4 rounded-xl border ${bg}`}>
+            {block.title && <div className={`text-sm font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-800'}`}>{block.title}</div>}
+            <div className="flex flex-wrap items-center gap-2 justify-center">
+                {block.items?.map((item, i) => (
+                    <div key={i} className="flex items-center gap-2">
+                        {item.arrow ? (
+                            <span className={`text-2xl ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>→</span>
+                        ) : (
+                            <div className={`px-4 py-3 rounded-xl border-2 text-center min-w-[90px] max-w-[160px] ${item.highlight
+                                ? (darkMode ? 'bg-indigo-900 border-indigo-500' : 'bg-indigo-100 border-indigo-400')
+                                : (darkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300')
+                            }`}>
+                                {item.icon && <div className="text-xl mb-1">{item.icon}</div>}
+                                <div className={`font-bold text-xs ${darkMode ? 'text-white' : 'text-gray-800'}`}>{item.label}</div>
+                                {item.desc && <div className={`text-xs mt-1 leading-tight ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>{item.desc}</div>}
+                            </div>
+                        )}
+                    </div>
+                ))}
+            </div>
+            {block.note && <p className={`mt-3 text-xs text-center italic ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>{block.note}</p>}
+        </div>
+    )
+}
+
+function PyramidDiagram({ block, darkMode }) {
+    const colorMap = {
+        green: darkMode ? 'bg-green-900/60 border-green-600 text-green-300' : 'bg-green-100 border-green-400 text-green-800',
+        yellow: darkMode ? 'bg-yellow-900/60 border-yellow-600 text-yellow-300' : 'bg-yellow-100 border-yellow-400 text-yellow-800',
+        red: darkMode ? 'bg-red-900/60 border-red-600 text-red-300' : 'bg-red-100 border-red-400 text-red-800',
+        blue: darkMode ? 'bg-blue-900/60 border-blue-600 text-blue-300' : 'bg-blue-100 border-blue-400 text-blue-800',
+        indigo: darkMode ? 'bg-indigo-900/60 border-indigo-600 text-indigo-300' : 'bg-indigo-100 border-indigo-400 text-indigo-800',
+        orange: darkMode ? 'bg-orange-900/60 border-orange-600 text-orange-300' : 'bg-orange-100 border-orange-400 text-orange-800',
+    }
+    const bg = darkMode ? 'bg-gray-750 border-gray-600' : 'bg-gray-50 border-gray-200'
+    return (
+        <div className={`mt-5 p-5 rounded-xl border ${bg}`}>
+            {block.title && <div className={`text-sm font-bold mb-4 text-center ${darkMode ? 'text-white' : 'text-gray-800'}`}>{block.title}</div>}
+            <div className="flex flex-col items-center gap-2">
+                {block.levels?.map((level, i) => {
+                    const pct = 28 + (block.levels.length - 1 - i) * 18
+                    return (
+                        <div key={i} className={`px-4 py-2.5 rounded-xl border-2 text-center text-sm transition-all ${colorMap[level.color] || colorMap.blue}`}
+                            style={{ width: `${Math.min(100, pct)}%` }}>
+                            <div className="font-bold">{level.label}</div>
+                            {level.desc && <div className="text-xs opacity-80 mt-0.5">{level.desc}</div>}
+                        </div>
+                    )
+                })}
+            </div>
+            {block.note && <p className={`mt-3 text-xs text-center italic ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>{block.note}</p>}
+        </div>
+    )
+}
+
+function DataStructureDiagram({ block, darkMode }) {
+    const bg = darkMode ? 'bg-gray-750 border-gray-600' : 'bg-gray-50 border-gray-200'
+
+    if (block.dataType === 'list') {
+        return (
+            <div className={`mt-5 p-4 rounded-xl border ${bg}`}>
+                {block.title && <div className={`text-sm font-bold mb-3 ${darkMode ? 'text-white' : 'text-gray-800'}`}>{block.title}</div>}
+                <div className="flex items-stretch overflow-x-auto">
+                    {block.items?.map((item, i) => (
+                        <div key={i} className="flex items-stretch">
+                            <div className={`flex flex-col items-center border-2 ${item.highlighted ? (darkMode ? 'border-yellow-400 bg-yellow-900/30' : 'border-yellow-400 bg-yellow-50') : (darkMode ? 'border-gray-500 bg-gray-700' : 'border-gray-300 bg-white')}`}>
+                                <div className={`px-4 py-2.5 text-sm font-mono font-bold ${darkMode ? 'text-gray-200' : 'text-gray-800'}`}>{String(item.value)}</div>
+                                <div className={`px-2 py-0.5 text-xs border-t w-full text-center ${darkMode ? 'border-gray-600 text-indigo-400 bg-gray-800' : 'border-gray-300 text-indigo-600 bg-gray-50'}`}>[{i}]</div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+                {block.note && <p className={`mt-2 text-xs italic ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>{block.note}</p>}
+            </div>
+        )
+    }
+
+    if (block.dataType === 'dict') {
+        return (
+            <div className={`mt-5 p-4 rounded-xl border ${bg}`}>
+                {block.title && <div className={`text-sm font-bold mb-3 ${darkMode ? 'text-white' : 'text-gray-800'}`}>{block.title}</div>}
+                <div className="inline-flex flex-col gap-0 rounded-lg overflow-hidden border border-gray-600">
+                    {block.items?.map((item, i) => (
+                        <div key={i} className={`flex border-b last:border-b-0 ${darkMode ? 'border-gray-600' : 'border-gray-200'}`}>
+                            <div className={`px-4 py-2 font-mono text-xs font-bold border-r min-w-[120px] ${darkMode ? 'bg-indigo-900/40 border-gray-600 text-indigo-300' : 'bg-indigo-50 border-gray-200 text-indigo-700'}`}>
+                                "{item.key}"
+                            </div>
+                            <div className={`px-4 py-2 font-mono text-xs ${darkMode ? 'bg-gray-700 text-gray-300' : 'bg-white text-gray-700'}`}>
+                                {typeof item.value === 'string' ? `"${item.value}"` : String(item.value)}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+                {block.note && <p className={`mt-2 text-xs italic ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>{block.note}</p>}
+            </div>
+        )
+    }
+
+    if (block.dataType === 'set') {
+        return (
+            <div className={`mt-5 p-4 rounded-xl border ${bg}`}>
+                {block.title && <div className={`text-sm font-bold mb-3 ${darkMode ? 'text-white' : 'text-gray-800'}`}>{block.title}</div>}
+                <div className="flex flex-wrap items-center gap-2">
+                    <span className={`text-2xl font-mono ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>{'{'}</span>
+                    {block.items?.map((item, i) => (
+                        <div key={i} className={`px-3 py-1.5 rounded-full text-xs font-mono font-bold border-2 ${darkMode ? 'border-orange-500 bg-orange-900/30 text-orange-300' : 'border-orange-400 bg-orange-50 text-orange-700'}`}>
+                            {String(item.value)}
+                        </div>
+                    ))}
+                    <span className={`text-2xl font-mono ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>{'}'}</span>
+                </div>
+                <p className={`mt-2 text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>⚡ Sıra yoktur · Her eleman benzersizdir · Hızlı üyelik kontrolü</p>
+                {block.note && <p className={`mt-1 text-xs italic ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>{block.note}</p>}
+            </div>
+        )
+    }
+
+    if (block.dataType === 'tuple') {
+        return (
+            <div className={`mt-5 p-4 rounded-xl border ${bg}`}>
+                {block.title && <div className={`text-sm font-bold mb-3 ${darkMode ? 'text-white' : 'text-gray-800'}`}>{block.title}</div>}
+                <div className="flex items-center gap-1 flex-wrap">
+                    <span className={`text-xl font-mono font-bold ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>(</span>
+                    {block.items?.map((item, i) => (
+                        <div key={i} className="flex items-center gap-1">
+                            <div className={`px-3 py-2 text-xs font-mono border-2 rounded ${darkMode ? 'border-purple-500 bg-purple-900/30 text-purple-300' : 'border-purple-400 bg-purple-50 text-purple-700'}`}>
+                                {String(item.value)}
+                            </div>
+                            {i < block.items.length - 1 && <span className={`text-sm ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>,</span>}
+                        </div>
+                    ))}
+                    <span className={`text-xl font-mono font-bold ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>)</span>
+                </div>
+                <p className={`mt-2 text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>🔒 Değiştirilemez (immutable) · Sıralı · Hızlı okuma</p>
+                {block.note && <p className={`mt-1 text-xs italic ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>{block.note}</p>}
+            </div>
+        )
+    }
+
+    return null
+}
+
+function VisualBlock({ block, darkMode }) {
+    switch (block.variant) {
+        case 'join': return <JoinDiagram block={block} darkMode={darkMode} />
+        case 'table': return <TableDiagram block={block} darkMode={darkMode} />
+        case 'flow': return <FlowDiagram block={block} darkMode={darkMode} />
+        case 'boxes': return <BoxesDiagram block={block} darkMode={darkMode} />
+        case 'pyramid': return <PyramidDiagram block={block} darkMode={darkMode} />
+        case 'data-structure': return <DataStructureDiagram block={block} darkMode={darkMode} />
+        default: return null
+    }
+}
+
+function CalloutBlock({ block, darkMode }) {
+    const colorMap = {
+        blue: { border: 'border-blue-400', bg: darkMode ? 'bg-blue-900/20' : 'bg-blue-50', text: darkMode ? 'text-blue-300' : 'text-blue-800', titleText: darkMode ? 'text-blue-200' : 'text-blue-900' },
+        green: { border: 'border-green-400', bg: darkMode ? 'bg-green-900/20' : 'bg-green-50', text: darkMode ? 'text-green-300' : 'text-green-800', titleText: darkMode ? 'text-green-200' : 'text-green-900' },
+        yellow: { border: 'border-yellow-400', bg: darkMode ? 'bg-yellow-900/20' : 'bg-yellow-50', text: darkMode ? 'text-yellow-300' : 'text-yellow-800', titleText: darkMode ? 'text-yellow-200' : 'text-yellow-900' },
+        purple: { border: 'border-purple-400', bg: darkMode ? 'bg-purple-900/20' : 'bg-purple-50', text: darkMode ? 'text-purple-300' : 'text-purple-800', titleText: darkMode ? 'text-purple-200' : 'text-purple-900' },
+        red: { border: 'border-red-400', bg: darkMode ? 'bg-red-900/20' : 'bg-red-50', text: darkMode ? 'text-red-300' : 'text-red-800', titleText: darkMode ? 'text-red-200' : 'text-red-900' },
+        orange: { border: 'border-orange-400', bg: darkMode ? 'bg-orange-900/20' : 'bg-orange-50', text: darkMode ? 'text-orange-300' : 'text-orange-800', titleText: darkMode ? 'text-orange-200' : 'text-orange-900' },
+    }
+    const c = colorMap[block.color] || colorMap.blue
+    return (
+        <div className={`mt-4 p-4 rounded-xl border-2 ${c.border} ${c.bg}`}>
+            {block.title && <div className={`font-bold text-sm mb-2 ${c.titleText}`}>{block.emoji || ''} {block.title}</div>}
+            <p className={`text-sm leading-relaxed ${c.text}`}>{block.content}</p>
+        </div>
+    )
+}
+
+// ─── JavaCompareBlock ─────────────────────────────────────────────────────────
+
+function JavaCompareBlock({ block, darkMode }) {
+    const { language } = useLanguage()
+    const isTr = language === 'tr'
+    const isTS = !!block.typescript
+    const isSQL = !!block.sql
+    const newCode = block.typescript || block.python || block.sql
+    const langIcon = isTS ? '🔷' : isSQL ? '🗄️' : '🐍'
+    const langLabel = isTS ? "TypeScript'te" : isSQL ? 'Python\'da (DB)' : "Python'da"
+    const whyText = isTr ? block.why : (block.why_en ?? block.why)
+    const noteText = isTr ? block.note : (block.note_en ?? block.note)
+    const whyLabel = isTr ? '🤔 Neden?' : '🤔 Why?'
+    return (
+        <div className={`mt-6 rounded-xl border-2 overflow-hidden ${darkMode ? 'border-orange-700/60' : 'border-orange-300'}`}>
+            <div className={`px-4 py-3 flex items-center gap-2 ${darkMode ? 'bg-orange-900/25' : 'bg-amber-50'}`}>
+                <span className="text-xl">☕</span>
+                <span className={`font-bold text-sm ${darkMode ? 'text-orange-300' : 'text-orange-800'}`}>{isTr ? 'Java Biliyorsan:' : 'If You Know Java:'}</span>
+                <span className={`text-sm font-mono font-semibold ${darkMode ? 'text-orange-200' : 'text-orange-900'}`}>{block.topic}</span>
+            </div>
+            {whyText && (
+                <div className={`px-4 py-3 text-sm border-b ${darkMode ? 'bg-gray-800/80 border-orange-900/30 text-gray-300' : 'bg-white border-orange-100 text-gray-700'}`}>
+                    <span className={`font-semibold mr-1 ${darkMode ? 'text-orange-300' : 'text-orange-700'}`}>{whyLabel}</span>
+                    {whyText}
+                </div>
+            )}
+            <div className="grid grid-cols-1 md:grid-cols-2">
+                <div className={`border-r ${darkMode ? 'border-gray-700' : 'border-orange-200'}`}>
+                    <div className={`px-3 py-1.5 text-xs font-bold ${darkMode ? 'bg-yellow-900/25 text-yellow-300' : 'bg-yellow-100 text-yellow-800'}`}>☕ Java'da</div>
+                    <div className="bg-slate-800 p-3 min-h-[80px]">
+                        <pre className="font-mono text-xs text-amber-200 overflow-x-auto leading-relaxed">{(block.java || '').trim()}</pre>
+                    </div>
+                </div>
+                <div>
+                    <div className={`px-3 py-1.5 text-xs font-bold ${darkMode ? 'bg-blue-900/25 text-blue-300' : 'bg-blue-100 text-blue-800'}`}>{langIcon} {langLabel}</div>
+                    <div className="bg-slate-800 p-3 min-h-[80px]">
+                        <pre className={`font-mono text-xs overflow-x-auto leading-relaxed ${isTS ? 'text-sky-200' : 'text-emerald-200'}`}>{(newCode || '').trim()}</pre>
+                    </div>
+                </div>
+            </div>
+            {noteText && (
+                <div className={`px-4 py-2.5 text-xs border-t ${darkMode ? 'bg-gray-800/80 border-orange-900/30 text-gray-400' : 'bg-amber-50 border-orange-100 text-orange-700'}`}>
+                    💡 {noteText}
+                </div>
+            )}
+        </div>
+    )
+}
+
+// ─── PyodideEditor ────────────────────────────────────────────────────────────
+
+function PyodideEditor({ defaultCode, height = '180px' }) {
+    const [code, setCode] = useState(defaultCode || '')
+    const [output, setOutput] = useState('')
+    const [loading, setLoading] = useState(false)
+    const [pyReady, setPyReady] = useState(!!window._pyodideInstance)
+    const pyRef = useRef(null)
+
+    useEffect(() => {
+        if (window._pyodideInstance) { pyRef.current = window._pyodideInstance; setPyReady(true); return }
+        if (window._pyodideLoading) { const iv = setInterval(() => { if (window._pyodideInstance) { pyRef.current = window._pyodideInstance; setPyReady(true); clearInterval(iv) } }, 300); return }
+        window._pyodideLoading = true
+        const s = document.createElement('script')
+        s.src = 'https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js'
+        s.onload = () => window.loadPyodide({ indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.26.2/full/' }).then(py => { window._pyodideInstance = py; pyRef.current = py; setPyReady(true) })
+        document.head.appendChild(s)
+    }, [])
+
+    const run = async () => {
+        if (!pyRef.current) return
+        setLoading(true); setOutput('')
+        try {
+            pyRef.current.runPython('import sys, io\nsys.stdout = io.StringIO()')
+            pyRef.current.runPython(code)
+            setOutput(pyRef.current.runPython('sys.stdout.getvalue()') || '(no output)')
+        } catch (e) { setOutput('❌ ' + e.message) }
+        setLoading(false)
+    }
+
+    return (
+        <div className="mt-4 rounded-xl overflow-hidden border border-purple-800/40">
+            <div style={{ background: '#12121f' }} className="flex items-center justify-between px-3 py-2">
+                <span className="text-xs font-mono" style={{ color: '#6c7086' }}>{pyReady ? '🐍 Python — Try it yourself' : '⏳ Loading Python...'}</span>
+                <button onClick={run} disabled={!pyReady || loading} style={{ background: pyReady ? '#7c3aed' : '#313148', color: '#fff', border: 'none', borderRadius: '6px', padding: '5px 16px', fontSize: '12px', fontWeight: 600, cursor: pyReady ? 'pointer' : 'not-allowed' }}>
+                    {loading ? '⏳' : '▶ Run'}
+                </button>
+            </div>
+            <textarea value={code} onChange={e => setCode(e.target.value)} style={{ display: 'block', width: '100%', minHeight: height, background: '#12121f', color: '#cdd6f4', fontFamily: 'JetBrains Mono, monospace', fontSize: '13px', border: 'none', padding: '14px 16px', resize: 'vertical', boxSizing: 'border-box', outline: 'none' }} spellCheck={false} />
+            {output && <pre style={{ margin: 0, padding: '10px 16px', background: '#0d0d1a', color: output.startsWith('❌') ? '#ef4444' : '#10b981', fontFamily: 'JetBrains Mono, monospace', fontSize: '12px', borderTop: '1px solid #1e1e3a', whiteSpace: 'pre-wrap' }}>{output}</pre>}
+        </div>
+    )
+}
+
+// ─── TSEditor ─────────────────────────────────────────────────────────────────
+
+function TSEditor({ defaultCode, height = '180px' }) {
+    const [code, setCode] = useState(defaultCode || '')
+    const [output, setOutput] = useState('')
+    const [babelReady, setBabelReady] = useState(!!window.Babel)
+
+    useEffect(() => {
+        if (window.Babel) { setBabelReady(true); return }
+        const s = document.createElement('script')
+        s.src = 'https://unpkg.com/@babel/standalone/babel.min.js'
+        s.onload = () => setBabelReady(true)
+        document.head.appendChild(s)
+    }, [])
+
+    const run = () => {
+        setOutput('')
+        try {
+            const js = window.Babel.transform(code, { filename: 'x.ts', presets: ['typescript'] }).code
+            const logs = []
+            const fn = new Function('console', js)
+            fn({ log: (...a) => logs.push(a.map(x => typeof x === 'object' ? JSON.stringify(x, null, 2) : String(x)).join(' ')), error: (...a) => logs.push('❌ ' + a.join(' ')) })
+            setOutput(logs.join('\n') || '(no output)')
+        } catch (e) { setOutput('❌ ' + e.message) }
+    }
+
+    return (
+        <div className="mt-4 rounded-xl overflow-hidden border border-blue-800/40">
+            <div style={{ background: '#12121f' }} className="flex items-center justify-between px-3 py-2">
+                <span className="text-xs font-mono" style={{ color: '#6c7086' }}>{babelReady ? '🔷 TypeScript — Try it yourself' : '⏳ Loading TypeScript...'}</span>
+                <button onClick={run} disabled={!babelReady} style={{ background: babelReady ? '#2563eb' : '#313148', color: '#fff', border: 'none', borderRadius: '6px', padding: '5px 16px', fontSize: '12px', fontWeight: 600, cursor: babelReady ? 'pointer' : 'not-allowed' }}>▶ Run</button>
+            </div>
+            <textarea value={code} onChange={e => setCode(e.target.value)} style={{ display: 'block', width: '100%', minHeight: height, background: '#12121f', color: '#cdd6f4', fontFamily: 'JetBrains Mono, monospace', fontSize: '13px', border: 'none', padding: '14px 16px', resize: 'vertical', boxSizing: 'border-box', outline: 'none' }} spellCheck={false} />
+            {output && <pre style={{ margin: 0, padding: '10px 16px', background: '#0d0d1a', color: output.startsWith('❌') ? '#ef4444' : '#10b981', fontFamily: 'JetBrains Mono, monospace', fontSize: '12px', borderTop: '1px solid #1e1e3a', whiteSpace: 'pre-wrap' }}>{output}</pre>}
+        </div>
+    )
+}
+
+// ─── Bilingual content helper ─────────────────────────────────────────────────
+
+const tx = (val, lang) => {
+    if (!val) return ''
+    if (typeof val === 'string') return val
+    return val[lang] || val.en || val.tr || ''
+}
+
+// ─── ScrollProgressBar ────────────────────────────────────────────────────────
+
+function ScrollProgressBar() {
+    const [progress, setProgress] = useState(0)
+    useEffect(() => {
+        const update = () => {
+            const { scrollTop, scrollHeight, clientHeight } = document.documentElement
+            const pct = (scrollTop / (scrollHeight - clientHeight)) * 100
+            setProgress(Math.min(100, Math.max(0, pct)))
+        }
+        window.addEventListener('scroll', update, { passive: true })
+        return () => window.removeEventListener('scroll', update)
+    }, [])
+    return (
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, height: '3px', background: 'transparent', zIndex: 9999 }}>
+            <div style={{
+                height: '100%', width: `${progress}%`,
+                background: 'linear-gradient(90deg, #7c3aed, #10b981)',
+                transition: 'width 0.1s linear',
+            }} />
+        </div>
+    )
+}
+
+// ─── HomeButton ───────────────────────────────────────────────────────────────
+
+function HomeButton() {
+    const [visible, setVisible] = useState(false)
+    useEffect(() => {
+        const check = () => setVisible(window.scrollY > 300)
+        window.addEventListener('scroll', check, { passive: true })
+        return () => window.removeEventListener('scroll', check)
+    }, [])
+    if (!visible) return null
+    return (
+        <button
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            title="Başa dön / Back to top"
+            style={{
+                position: 'fixed', bottom: '24px', right: '24px',
+                width: '48px', height: '48px', borderRadius: '50%',
+                background: '#7c3aed', color: '#fff', border: 'none',
+                cursor: 'pointer', fontSize: '20px', zIndex: 999,
+                boxShadow: '0 4px 16px rgba(124,58,237,0.5)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                transition: 'transform 0.2s, box-shadow 0.2s',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.1)'; e.currentTarget.style.boxShadow = '0 6px 20px rgba(124,58,237,0.7)' }}
+            onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 4px 16px rgba(124,58,237,0.5)' }}
+        >
+            ↑
+        </button>
+    )
+}
+
+// ─── QuizFillBlock ────────────────────────────────────────────────────────────
+
+function QuizFillBlock({ block, darkMode }) {
+    const { language } = useLanguage()
+    const [userAnswer, setUserAnswer] = useState('')
+    const [checked, setChecked] = useState(false)
+    const isCorrect = userAnswer.trim().toLowerCase() === (block.answer || '').toLowerCase()
+    return (
+        <div className={`mt-6 p-5 rounded-xl border-2 ${darkMode ? 'bg-gray-800 border-teal-700' : 'bg-teal-50 border-teal-200'}`}>
+            <div className="flex items-center gap-2 mb-3">
+                <span className="text-xl">✏️</span>
+                <span className={`font-bold text-sm ${darkMode ? 'text-teal-300' : 'text-teal-700'}`}>Boşluk Doldur</span>
+            </div>
+            <p className={`text-sm font-semibold mb-4 leading-relaxed ${darkMode ? 'text-white' : 'text-gray-800'}`}>
+                {tx(block.instruction, language)}
+            </p>
+            <div className="flex gap-3 items-center flex-wrap">
+                <input
+                    type="text"
+                    value={userAnswer}
+                    onChange={e => { setUserAnswer(e.target.value); setChecked(false) }}
+                    placeholder={tx(block.hint, language) || 'Cevabınızı yazın...'}
+                    className={`px-3 py-2 rounded-lg border text-sm font-mono min-w-[160px] outline-none ${darkMode ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-500' : 'bg-white border-gray-300 text-gray-800 placeholder-gray-400'}`}
+                    onKeyDown={e => e.key === 'Enter' && setChecked(true)}
+                />
+                <button
+                    onClick={() => setChecked(true)}
+                    className="px-4 py-2 bg-teal-600 text-white rounded-lg text-sm font-semibold hover:bg-teal-500 transition-colors"
+                >
+                    Kontrol Et →
+                </button>
+            </div>
+            {checked && (
+                <div className={`mt-3 p-3 rounded-lg text-sm font-medium ${isCorrect
+                    ? (darkMode ? 'bg-green-900/30 text-green-300 border border-green-700' : 'bg-green-50 text-green-700 border border-green-200')
+                    : (darkMode ? 'bg-red-900/30 text-red-300 border border-red-700' : 'bg-red-50 text-red-700 border border-red-200')
+                }`}>
+                    {isCorrect ? `✅ Doğru! Cevap: "${block.answer}"` : `❌ Yanlış. Doğru cevap: "${block.answer}"`}
+                </div>
+            )}
+        </div>
+    )
+}
+
+// ─── InterviewQuestionsBlock ──────────────────────────────────────────────────
+
+function InterviewQuestionsBlock({ block, darkMode }) {
+    const { language } = useLanguage()
+    const isTr = language === 'tr'
+    const levelConfig = {
+        basic:        { label: isTr ? '🟢 Temel'       : '🟢 Basic',        color: darkMode ? 'text-green-400'  : 'text-green-700' },
+        intermediate: { label: isTr ? '🟡 Orta Seviye' : '🟡 Intermediate', color: darkMode ? 'text-yellow-400' : 'text-yellow-700' },
+        advanced:     { label: isTr ? '🔴 İleri Seviye': '🔴 Advanced',     color: darkMode ? 'text-red-400'    : 'text-red-700' },
+    }
+    return (
+        <div className="mt-6">
+            <div className={`flex items-center gap-2 mb-4 pb-2 border-b ${darkMode ? 'border-gray-700' : 'border-gray-200'}`}>
+                <span className="text-xl">💼</span>
+                <h4 className={`font-bold text-base ${darkMode ? 'text-white' : 'text-gray-800'}`}>
+                    {block.topic} — {isTr ? 'Mülakat Soruları' : 'Interview Questions'}
+                </h4>
+            </div>
+            {['basic', 'intermediate', 'advanced'].map(level => {
+                const qs = block.questions?.filter(q => q.level === level)
+                if (!qs?.length) return null
+                const cfg = levelConfig[level]
+                return (
+                    <div key={level} className="mb-5">
+                        <div className={`text-xs font-bold uppercase tracking-wide mb-3 ${cfg.color}`}>{cfg.label}</div>
+                        {qs.map((q, j) => (
+                            <QAItem
+                                key={j}
+                                question={tx(q.q, language)}
+                                answer={tx(q.a, language)}
+                                code={q.code}
+                                darkMode={darkMode}
+                            />
+                        ))}
+                    </div>
+                )
+            })}
+        </div>
+    )
+}
+
+// ─── ErrorDictionaryBlock ─────────────────────────────────────────────────────
+
+function ErrorDictionaryBlock({ block, darkMode }) {
+    const { language } = useLanguage()
+    const isTr = language === 'tr'
+    return (
+        <div className="mt-6">
+            <div className={`flex items-center gap-2 mb-4 pb-2 border-b ${darkMode ? 'border-gray-700' : 'border-gray-200'}`}>
+                <span className="text-xl">🚨</span>
+                <h4 className={`font-bold text-base ${darkMode ? 'text-white' : 'text-gray-800'}`}>
+                    {block.framework} — {isTr ? 'Hata Sözlüğü' : 'Error Dictionary'}
+                </h4>
+            </div>
+            <div className="space-y-4">
+                {block.errors?.map((err, j) => (
+                    <div key={j} className={`rounded-xl border overflow-hidden ${darkMode ? 'border-red-900/50' : 'border-red-200'}`}>
+                        <div className={`px-4 py-2.5 font-mono text-sm font-bold ${darkMode ? 'bg-red-900/30 text-red-400' : 'bg-red-50 text-red-700'}`}>
+                            ❌ {err.error}
+                        </div>
+                        {err.fullMessage && (
+                            <div className={`px-4 py-2 text-xs font-mono border-b ${darkMode ? 'bg-gray-900 text-gray-500 border-gray-800' : 'bg-gray-50 text-gray-500 border-gray-100'}`}>
+                                {err.fullMessage}
+                            </div>
+                        )}
+                        <div className={`px-4 py-3 grid grid-cols-1 md:grid-cols-2 gap-4 ${darkMode ? 'bg-gray-800' : 'bg-white'}`}>
+                            <div>
+                                <div className={`text-xs font-bold mb-1 uppercase tracking-wide ${darkMode ? 'text-yellow-400' : 'text-yellow-700'}`}>⚡ {isTr ? 'Sebep' : 'Cause'}</div>
+                                <p className={`text-sm leading-relaxed ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>{tx(err.cause, language)}</p>
+                            </div>
+                            <div>
+                                <div className={`text-xs font-bold mb-1 uppercase tracking-wide ${darkMode ? 'text-green-400' : 'text-green-700'}`}>✅ {isTr ? 'Çözüm' : 'Solution'}</div>
+                                <p className={`text-sm leading-relaxed ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>{tx(err.solution, language)}</p>
+                            </div>
+                        </div>
+                        {(err.codeWrong || err.codeFixed) && (
+                            <div className={`px-4 pb-4 grid grid-cols-1 md:grid-cols-2 gap-3 ${darkMode ? 'bg-gray-800' : 'bg-white'}`}>
+                                {err.codeWrong && (
+                                    <div>
+                                        <div className="text-xs font-bold text-red-400 mb-1">❌ {isTr ? 'Yanlış:' : 'Wrong:'}</div>
+                                        <CodeBlock code={err.codeWrong} darkMode={darkMode} />
+                                    </div>
+                                )}
+                                {err.codeFixed && (
+                                    <div>
+                                        <div className="text-xs font-bold text-green-400 mb-1">✅ {isTr ? 'Doğru:' : 'Fixed:'}</div>
+                                        <CodeBlock code={err.codeFixed} darkMode={darkMode} />
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                    </div>
+                ))}
+            </div>
+        </div>
+    )
+}
+
+// ─── QAItem ───────────────────────────────────────────────────────────────────
+
+function QAItem({ question, answer, code, darkMode }) {
+    const [open, setOpen] = useState(false)
+    return (
+        <div className={`rounded-xl border overflow-hidden mb-3 ${darkMode ? 'border-gray-600' : 'border-gray-200'}`}>
+            <button
+                onClick={() => setOpen(!open)}
+                className={`w-full flex justify-between items-start text-left p-4 font-semibold text-sm transition-colors ${darkMode ? 'bg-gray-750 text-white hover:bg-gray-700' : 'bg-gray-50 text-gray-800 hover:bg-gray-100'}`}
+            >
+                <span className="flex-1 pr-4">{question}</span>
+                <span className={`text-2xl font-light transition-transform duration-300 flex-shrink-0 ${open ? 'rotate-45' : ''}`}>+</span>
+            </button>
+            {open && (
+                <div className={`p-4 border-t text-sm ${darkMode ? 'bg-gray-800 border-gray-700 text-gray-300' : 'bg-white border-gray-100 text-gray-600'}`}>
+                    <p className="leading-relaxed whitespace-pre-line">{answer}</p>
+                    {code && <CodeBlock code={code} darkMode={darkMode} />}
+                </div>
+            )}
+        </div>
+    )
+}
+
 // ─── Block Renderer ───────────────────────────────────────────────────────────
 
-function renderBlock(block, i, darkMode) {
+function renderBlock(block, i, darkMode, language = 'en') {
     const textCls = `text-sm leading-relaxed mt-3 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`
     const h3Cls = `text-xl font-bold mt-8 mb-3 pb-2 border-b ${darkMode ? 'text-white border-gray-700' : 'text-gray-800 border-gray-200'}`
     const h4Cls = `text-base font-semibold mt-5 mb-2 ${darkMode ? 'text-gray-200' : 'text-gray-700'}`
@@ -77,24 +955,24 @@ function renderBlock(block, i, darkMode) {
 
     switch (block.type) {
         case 'text':
-            return <p key={i} className={textCls}>{block.content}</p>
+            return <p key={i} className={textCls}>{tx(block.content, language)}</p>
         case 'heading':
             return (
                 <h3 key={i} className={h3Cls}>
-                    {block.text}
+                    {tx(block.text || block.content, language)}
                     {block.difficulty && <span className={`ml-3 text-xs font-normal px-2 py-0.5 rounded-full align-middle ${block.difficulty.startsWith('🟢') ? (darkMode ? 'bg-green-900 text-green-300' : 'bg-green-100 text-green-700') : block.difficulty.startsWith('🟡') ? (darkMode ? 'bg-yellow-900 text-yellow-300' : 'bg-yellow-100 text-yellow-700') : (darkMode ? 'bg-red-900 text-red-300' : 'bg-red-100 text-red-700')}`}>{block.difficulty}</span>}
                 </h3>
             )
         case 'subheading':
-            return <h4 key={i} className={h4Cls}>{block.text}</h4>
+            return <h4 key={i} className={h4Cls}>{tx(block.text || block.content, language)}</h4>
         case 'code':
             return (
                 <div key={i}>
                     {block.label && <div className={`mt-4 mb-1 text-xs font-semibold uppercase tracking-wide ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>{block.label}</div>}
-                    <CodeBlock code={block.code} darkMode={darkMode} />
+                    <CodeBlock code={block.code ?? block.content} language={block.language} darkMode={darkMode} />
                     {block.expected && (
                         <div className={`mt-1 p-3 rounded-b-lg font-mono text-xs border-l-4 border-emerald-500 ${darkMode ? 'bg-gray-900 text-emerald-400' : 'bg-emerald-50 text-emerald-800'}`}>
-                            <div className={`text-xs font-sans mb-1 ${darkMode ? 'opacity-50' : 'opacity-60'}`}>▶ Expected Output:</div>
+                            <div className={`text-xs font-sans mb-1 ${darkMode ? 'opacity-50' : 'opacity-60'}`}>▶ Beklenen Çıktı:</div>
                             <pre className="whitespace-pre-wrap">{block.expected}</pre>
                         </div>
                     )}
@@ -103,7 +981,7 @@ function renderBlock(block, i, darkMode) {
         case 'tip':
             return (
                 <div key={i} className={`mt-4 p-4 rounded-lg border-l-4 border-green-500 text-sm ${darkMode ? 'bg-green-900/20 text-green-300' : 'bg-green-50 text-green-800'}`}>
-                    💡 <strong>Tip: </strong>{block.content}
+                    💡 <strong>{language === 'tr' ? 'İpucu: ' : 'Tip: '}</strong>{tx(block.content, language)}
                 </div>
             )
         case 'info':
@@ -115,7 +993,7 @@ function renderBlock(block, i, darkMode) {
         case 'warning':
             return (
                 <div key={i} className={`mt-4 p-4 rounded-lg border-l-4 border-yellow-500 text-sm ${darkMode ? 'bg-yellow-900/20 text-yellow-300' : 'bg-yellow-50 text-yellow-800'}`}>
-                    ⚠️ <strong>Warning: </strong>{block.content}
+                    ⚠️ <strong>Dikkat: </strong>{block.content}
                 </div>
             )
         case 'divider':
@@ -186,35 +1064,154 @@ function renderBlock(block, i, darkMode) {
             )
         case 'exercise':
             return <ExerciseBlock key={i} block={block} darkMode={darkMode} />
+        case 'comparison':
+            return <ComparisonBlock key={i} block={block} darkMode={darkMode} language={language} />
+        case 'quiz':
+            return <QuizBlock key={i} block={block} darkMode={darkMode} language={language} />
+        case 'visual':
+            return <VisualBlock key={i} block={block} darkMode={darkMode} />
+        case 'callout':
+            return <CalloutBlock key={i} block={block} darkMode={darkMode} />
+        case 'java-compare':
+            return <JavaCompareBlock key={i} block={block} darkMode={darkMode} />
+
+        case 'editor':
+            return block.lang === 'typescript'
+                ? <TSEditor key={i} defaultCode={block.defaultCode || block.code || ''} height={block.height} />
+                : <PyodideEditor key={i} defaultCode={block.defaultCode || block.code || ''} height={block.height} />
+
+        // ── New block types ────────────────────────────────────────────────────
+
+        case 'simple-box':
+            return (
+                <div key={i} className="mt-4 p-4 rounded-xl border-2 flex items-start gap-3" style={{ background: '#fef3c7', borderColor: '#f59e0b' }}>
+                    <span className="text-2xl flex-shrink-0">{block.emoji || '💡'}</span>
+                    <p className="text-sm leading-relaxed" style={{ color: '#78350f' }}>
+                        {tx(block.content, language)}
+                    </p>
+                </div>
+            )
+
+        case 'glossary-term':
+            return (
+                <div key={i} className={`mt-4 rounded-xl border overflow-hidden ${darkMode ? 'border-purple-800 bg-purple-900/10' : 'border-purple-200 bg-purple-50'}`}>
+                    <div className={`px-4 py-2 font-mono font-bold text-sm ${darkMode ? 'bg-purple-900/30 text-purple-300' : 'bg-purple-100 text-purple-800'}`}>
+                        📖 {block.term}
+                    </div>
+                    <div className="p-4 space-y-2.5">
+                        {block.items?.map((item, j) => (
+                            <div key={j} className={`flex items-start gap-3 text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                                <span className="text-lg flex-shrink-0 mt-0.5">{item.icon}</span>
+                                <div>
+                                    <span className={`font-semibold ${darkMode ? 'text-white' : 'text-gray-800'}`}>
+                                        {tx(item.label, language)}:
+                                    </span>{' '}
+                                    <span>{tx(item.content, language)}</span>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )
+
+        case 'glossary-section':
+            return (
+                <div key={i} className={`mt-8 p-5 rounded-xl border ${darkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-gray-50'}`}>
+                    <div className={`flex items-center gap-2 mb-4 pb-2 border-b ${darkMode ? 'border-gray-700' : 'border-gray-200'}`}>
+                        <span className="text-xl">📚</span>
+                        <h4 className={`font-bold text-base ${darkMode ? 'text-white' : 'text-gray-800'}`}>
+                            {language === 'tr' ? 'Terimler Sözlüğü' : 'Glossary'}
+                        </h4>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        {block.terms?.map((item, j) => (
+                            <div key={j} className={`p-3 rounded-lg border ${darkMode ? 'bg-gray-750 border-gray-700' : 'bg-white border-gray-200'}`}>
+                                <div className={`font-mono font-bold text-sm mb-1 ${darkMode ? 'text-purple-400' : 'text-purple-700'}`}>{item.term}</div>
+                                <p className={`text-xs leading-relaxed ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                                    {tx(item.definition, language)}
+                                </p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )
+
+        case 'interview-questions':
+            return <InterviewQuestionsBlock key={i} block={block} darkMode={darkMode} />
+
+        case 'error-dictionary':
+            return <ErrorDictionaryBlock key={i} block={block} darkMode={darkMode} />
+
+        case 'quiz-fill':
+            return <QuizFillBlock key={i} block={block} darkMode={darkMode} />
+
+        case 'installation':
+            return (
+                <div key={i} className="mt-4">
+                    {block.title && (
+                        <h4 className={`text-sm font-semibold mb-3 uppercase tracking-wide ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                            {tx(block.title, language)}
+                        </h4>
+                    )}
+                    <div className="space-y-2">
+                        {block.steps?.map((step, j) => (
+                            <div key={j} className={`rounded-xl border overflow-hidden ${darkMode ? 'border-gray-700' : 'border-gray-200'}`}>
+                                <div className="bg-slate-900 px-4 py-2.5 flex items-center gap-3">
+                                    <span className={`w-6 h-6 flex-shrink-0 rounded-full flex items-center justify-center text-xs font-bold ${darkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-700 text-gray-200'}`}>{j + 1}</span>
+                                    <code className="font-mono text-sm text-green-400 flex-1">{step.cmd}</code>
+                                    {step.cmd_mac && <code className="font-mono text-xs text-gray-500 hidden md:block">{step.cmd_mac}</code>}
+                                </div>
+                                <div className={`px-4 py-2 text-sm ${darkMode ? 'bg-gray-800 text-gray-400' : 'bg-gray-50 text-gray-600'}`}>
+                                    {tx(step.explanation, language)}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )
+
+        case 'file-tree':
+            return (
+                <div key={i} className={`mt-4 rounded-xl border overflow-hidden ${darkMode ? 'border-gray-700' : 'border-gray-200'}`}>
+                    {block.title && (
+                        <div className={`px-4 py-2.5 text-sm font-semibold ${darkMode ? 'bg-gray-700 text-gray-200' : 'bg-gray-100 text-gray-700'}`}>
+                            📁 {tx(block.title, language)}
+                        </div>
+                    )}
+                    <div className="bg-slate-900 p-4 overflow-x-auto">
+                        <pre className="font-mono text-xs text-slate-300 leading-relaxed whitespace-pre">{block.tree}</pre>
+                    </div>
+                    {block.note && (
+                        <div className={`px-4 py-2 text-xs italic border-t ${darkMode ? 'bg-gray-800 text-gray-500 border-gray-700' : 'bg-gray-50 text-gray-500 border-gray-200'}`}>
+                            💡 {tx(block.note, language)}
+                        </div>
+                    )}
+                </div>
+            )
+
+        case 'diagram-svg':
+            return (
+                <div key={i} className="mt-5">
+                    {block.title && (
+                        <div className={`text-sm font-semibold mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                            {tx(block.title, language)}
+                        </div>
+                    )}
+                    <div
+                        className="rounded-xl overflow-hidden w-full"
+                        dangerouslySetInnerHTML={{ __html: block.svg }}
+                    />
+                </div>
+            )
+
         default:
             return null
     }
 }
 
-function QAItem({ question, answer, code, darkMode }) {
-    const [open, setOpen] = useState(false)
-    return (
-        <div className={`rounded-xl border overflow-hidden mb-3 ${darkMode ? 'border-gray-600' : 'border-gray-200'}`}>
-            <button
-                onClick={() => setOpen(!open)}
-                className={`w-full flex justify-between items-start text-left p-4 font-semibold text-sm transition-colors ${darkMode ? 'bg-gray-750 text-white hover:bg-gray-700' : 'bg-gray-50 text-gray-800 hover:bg-gray-100'}`}
-            >
-                <span className="flex-1 pr-4">{question}</span>
-                <span className={`text-2xl font-light transition-transform duration-300 flex-shrink-0 ${open ? 'rotate-45' : ''}`}>+</span>
-            </button>
-            {open && (
-                <div className={`p-4 border-t text-sm ${darkMode ? 'bg-gray-800 border-gray-700 text-gray-300' : 'bg-white border-gray-100 text-gray-600'}`}>
-                    <p className="leading-relaxed whitespace-pre-line">{answer}</p>
-                    {code && <CodeBlock code={code} darkMode={darkMode} />}
-                </div>
-            )}
-        </div>
-    )
-}
-
 // ─── TopicPage ────────────────────────────────────────────────────────────────
 
-function TopicPage({ data, gradient, bgLight }) {
+function TopicPage({ data, gradient, bgLight, extraBanner }) {
     const { language } = useLanguage()
     const [darkMode, setDarkMode] = useState(() => {
         const saved = localStorage.getItem('darkMode')
@@ -236,6 +1233,8 @@ function TopicPage({ data, gradient, bgLight }) {
 
     return (
         <div className={`min-h-screen transition-colors duration-300 ${darkMode ? 'dark-mode bg-gray-900' : bgLight}`}>
+            <ScrollProgressBar />
+            <HomeButton />
             <TopicHeader darkMode={darkMode} setDarkMode={setDarkMode} />
 
             <main className="container mx-auto px-4 md:px-6 py-8 max-w-5xl">
@@ -245,6 +1244,9 @@ function TopicPage({ data, gradient, bgLight }) {
                     <p className="text-xl opacity-90">{hero.subtitle}</p>
                     <p className="mt-3 opacity-80 max-w-3xl text-sm leading-relaxed">{hero.intro}</p>
                 </div>
+
+                {/* Extra Banner (e.g. resource link) */}
+                {extraBanner}
 
                 {/* Tabs */}
                 <div className={`sticky top-0 z-30 rounded-xl mb-6 p-1.5 shadow-md ${darkMode ? 'bg-gray-800' : 'bg-white border border-gray-200'}`}>
@@ -271,7 +1273,7 @@ function TopicPage({ data, gradient, bgLight }) {
                     <h2 className={`text-2xl font-bold mb-6 ${darkMode ? 'text-white' : 'text-gray-800'}`}>
                         {sections[activeTab]?.title}
                     </h2>
-                    {sections[activeTab]?.blocks?.map((block, i) => renderBlock(block, i, darkMode))}
+                    {sections[activeTab]?.blocks?.map((block, i) => renderBlock(block, i, darkMode, language))}
                 </div>
 
                 {/* Pagination */}

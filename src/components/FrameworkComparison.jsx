@@ -346,7 +346,7 @@ function FrameworkComparison({ darkMode }) {
                 <div className="grid grid-cols-1 gap-6">
                     <div className="p-6 bg-green-50 border-l-4 border-green-500 rounded-lg">
                         <h4 className="font-bold text-green-900 mb-3">🌲 Cypress</h4>
-                        <pre className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto text-sm">
+                        <pre className="bg-slate-800 text-slate-100 p-4 rounded-lg overflow-x-auto text-sm">
                             {`describe('Login Test', () => {
   it('should login successfully', () => {
     cy.visit('/login');

@@ -4,6 +4,7 @@ import JMeterPage from './components/JMeterPage'
 import SQLPage from './components/SQLPage'
 import TypeScriptPage from './components/TypeScriptPage'
 import PythonPage from './components/PythonPage'
+import TestFrameworksPage from './components/TestFrameworksPage'
 
 function App() {
     return (
@@ -13,6 +14,7 @@ function App() {
             <Route path="/sql" element={<SQLPage />} />
             <Route path="/typescript" element={<TypeScriptPage />} />
             <Route path="/python" element={<PythonPage />} />
+            <Route path="/test-frameworks" element={<TestFrameworksPage />} />
         </Routes>
     )
 }

@@ -51,3 +51,114 @@ textarea {
 .subsection-title {
   @apply text-lg font-semibold mb-3 mt-4;
 }
+
+/* ─────────────────────────────────────────────────────────────
+   Smooth Hover Scale — Yumuşak Büyüme Efekti
+   Tüm metin linkleri, butonlar ve kart elementleri için.
+   transition: 0.3s ease-in-out / scale(1.04)
+   ───────────────────────────────────────────────────────────── */
+
+/* ── Metin linkleri (a etiketleri, buton olmayan) ────────── */
+a:not(.no-hover-scale) {
+  display: inline-block;
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out !important;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+a:not(.no-hover-scale):hover {
+  transform: scale(1.04);
+}
+
+/* ── Butonlar ─────────────────────────────────────────────── */
+button:not(.no-hover-scale) {
+  transition: transform 0.3s ease-in-out,
+              box-shadow 0.3s ease-in-out,
+              background-color 0.2s ease,
+              opacity 0.2s ease !important;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+button:not(.no-hover-scale):hover {
+  transform: scale(1.04);
+}
+
+button:not(.no-hover-scale):active {
+  transform: scale(0.97);
+}
+
+/* ── Kart elementleri (section/div bazlı kartlar) ────────── */
+.section-card:not(.no-hover-scale),
+[class*="rounded-xl"]:not(button):not(a):not(pre):not(code):not(textarea):not(table):not(tr):not(td):not(th).hover-card {
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out !important;
+  will-change: transform;
+}
+
+.section-card:not(.no-hover-scale):hover {
+  transform: scale(1.02);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.15);
+}
+
+/* ── Tailwind hover:scale-105 ile çakışmayı önle ─────────── */
+/* Tailwind'in kendi hover:scale-* sınıfları önceliklidir,
+   bu kurallar sadece o sınıf yoksa devreye girer. */
+[class*="hover:scale-"]:hover {
+  /* Tailwind'e bırak */
+  transform: none;
+}
+
+/* Tailwind hover:scale- kullanan elementlerde kendi animasyonumuz çalışmasın */
+[class*="hover:scale-"] {
+  transition: transform 0.3s ease-in-out,
+              box-shadow 0.3s ease-in-out !important;
+}
+
+/* ── Kaydırma sırasında sabit kalması gereken elementler ─── */
+/* Sticky header ve modal gibi şeylerin büyümemesi için */
+header a,
+header button,
+.sticky a:not([class]),
+nav a,
+nav button {
+  /* Genel link kuralını ezme — Tailwind sınıfları olan nav butonları
+     zaten hover:scale-105 alıyor; a etiketleri için küçük bir efekt yeterli */
+}
+
+/* ── inline-block gerektiren özel durumlar ───────────────── */
+/* Flex/grid container içindeki linklerin düzeni bozulmaması için */
+.flex a,
+.grid a,
+li a,
+p a {
+  display: inline-block;
+}
+
+/* ── Bazı elementlerde büyüme istemiyoruz ────────────────── */
+/* Örn: kod blokları, tablolar, inputlar */
+pre,
+code,
+textarea,
+input,
+select,
+table,
+tbody,
+thead,
+tr,
+td,
+th,
+img,
+.carousel,
+[data-dismiss],
+.modal,
+.modal * {
+  transform: none !important;
+  transition: none !important;
+  will-change: auto !important;
+}
+
+/* img özel: sadece içinde bulunduğu kart ölçeklensin */
+img {
+  transform: none !important;
+  transition: none !important;
+}

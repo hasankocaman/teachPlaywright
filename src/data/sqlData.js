@@ -47,6 +47,48 @@ const sections = [
         ]
       },
       { type: 'tip', content: 'Start learning with SQLiteOnline.com — runs in your browser, zero installation. For a real environment, install DBeaver (free GUI) and connect to SQLite or MySQL.' },
+      { type: 'heading', text: 'SQL in the QA Workflow' },
+      {
+        type: 'visual', variant: 'boxes',
+        title: 'How SQL Connects to QA Testing',
+        items: [
+          { icon: '🧪', label: 'Test Script', desc: 'Playwright / pytest' },
+          { arrow: true },
+          { icon: '🖥️', label: 'App UI/API', desc: 'Makes DB changes' },
+          { arrow: true },
+          { icon: '🗄️', label: 'Database', desc: 'MySQL / PostgreSQL' },
+          { arrow: true },
+          { icon: '🔍', label: 'SQL Query', desc: 'You verify here!', highlight: true },
+        ],
+        note: 'After every test action, a SQL query can verify the database state was updated correctly — not just what the UI shows.',
+      },
+      {
+        type: 'visual', variant: 'table',
+        title: 'Example: A Typical Database Table',
+        tables: [{
+          name: 'users',
+          columns: [
+            { name: 'id', type: 'INT', pk: true },
+            { name: 'name', type: 'VARCHAR' },
+            { name: 'email', type: 'VARCHAR' },
+            { name: 'role', type: 'VARCHAR' },
+            { name: 'created_at', type: 'DATETIME' },
+          ],
+          rows: [
+            { cells: [1, 'Alice', 'alice@test.com', 'admin', '2024-01-10'] },
+            { cells: [2, 'Bob', 'bob@test.com', 'user', '2024-01-12'] },
+            { cells: [3, 'Carol', 'carol@test.com', 'user', '2024-01-15'], highlighted: true },
+          ]
+        }],
+        note: 'Each row is a record. Each column is a field. id is the Primary Key — it uniquely identifies every row.',
+      },
+      {
+        type: 'quiz',
+        question: 'What does SQL stand for?',
+        options: ['Standard Query Logic', 'Structured Query Language', 'Simple Question Language', 'Sequential Query Library'],
+        correct: 1,
+        explanation: 'SQL = Structured Query Language. It\'s been the standard language for relational databases since the 1970s and is used by MySQL, PostgreSQL, SQLite, Oracle, and SQL Server.',
+      },
     ],
   },
 
@@ -150,6 +192,96 @@ cursor.execute("SELECT COUNT(*) FROM orders WHERE status = 'pending'")
 count = cursor.fetchone()[0]
 print(f"Pending orders: {count}")
 conn.close()`,
+      },
+      { type: 'heading', text: '☕ If You Know Java: Database Connection Bridge' },
+      {
+        type: 'java-compare',
+        topic: 'DB Connection Setup (DriverManager vs sqlite3)',
+        why: 'Java uses JDBC — you add a driver to pom.xml/build.gradle, then call DriverManager.getConnection() with a JDBC URL. Python has sqlite3 built-in (zero install!) and psycopg2 for PostgreSQL. Pattern is identical: open connection → use → close.',
+        why_en: 'Java uses JDBC — you add a driver to pom.xml/build.gradle, then call DriverManager.getConnection() with a JDBC URL. Python has sqlite3 built-in (zero install!) and psycopg2 for PostgreSQL. Pattern is identical: open connection → use → close.',
+        java: `// Java: JDBC connection via DriverManager
+import java.sql.*;
+
+// Open connection (MySQL example):
+Connection conn = DriverManager.getConnection(
+    "jdbc:mysql://localhost:3306/testdb",
+    "root", "password"
+);
+Statement stmt = conn.createStatement();
+ResultSet rs   = stmt.executeQuery("SELECT * FROM users");
+
+// ALWAYS close — use try-with-resources:
+try (Connection c = DriverManager.getConnection(url, user, pass)) {
+    Statement s = c.createStatement();
+    ResultSet r = s.executeQuery("SELECT COUNT(*) FROM users");
+}   // auto-closed here`,
+        python: `# Python: sqlite3 — BUILT-IN, zero install!
+import sqlite3
+
+conn = sqlite3.connect("test.db")  # creates file if not exists
+cursor = conn.cursor()
+cursor.execute("SELECT * FROM users")
+rows = cursor.fetchall()           # list of tuples
+conn.close()
+
+# Context manager = try-with-resources:
+with sqlite3.connect("test.db") as conn:
+    cursor = conn.cursor()
+    cursor.execute("SELECT COUNT(*) FROM users")
+    count = cursor.fetchone()[0]
+# conn auto-closed after with block
+
+# PostgreSQL (pip install psycopg2-binary):
+import psycopg2
+conn = psycopg2.connect(
+    host="localhost", dbname="testdb",
+    user="postgres", password="secret"
+)`,
+        note: 'sqlite3 is in the Python standard library — no Maven, no pip, no pom.xml! Just import and use. pip install psycopg2-binary is equivalent to adding a single Maven dependency.',
+        note_en: 'sqlite3 is in the Python standard library — no Maven, no pip, no pom.xml! Just import and use. pip install psycopg2-binary is equivalent to adding a single Maven dependency.',
+      },
+      {
+        type: 'java-compare',
+        topic: 'Dependency Setup (Maven pom.xml vs pip)',
+        why: 'In Java you declare JDBC driver dependencies in pom.xml and Maven downloads them. In Python, pip install downloads the driver. For SQLite — nothing at all, it ships with Python.',
+        why_en: 'In Java you declare JDBC driver dependencies in pom.xml and Maven downloads them. In Python, pip install downloads the driver. For SQLite — nothing at all, it ships with Python.',
+        java: `<!-- Java: pom.xml — add JDBC driver dependency -->
+<dependencies>
+
+  <!-- MySQL -->
+  <dependency>
+    <groupId>mysql</groupId>
+    <artifactId>mysql-connector-java</artifactId>
+    <version>8.0.33</version>
+  </dependency>
+
+  <!-- PostgreSQL -->
+  <dependency>
+    <groupId>org.postgresql</groupId>
+    <artifactId>postgresql</artifactId>
+    <version>42.6.0</version>
+  </dependency>
+
+</dependencies>
+<!-- then: mvn install -->`,
+        python: `# Python: pip — no config file needed at all!
+
+# SQLite: NOTHING — built in to Python!
+import sqlite3           # works with zero setup
+
+# MySQL:
+# pip install mysql-connector-python
+import mysql.connector
+
+# PostgreSQL:
+# pip install psycopg2-binary
+import psycopg2
+
+# requirements.txt (optional, like pom.xml):
+# psycopg2-binary==2.9.9
+# mysql-connector-python==8.2.0`,
+        note: 'Python wins on speed-to-first-query for SQLite. For real project deps, use requirements.txt (same idea as pom.xml). pip install -r requirements.txt installs everything.',
+        note_en: 'Python wins on speed-to-first-query for SQLite. For real project deps, use requirements.txt (same idea as pom.xml). pip install -r requirements.txt installs everything.',
       },
     ],
   },
@@ -294,6 +426,215 @@ SELECT * FROM test_results ORDER BY duration_ms DESC;
 SELECT * FROM test_results WHERE status = 'FAIL';
 SELECT COUNT(*) AS total, status FROM test_results GROUP BY status;`,
         expected: `+----+----------------+--------+\n| id | test_name      | status |\n+----+----------------+--------+\n|  2 | Checkout Flow  | FAIL   |\n|  4 | Profile Update | FAIL   |\n+----+----------------+--------+`
+      },
+      { type: 'heading', text: 'SQL Query Execution Order — The Secret Most Beginners Miss' },
+      { type: 'text', content: 'SQL does NOT execute top-to-bottom like regular code. It follows a specific internal order. This is WHY you can\'t use SELECT aliases in WHERE, and WHY aggregate functions go in HAVING not WHERE.' },
+      {
+        type: 'visual', variant: 'flow',
+        title: 'SQL Clause Evaluation Order (Step by Step)',
+        note: 'You write SELECT at the top, but it executes almost LAST. This is why aliases defined in SELECT aren\'t available in WHERE!',
+        steps: [
+          { num: '1', label: 'FROM', desc: 'Load tables' },
+          { num: '2', label: 'JOIN', desc: 'Combine' },
+          { num: '3', label: 'WHERE', desc: 'Filter rows', highlight: true },
+          { num: '4', label: 'GROUP BY', desc: 'Group' },
+          { num: '5', label: 'HAVING', desc: 'Filter groups', highlight: true },
+          { num: '6', label: 'SELECT', desc: 'Pick columns' },
+          { num: '7', label: 'ORDER BY', desc: 'Sort' },
+          { num: '8', label: 'LIMIT', desc: 'Slice' },
+        ],
+      },
+      {
+        type: 'visual', variant: 'table',
+        title: 'Our Sample Data — test_results Table',
+        tables: [{
+          name: 'test_results',
+          columns: [
+            { name: 'id', type: 'INT', pk: true },
+            { name: 'test_name', type: 'VARCHAR' },
+            { name: 'status', type: 'VARCHAR' },
+            { name: 'duration_ms', type: 'INT' },
+            { name: 'environment', type: 'VARCHAR' },
+          ],
+          rows: [
+            { cells: [1, 'Login Test', 'PASS', 1200, 'staging'] },
+            { cells: [2, 'Checkout Flow', 'FAIL', 5400, 'staging'], highlighted: true },
+            { cells: [3, 'Signup Test', 'PASS', 890, 'prod'] },
+            { cells: [4, 'Profile Update', 'FAIL', 3100, 'prod'], highlighted: true },
+            { cells: [5, 'Search Feature', 'PASS', 2200, 'staging'] },
+            { cells: [6, 'Logout Test', 'SKIP', 0, 'staging'] },
+          ]
+        }],
+        note: 'Highlighted rows = FAIL status. Try: SELECT * FROM test_results WHERE status = \'FAIL\' → returns rows 2 and 4.',
+      },
+      { type: 'heading', text: 'NULL — The Most Common SQL Mistake' },
+      { type: 'text', content: 'NULL means "no value / unknown" — it is NOT zero, it is NOT an empty string. Any comparison with NULL returns NULL (not true/false). This trips up every SQL beginner.' },
+      {
+        type: 'comparison',
+        left: {
+          label: '❌ Wrong — = NULL never works',
+          code: `SELECT * FROM users WHERE email = NULL;
+-- Returns 0 rows EVERY TIME!
+-- Even if NULL values exist.
+-- Why? NULL = NULL → NULL (not true)`,
+          note: 'Never use = or != to check for NULL',
+        },
+        right: {
+          label: '✅ Correct — IS NULL / IS NOT NULL',
+          code: `SELECT * FROM users WHERE email IS NULL;
+SELECT * FROM users WHERE email IS NOT NULL;
+-- COALESCE: replace NULL with a default:
+SELECT name, COALESCE(email, 'no email') FROM users;`,
+          note: 'IS NULL and IS NOT NULL always work correctly',
+        },
+      },
+      {
+        type: 'quiz',
+        question: 'A query returns 0 rows when you filter: WHERE discount = NULL. Why?',
+        options: [
+          'There are no NULL discounts in the table',
+          'NULL comparisons with = always return NULL (not TRUE), so no rows match',
+          'You need quotes: WHERE discount = "NULL"',
+          'NULL is automatically converted to 0',
+        ],
+        correct: 1,
+        explanation: 'Any comparison with NULL using = or != returns NULL, which is treated as FALSE. Use IS NULL or IS NOT NULL instead. This is one of the most common SQL bugs.',
+      },
+      { type: 'heading', text: '☕ If You Know Java: Database Access Bridge' },
+      {
+        type: 'java-compare',
+        topic: 'DB Connection (DriverManager vs sqlite3)',
+        why: 'Java uses JDBC DriverManager with a URL + credentials. Python uses lightweight driver modules (sqlite3 is built-in, psycopg2 for PostgreSQL). The connection pattern is the same — the API differs.',
+        java: `// Java: JDBC connection
+import java.sql.*;
+Connection conn = DriverManager.getConnection(
+    "jdbc:mysql://localhost:3306/mydb",
+    "username", "password"
+);
+// Always close — use try-with-resources:
+try (Connection c = DriverManager.getConnection(url, user, pass)) {
+    // use c here — auto-closed
+}`,
+        python: `# Python: sqlite3 (built-in, zero install!)
+import sqlite3
+conn = sqlite3.connect("mydb.sqlite")
+
+# PostgreSQL:
+import psycopg2
+conn = psycopg2.connect(
+    host="localhost", dbname="mydb",
+    user="username", password="password"
+)
+
+# Context manager — auto-closes like try-with-resources:
+with sqlite3.connect("mydb.sqlite") as conn:
+    cursor = conn.cursor()`,
+        note: 'Python sqlite3 is built into Python — no pip install. For MySQL: mysql-connector-python; PostgreSQL: psycopg2.',
+      },
+      {
+        type: 'java-compare',
+        topic: 'Executing SELECT → Iterating Results',
+        why: 'Java uses ResultSet with rs.next() loop and column-by-name getters. Python cursor.fetchall() returns a simple list of tuples — far less boilerplate.',
+        java: `// Java: Statement + ResultSet
+Statement stmt = conn.createStatement();
+ResultSet rs = stmt.executeQuery(
+    "SELECT test_name, status FROM test_results WHERE status='FAIL'"
+);
+while (rs.next()) {
+    String name = rs.getString("test_name");
+    String status = rs.getString("status");
+    System.out.println(name + " → " + status);
+}
+rs.close(); stmt.close();`,
+        python: `# Python: cursor + fetchall
+cursor = conn.cursor()
+cursor.execute(
+    "SELECT test_name, status FROM test_results WHERE status='FAIL'"
+)
+rows = cursor.fetchall()  # list of tuples
+for name, status in rows:
+    print(f"{name} → {status}")
+
+# Single row — like rs.next() once:
+cursor.execute("SELECT COUNT(*) FROM test_results")
+count = cursor.fetchone()[0]`,
+        note: 'cursor.fetchall() returns all rows as a list of tuples. cursor.fetchone() returns one row or None — equivalent to rs.next() called once.',
+      },
+      { type: 'heading', text: '☕ If You Know Java: DML Operations Bridge' },
+      {
+        type: 'java-compare',
+        topic: 'INSERT → JPA persist() vs SQL INSERT INTO',
+        why: 'In Java enterprise projects you likely used JPA/Hibernate (EntityManager.persist) to insert objects. In SQL you write INSERT INTO directly. Both end up doing the same SQL — JPA just generates it for you.',
+        why_en: 'In Java enterprise projects you likely used JPA/Hibernate (EntityManager.persist) to insert objects. In SQL you write INSERT INTO directly. Both end up doing the same SQL — JPA just generates it for you.',
+        java: `// Java: JPA EntityManager
+@Entity
+@Table(name = "test_results")
+public class TestResult {
+    @Id @GeneratedValue(strategy = IDENTITY)
+    private Long id;
+    private String testName;
+    private String status;
+}
+
+// Insert: no SQL needed — JPA generates it
+EntityManager em = emf.createEntityManager();
+em.getTransaction().begin();
+TestResult r = new TestResult();
+r.setTestName("Login Test");
+r.setStatus("PASS");
+em.persist(r);          // ← generates: INSERT INTO test_results ...
+em.getTransaction().commit();`,
+        sql: `-- Direct SQL: you write it yourself
+INSERT INTO test_results (test_name, status, duration_ms)
+VALUES ('Login Test', 'PASS', 1234);
+
+-- Multiple rows at once (JPA needs a loop or batch):
+INSERT INTO test_results (test_name, status, duration_ms) VALUES
+    ('Signup Test',   'PASS', 890),
+    ('Checkout Flow', 'FAIL', 5400);
+
+-- Copy rows (JPA: query + persist loop):
+INSERT INTO test_archive
+SELECT * FROM test_results WHERE run_date < '2024-01-01';`,
+        note: 'SQL INSERT is explicit and powerful — batch inserts and INSERT-SELECT have no JPA equivalent without custom queries. Direct SQL is preferred in test automation for speed and simplicity.',
+        note_en: 'SQL INSERT is explicit and powerful — batch inserts and INSERT-SELECT have no JPA equivalent without custom queries. Direct SQL is preferred in test automation for speed and simplicity.',
+      },
+      {
+        type: 'java-compare',
+        topic: 'UPDATE/DELETE → JPA merge()/remove() vs SQL',
+        why: 'JPA abstracts UPDATE and DELETE through entity state changes. SQL gives you direct control — update/delete exactly the rows you specify with WHERE.',
+        why_en: 'JPA abstracts UPDATE and DELETE through entity state changes. SQL gives you direct control — update/delete exactly the rows you specify with WHERE.',
+        java: `// Java: JPA update — find then mutate
+EntityManager em = ...;
+em.getTransaction().begin();
+
+TestResult r = em.find(TestResult.class, 3L);  // SELECT first
+r.setStatus("PASS");         // mark as mutated
+em.merge(r);                 // generates: UPDATE test_results SET status='PASS' WHERE id=3
+
+// JPA delete:
+TestResult toDelete = em.find(TestResult.class, 3L);
+em.remove(toDelete);         // generates: DELETE FROM test_results WHERE id=3
+
+em.getTransaction().commit();`,
+        sql: `-- SQL UPDATE: direct, no find() needed
+UPDATE test_results
+SET    status = 'PASS'
+WHERE  id = 3;
+
+-- Update multiple rows at once (JPA needs a loop):
+UPDATE test_results
+SET    is_flaky = TRUE
+WHERE  test_name LIKE '%Search%';
+
+-- SQL DELETE: also direct
+DELETE FROM test_results WHERE status = 'SKIP';
+
+-- Safe pattern: SELECT first to verify, then DELETE
+SELECT * FROM test_results WHERE environment = 'cleanup';
+DELETE FROM test_results WHERE environment = 'cleanup';`,
+        note: 'SQL UPDATE and DELETE with WHERE can affect many rows in one statement. JPA needs individual entity loads for each row. In test automation, direct SQL cleanup is faster and more common.',
+        note_en: 'SQL UPDATE and DELETE with WHERE can affect many rows in one statement. JPA needs individual entity loads for each row. In test automation, direct SQL cleanup is faster and more common.',
       },
     ],
   },
@@ -461,6 +802,189 @@ WHERE b.status = 'OPEN'
 GROUP BY te.id, te.name
 ORDER BY open_bugs DESC;`,
         expected: `+-------+-----------+\n| name  | open_bugs |\n+-------+-----------+\n| Alice |         2 |\n| Bob   |         2 |\n| Carol |         1 |\n+-------+-----------+`
+      },
+      { type: 'heading', text: 'Visual JOIN Guide — See Exactly Which Rows Are Returned' },
+      { type: 'text', content: 'The 4 diagrams below use the same data. Click "Eşleşmeleri Göster" to highlight matched rows, then "Sonucu Göster" to see the query result. This is the fastest way to truly understand JOINs.' },
+      {
+        type: 'visual', variant: 'join',
+        joinType: 'INNER JOIN',
+        leftTable: {
+          name: 'testers',
+          rows: [
+            { label: '1 | Alice', matched: true },
+            { label: '2 | Bob', matched: true },
+            { label: '3 | Carol', matched: false },
+          ]
+        },
+        rightTable: {
+          name: 'bugs',
+          rows: [
+            { label: '1 | Login fails | t=1', matched: true },
+            { label: '2 | Broken img | t=1', matched: true },
+            { label: '3 | API timeout | t=2', matched: true },
+          ]
+        },
+        resultHeaders: ['tester', 'bug_title', 'status'],
+        resultRows: [
+          ['Alice', 'Login fails on Safari', 'OPEN'],
+          ['Alice', 'Broken image on profile', 'CLOSED'],
+          ['Bob', 'API timeout on checkout', 'OPEN'],
+        ],
+        explanation: 'INNER JOIN returns ONLY rows that match in BOTH tables. Carol has no bugs — she is completely excluded from the result.',
+      },
+      {
+        type: 'visual', variant: 'join',
+        joinType: 'LEFT JOIN',
+        leftTable: {
+          name: 'testers',
+          rows: [
+            { label: '1 | Alice', matched: true },
+            { label: '2 | Bob', matched: true },
+            { label: '3 | Carol', matched: false, nullFill: true },
+          ]
+        },
+        rightTable: {
+          name: 'bugs',
+          rows: [
+            { label: '1 | Login fails | t=1', matched: true },
+            { label: '2 | Broken img | t=1', matched: true },
+            { label: '3 | API timeout | t=2', matched: true },
+          ]
+        },
+        resultHeaders: ['tester', 'bug_count'],
+        resultRows: [
+          ['Alice', 2],
+          ['Bob', 1],
+          ['Carol', 0],
+        ],
+        explanation: 'LEFT JOIN returns ALL rows from the LEFT table (testers), plus matches from bugs. Carol appears with bug_count=0 — LEFT JOIN is perfect for "count per user including zeros".',
+      },
+      {
+        type: 'visual', variant: 'join',
+        joinType: 'RIGHT JOIN',
+        leftTable: {
+          name: 'testers',
+          rows: [
+            { label: '1 | Alice', matched: true },
+            { label: '2 | Bob', matched: true },
+            { label: '3 | Carol', matched: false },
+          ]
+        },
+        rightTable: {
+          name: 'bugs',
+          rows: [
+            { label: '1 | Login fails | t=1', matched: true },
+            { label: '2 | Broken img | t=1', matched: true },
+            { label: '3 | API timeout | t=2', matched: true },
+            { label: '4 | Crash | t=99 (no tester!)', matched: false, nullFill: true },
+          ]
+        },
+        resultHeaders: ['tester', 'bug_title'],
+        resultRows: [
+          ['Alice', 'Login fails on Safari'],
+          ['Alice', 'Broken image on profile'],
+          ['Bob', 'API timeout on checkout'],
+          [null, 'Crash on empty search'],
+        ],
+        explanation: 'RIGHT JOIN returns ALL rows from the RIGHT table (bugs). Bug #4 has no tester — it still appears with tester = NULL. Rarely used — most developers rewrite as LEFT JOIN with tables swapped.',
+      },
+      {
+        type: 'comparison',
+        left: {
+          label: '❌ Slow — Subquery for every row',
+          code: `SELECT name,
+  (SELECT COUNT(*) FROM bugs
+   WHERE tester_id = t.id) AS bug_count
+FROM testers t;
+-- Runs inner SELECT once per tester row!`,
+          note: 'Correlated subquery: O(n) inner queries',
+        },
+        right: {
+          label: '✅ Fast — Single JOIN + GROUP BY',
+          code: `SELECT t.name, COUNT(b.id) AS bug_count
+FROM testers t
+LEFT JOIN bugs b ON t.id = b.tester_id
+GROUP BY t.id, t.name;
+-- Single pass through both tables`,
+          note: 'LEFT JOIN: handles 0 bugs correctly too',
+        },
+      },
+      {
+        type: 'quiz',
+        question: 'Which JOIN type returns ALL rows from the left table, including rows with NO matches in the right table?',
+        options: ['INNER JOIN', 'CROSS JOIN', 'LEFT JOIN', 'RIGHT JOIN'],
+        correct: 2,
+        explanation: 'LEFT JOIN (also called LEFT OUTER JOIN) returns every row from the left table. For right-table columns with no match, NULL values appear. Use it when you need "all X, even if they have no related Y" — like all testers including those with 0 bugs.',
+      },
+      { type: 'heading', text: '☕ If You Know Java: PreparedStatement & Transactions' },
+      {
+        type: 'java-compare',
+        topic: 'PreparedStatement → Parameterized Query',
+        why: 'SQL Injection prevention! Java uses ? placeholders with PreparedStatement. Python uses the same concept — %s (MySQL/PostgreSQL) or ? (SQLite). Never concatenate user input into SQL strings!',
+        java: `// Java: PreparedStatement — SQL injection safe!
+String sql = "SELECT * FROM users WHERE email = ? AND is_active = ?";
+PreparedStatement ps = conn.prepareStatement(sql);
+ps.setString(1, userEmail);   // 1-indexed params
+ps.setBoolean(2, true);
+ResultSet rs = ps.executeQuery();
+
+// INSERT with PreparedStatement:
+PreparedStatement ins = conn.prepareStatement(
+    "INSERT INTO test_results (test_name, status) VALUES (?, ?)"
+);
+ins.setString(1, testName);
+ins.setString(2, "PASS");
+ins.executeUpdate();`,
+        python: `# Python: parameterized query (%s for MySQL/psycopg2)
+cursor.execute(
+    "SELECT * FROM users WHERE email = %s AND is_active = %s",
+    (user_email, True)   # tuple of values — NOT f-string!
+)
+
+# SQLite uses ? (same as Java PreparedStatement):
+cursor.execute(
+    "SELECT * FROM users WHERE email = ? AND is_active = ?",
+    (user_email, 1)
+)
+
+# INSERT:
+cursor.execute(
+    "INSERT INTO test_results (test_name, status) VALUES (%s, %s)",
+    (test_name, "PASS")
+)
+conn.commit()  # don't forget!`,
+        note: 'Python psycopg2/MySQL uses %s. SQLite uses ? (same as Java!). NEVER use f-strings or + concatenation for SQL values — always use parameterized queries.',
+      },
+      {
+        type: 'java-compare',
+        topic: 'Transaction Management (commit / rollback)',
+        why: 'Transactions guarantee all-or-nothing changes — critical for test data setup. Java calls setAutoCommit(false). Python\'s drivers have auto-commit off by default, so you explicitly call commit().',
+        java: `// Java: manual transaction control
+try {
+    conn.setAutoCommit(false);  // begin transaction
+    stmt.executeUpdate("INSERT INTO orders ...");
+    stmt.executeUpdate("UPDATE inventory SET qty=qty-1 ...");
+    conn.commit();               // save ALL changes
+} catch (SQLException e) {
+    conn.rollback();             // undo ALL changes
+    throw e;
+} finally {
+    conn.setAutoCommit(true);
+}`,
+        python: `# Python: explicit commit / rollback
+try:
+    cursor.execute("INSERT INTO orders ...")
+    cursor.execute("UPDATE inventory SET qty=qty-1 ...")
+    conn.commit()    # save ALL changes
+except Exception:
+    conn.rollback()  # undo ALL changes
+    raise
+
+# Cleanest: "with" context manager (psycopg2):
+with conn:   # auto-commits on success, rolls back on error
+    cursor.execute("INSERT INTO orders ...")
+    cursor.execute("UPDATE inventory SET qty=qty-1 ...")`,
+        note: 'QA tip: wrap test data setup in a transaction and rollback after each test — keeps the DB clean without writing DELETE cleanup queries.',
       },
     ],
   },
@@ -640,6 +1164,31 @@ cursor.execute(
 
 # Why safe? The DB engine handles the values as DATA, never as SQL code.
 # 'admin' OR '1'='1' becomes a literal string to match, not executable SQL.`,
+      },
+      {
+        type: 'visual', variant: 'flow',
+        title: 'ACID Transaction Flow — What Happens Inside the DB',
+        note: 'ACID guarantees mean your test data is always in a consistent state — no partial inserts, no phantom reads between transactions.',
+        steps: [
+          { num: 'A', label: 'Atomicity', desc: 'All or nothing', highlight: true },
+          { num: 'C', label: 'Consistency', desc: 'Rules enforced' },
+          { num: 'I', label: 'Isolation', desc: 'Concurrent safe', highlight: true },
+          { num: 'D', label: 'Durability', desc: 'Survived crash' },
+        ],
+      },
+      {
+        type: 'visual', variant: 'boxes',
+        title: 'Transaction Lifecycle — What Each SQL Command Does',
+        items: [
+          { icon: '🚀', label: 'START TRANSACTION', desc: 'Begin atomic block' },
+          { arrow: true },
+          { icon: '✏️', label: 'INSERT / UPDATE / DELETE', desc: 'Multiple statements' },
+          { arrow: true },
+          { icon: '✅', label: 'COMMIT', desc: 'Persist all changes', highlight: true },
+          { arrow: true },
+          { icon: '↩️', label: 'ROLLBACK', desc: 'Undo all if error' },
+        ],
+        note: 'COMMIT makes all changes permanent. ROLLBACK undoes everything back to START TRANSACTION — like Ctrl+Z for the entire batch.',
       },
     ],
   },
@@ -1105,6 +1654,436 @@ ORDER BY sprint, rank_in_sprint;`,
   },
 ]
 
+function applyTr(enSection, overrides) {
+  return {
+    title: overrides.title ?? enSection.title,
+    blocks: enSection.blocks.map((block, i) => {
+      const o = overrides.blocks?.[i]
+      if (!o) return block
+      return { ...block, ...o }
+    })
+  }
+}
+
+const trSections = [
+  applyTr(sections[0], {
+    title: '🎯 SQL Nedir & Her QA Mühendisi Neden Bilmeli?',
+    blocks: {
+      0: { text: 'Veritabanı Nedir?' },
+      1: { content: 'Veritabanı, elektronik ortamda depolanan yapılandırılmış veri koleksiyonudur. Milyonlarca satır saklayan, ilgili verileri birbirine bağlayan ve karmaşık sorulara milisaniyeler içinde yanıt veren güçlü bir spreadsheet gibi düşünebilirsiniz. Test ettiğiniz her uygulamanın verileri neredeyse her zaman bir veritabanında saklanır.' },
+      2: { text: 'SQL Nedir?' },
+      3: { content: "SQL (Structured Query Language), ilişkisel veritabanlarıyla iletişim kurmak için standart dildir. Soru sormak ('bugün kaç kullanıcı kaydoldu?'), veri eklemek, kayıt güncellemek ve silmek için kullanılır. 1970'lerden bu yana endüstri standardıdır; MySQL, PostgreSQL, SQLite, SQL Server ve Oracle dahil tüm büyük veritabanlarında çalışır." },
+      4: { text: 'QA Mühendisleri Neden SQL Bilmeli?' },
+      5: { items: [
+        { icon: '✅', label: 'Backend Durumunu Doğrula', desc: 'UI işleminden sonra DB\'yi sorgulayarak verinin doğru kaydedildiğini doğrulayın — yalnızca UI\'ya güvenmeyin.' },
+        { icon: '🌱', label: 'Test Verisi Ekle', desc: 'Testler çalışmadan önce INSERT ile test kullanıcıları, ürünler ve siparişleri ekleyin — manuel kurulum gerekmez.' },
+        { icon: '🧹', label: 'Test Sonrası Temizlik', desc: 'Her çalıştırmadan sonra test kayıtlarını DELETE edin, sonraki çalıştırma temiz başlasın.' },
+        { icon: '🔍', label: 'Backend Doğrulaması', desc: 'İş kurallarını kontrol edin: sipariş toplamı = satır kalemlerinin toplamı, FK kısıtlamaları, veri bütünlüğü.' },
+        { icon: '⚡', label: "UI'dan Daha Hızlı", desc: 'Bir DB sorgusu milisaniyeler alır. Aynı veriye UI üzerinden tıklayarak ulaşmak dakikalar sürer.' },
+        { icon: '🐛', label: 'Gizli Hataları Bul', desc: 'UI başarı gösteriyor ama DB güncellenmedi — SQL gerçeği ortaya koyar.' },
+      ]},
+      6: { text: 'Temel Veritabanı Terminolojisi' },
+      7: {
+        headers: ['Terim', 'Anlam', 'Örnek'],
+        rows: [
+          ['Table (Tablo)', 'Satır ve sütunlarda veri saklar (spreadsheet gibi)', '"users" tablosu: id, email, age sütunları'],
+          ['Row / Record (Satır)', 'Tablodaki tek bir kayıt', 'Tek kullanıcı: {id:1, email:"alice@test.com"}'],
+          ['Column / Field (Sütun)', 'Her satır için saklanan bir özellik', '"email", "created_at", "is_active"'],
+          ['Primary Key', 'Her satır için benzersiz tanımlayıcı — NULL olamaz, tekrar edemez', '"id" sütunu, AUTO_INCREMENT ile'],
+          ['Foreign Key', "Başka tablonun PK'sını referans alan sütun — ilişki ve bütünlük sağlar", '"orders.user_id" → "users.id"'],
+          ['Index', 'Sütun aramalarını hızlandıran veri yapısı', '"email" sütununa INDEX → hızlı WHERE email=?'],
+          ['Schema', 'Veritabanının planı — tüm tablolar, sütunlar, tipler, kısıtlamalar', 'CREATE TABLE tanımları'],
+          ['Query (Sorgu)', 'SQL kullanılarak veritabanına gönderilen istek', 'SELECT * FROM users WHERE age > 25'],
+        ]
+      },
+      8: { text: 'Popüler Veritabanları Karşılaştırması' },
+      9: {
+        headers: ['Veritabanı', 'Tip', 'En İyi Kullanım', 'Ücretsiz?'],
+        rows: [
+          ['MySQL', 'Açık kaynak', 'Web uygulamaları, endüstride en yaygın', '✅ Evet'],
+          ['PostgreSQL', 'Açık kaynak', 'Karmaşık sorgular, JSON, kurumsal uygulamalar', '✅ Evet'],
+          ['SQLite', 'Gömülü / sunucusuz', 'Yerel geliştirme, test, mobil uygulamalar', '✅ Evet'],
+          ['SQL Server', 'Microsoft ticari', 'Windows/.NET kurumsal uygulamalar', '✅ Express sürüm'],
+          ['Oracle', 'Ticari kurumsal', 'Büyük ölçekli bankacılık/finans', '❌ Ücretli'],
+        ]
+      },
+      10: { content: "SQLiteOnline.com ile öğrenmeye başlayın — tarayıcınızda çalışır, kurulum gerekmez. Gerçek ortam için DBeaver (ücretsiz GUI) kurun ve SQLite veya MySQL'e bağlanın." },
+      11: { text: 'SQL, QA İş Akışında Nerede Kullanılır?' },
+      12: {
+        title: 'SQL Test Sürecinize Nasıl Entegre Olur?',
+        items: [
+          { icon: '🧪', label: 'Test Scripti', desc: 'Playwright / pytest' },
+          { arrow: true },
+          { icon: '🖥️', label: 'Uygulama UI/API', desc: 'DB değişikliği yapar' },
+          { arrow: true },
+          { icon: '🗄️', label: 'Veritabanı', desc: 'MySQL / PostgreSQL' },
+          { arrow: true },
+          { icon: '🔍', label: 'SQL Sorgusu', desc: 'Buradan doğrularsın!', highlight: true },
+        ],
+        note: 'Her test işleminden sonra bir SQL sorgusu veritabanı durumunun doğru şekilde güncellendiğini doğrulayabilir — yalnızca UI\'nun gösterdiğine güvenmeyin.',
+      },
+      13: {
+        title: 'Örnek: Bir Veritabanı Tablosu',
+        tables: [{
+          name: 'users',
+          columns: [
+            { name: 'id', type: 'INT', pk: true },
+            { name: 'name', type: 'VARCHAR' },
+            { name: 'email', type: 'VARCHAR' },
+            { name: 'role', type: 'VARCHAR' },
+            { name: 'created_at', type: 'DATETIME' },
+          ],
+          rows: [
+            { cells: [1, 'Alice', 'alice@test.com', 'admin', '2024-01-10'] },
+            { cells: [2, 'Bob', 'bob@test.com', 'user', '2024-01-12'] },
+            { cells: [3, 'Carol', 'carol@test.com', 'user', '2024-01-15'], highlighted: true },
+          ]
+        }],
+        note: 'Her satır bir kayıttır. Her sütun bir alandır. id, Primary Key\'dir — her satırı benzersiz olarak tanımlar.',
+      },
+      14: {
+        question: 'SQL neyin kısaltmasıdır?',
+        options: ['Standard Query Logic', 'Structured Query Language', 'Simple Question Language', 'Sequential Query Library'],
+        correct: 1,
+        explanation: "SQL = Structured Query Language (Yapılandırılmış Sorgu Dili). 1970'lerden bu yana ilişkisel veritabanları için standart dildir; MySQL, PostgreSQL, SQLite, Oracle ve SQL Server tarafından kullanılır.",
+      },
+    }
+  }),
+  applyTr(sections[1], {
+    title: '📦 SQL Ortamınızı Kurma',
+    blocks: {
+      0: { text: 'Seçenek A: Kurulum Gerektirmeyen Çevrimiçi Editörler (Buradan Başlayın)' },
+      1: { items: [
+        { label: 'db-fiddle.com', desc: 'En iyi seçenek. MySQL, PostgreSQL, SQLite. Schema + sorgu bölünmüş görünüm.' },
+        { label: 'sqliteonline.com', desc: "SQLite'ı tarayıcınızda çalıştırır. .db dosyası yükleyin veya tablo oluşturun." },
+        { label: 'sqlfiddle.com', desc: 'Klasik. Birden fazla DB motoru. Örnekleri paylaşmak için uygun.' },
+      ]},
+      2: { text: 'Seçenek B: SQLite CLI (En Hafif Yerel Seçenek)' },
+      3: { items: [
+        'Windows: sqlite.org/download.html\'den "sqlite-tools-win32" indirin ve C:\\sqlite\\ klasörüne çıkarın',
+        'Mac: Zaten yüklü! Çalıştır: sqlite3 — veya Homebrew ile: brew install sqlite',
+        'Linux: sudo apt install sqlite3',
+        'Veritabanı oluştur: sqlite3 mytest.db',
+        'Doğrula: SELECT sqlite_version();',
+      ]},
+      5: { text: 'Seçenek C: MySQL Community Server' },
+      6: { items: [
+        'Windows: dev.mysql.com/downloads/installer/ adresinden MySQL Installer indirin → "Developer Default" seçin',
+        'Mac: brew install mysql → brew services start mysql → mysql -u root',
+        'Linux: sudo apt install mysql-server → sudo systemctl start mysql → sudo mysql -u root',
+        'Kurulumu doğrula: SELECT VERSION();',
+      ]},
+      8: { text: 'Seçenek D: DBeaver GUI (Yeni Başlayanlar için Önerilen)' },
+      9: { content: "DBeaver, tüm veritabanlarıyla çalışan ücretsiz evrensel bir GUI'dir. Komut satırından çok daha kolaydır — tabloları görsel olarak inceleyebilir ve otomatik tamamlama ile sorgular çalıştırabilirsiniz." },
+      10: { items: [
+        'dbeaver.io adresinden DBeaver Community\'i indirin (ücretsiz)',
+        "DBeaver'ı kurun ve başlatın",
+        '"New Database Connection" seçeneğine tıklayın (sol üstteki fiş simgesi)',
+        'DB türünüzü seçin: SQLite, MySQL veya PostgreSQL',
+        'SQLite: Göz At\'a tıklayın → .db dosyanızı seçin (veya yeni oluşturun)',
+        'MySQL/PostgreSQL: host, port, veritabanı adı, kullanıcı adı ve şifreyi girin',
+        '"Test Connection"\'a tıklayın — Finish\'ten önce yeşil "Connected" mesajı görünmeli',
+        'Ctrl+] ile SQL Editor\'ü açın ve sorgu yazmaya başlayın',
+      ]},
+      11: { text: "Python'da SQL Kullanımı (Test Otomasyonu için)" },
+      13: { text: '☕ Java Biliyorsan: Veritabanı Bağlantısı Köprüsü' },
+      14: {
+        topic: 'DB Bağlantısı Kurma (DriverManager vs sqlite3)',
+        why: 'Java\'da JDBC kullanırsın — pom.xml\'e sürücü ekler, DriverManager.getConnection() çağırırsın. Python\'da sqlite3 yerleşik (sıfır kurulum!) ve PostgreSQL için psycopg2 var. Kalıp aynı: bağlantı aç → kullan → kapat.',
+        note: 'sqlite3 Python standart kütüphanesinde — Maven yok, pip yok, pom.xml yok! Sadece import et ve kullan. pip install psycopg2-binary tek bir Maven bağımlılığı eklemeye eşdeğer.',
+      },
+      15: {
+        topic: 'Bağımlılık Kurulumu (Maven pom.xml vs pip)',
+        why: 'Java\'da JDBC sürücü bağımlılıklarını pom.xml\'de bildirirsin, Maven indirir. Python\'da pip install sürücüyü indirir. SQLite için hiçbir şey gerekmez — Python ile birlikte gelir.',
+        note: 'Python SQLite için en hızlı başlangıcı sağlar. Gerçek proje bağımlılıkları için requirements.txt kullan (pom.xml ile aynı fikir). pip install -r requirements.txt her şeyi kurar.',
+      },
+    }
+  }),
+  applyTr(sections[2], {
+    title: '🟢 Seviye 1: SQL Temelleri',
+    blocks: {
+      0: { text: 'CREATE TABLE — Yapıyı Tanımlama', difficulty: '🟢 Başlangıç' },
+      2: { text: 'INSERT INTO — Veri Ekleme', difficulty: '🟢 Başlangıç' },
+      4: { text: 'SELECT — Veri Okuma', difficulty: '🟢 Başlangıç' },
+      6: { text: 'UPDATE ve DELETE', difficulty: '🟢 Başlangıç' },
+      8: { content: 'UPDATE ve DELETE komutlarında MUTLAKA WHERE kullanın! WHERE olmadan tablodaki tüm satırlar etkilenir. Değiştirilecek satırları önce SELECT ile doğrulayın, ardından güncelleme veya silme işlemini yapın.' },
+      9: { text: 'NULL Değerleri', difficulty: '🟢 Başlangıç' },
+      11: { text: 'İnteraktif Örnek: test_results Tablosu', difficulty: '🟢 Başlangıç' },
+      13: { text: 'SQL Yürütme Sırası — Çoğu Yeni Başlayanın Kaçırdığı Sır' },
+      14: { content: "SQL, normal kod gibi yukarıdan aşağıya çalışmaz. Belirli bir dahili sıra izler. Bu yüzden WHERE içinde SELECT takma adları kullanamaz ve aggregate fonksiyonlar HAVING'e gider, WHERE'e değil." },
+      15: {
+        title: 'SQL Cümle Değerlendirme Sırası (Adım Adım)',
+        note: 'SELECT\'i en üste yazarsın ama neredeyse en son çalışır. Bu yüzden SELECT\'te tanımlanan takma adlar WHERE\'de kullanılamaz!',
+        steps: [
+          { num: '1', label: 'FROM', desc: 'Tabloları yükle' },
+          { num: '2', label: 'JOIN', desc: 'Birleştir' },
+          { num: '3', label: 'WHERE', desc: 'Satırları filtrele', highlight: true },
+          { num: '4', label: 'GROUP BY', desc: 'Grupla' },
+          { num: '5', label: 'HAVING', desc: 'Grupları filtrele', highlight: true },
+          { num: '6', label: 'SELECT', desc: 'Sütunları seç' },
+          { num: '7', label: 'ORDER BY', desc: 'Sırala' },
+          { num: '8', label: 'LIMIT', desc: 'Dilimleme' },
+        ],
+      },
+      16: {
+        title: 'Örnek Verimiz — test_results Tablosu',
+        tables: [{
+          name: 'test_results',
+          columns: [
+            { name: 'id', type: 'INT', pk: true },
+            { name: 'test_name', type: 'VARCHAR' },
+            { name: 'status', type: 'VARCHAR' },
+            { name: 'duration_ms', type: 'INT' },
+            { name: 'environment', type: 'VARCHAR' },
+          ],
+          rows: [
+            { cells: [1, 'Login Test', 'PASS', 1200, 'staging'] },
+            { cells: [2, 'Checkout Flow', 'FAIL', 5400, 'staging'], highlighted: true },
+            { cells: [3, 'Signup Test', 'PASS', 890, 'prod'] },
+            { cells: [4, 'Profile Update', 'FAIL', 3100, 'prod'], highlighted: true },
+            { cells: [5, 'Search Feature', 'PASS', 2200, 'staging'] },
+            { cells: [6, 'Logout Test', 'SKIP', 0, 'staging'] },
+          ]
+        }],
+        note: "Sarı satırlar = FAIL durumu. Dene: SELECT * FROM test_results WHERE status = 'FAIL' → 2. ve 4. satırları döndürür.",
+      },
+      17: { text: 'NULL — En Yaygın SQL Hatası' },
+      18: { content: "NULL, 'değer yok / bilinmiyor' anlamına gelir — sıfır değil, boş string değil. NULL ile yapılan her karşılaştırma NULL döndürür (true veya false değil). Bu durum her SQL yeni başlayanının tökezlediği noktadır." },
+      19: {
+        left: {
+          label: '❌ Yanlış — = NULL hiçbir zaman çalışmaz',
+          code: `SELECT * FROM users WHERE email = NULL;
+-- Her zaman 0 satır döndürür!
+-- NULL değerler var olsa bile.
+-- Neden? NULL = NULL → NULL (true değil)`,
+          note: "NULL kontrolü için = veya != kullanmayın",
+        },
+        right: {
+          label: '✅ Doğru — IS NULL / IS NOT NULL',
+          code: `SELECT * FROM users WHERE email IS NULL;
+SELECT * FROM users WHERE email IS NOT NULL;
+-- COALESCE: NULL'ı varsayılanla değiştir:
+SELECT name, COALESCE(email, 'eposta yok') FROM users;`,
+          note: "IS NULL ve IS NOT NULL her zaman doğru çalışır",
+        },
+      },
+      20: {
+        question: "WHERE discount = NULL filtresi uyguladığında sorgu 0 satır döndürüyor. Neden?",
+        options: [
+          'Tabloda NULL indirim yok',
+          '= ile NULL karşılaştırması her zaman NULL (TRUE değil) döndürür, hiçbir satır eşleşmez',
+          'Tırnak gerekiyor: WHERE discount = "NULL"',
+          "NULL otomatik olarak 0'a dönüştürülür",
+        ],
+        correct: 1,
+        explanation: "= veya != ile yapılan NULL karşılaştırmaları FALSE gibi davranır. Bunun yerine IS NULL veya IS NOT NULL kullanın. Bu, en yaygın SQL hatalarından biridir.",
+      },
+      21: { text: '☕ Java Biliyorsan: Veritabanı Erişim Köprüsü' },
+      22: {
+        topic: 'DB Bağlantısı (DriverManager vs sqlite3)',
+        why: "Java, JDBC DriverManager ile URL + kimlik bilgileriyle bağlanır. Python, hafif sürücü modülleri kullanır (sqlite3 yerleşik, PostgreSQL için psycopg2). Bağlantı mantığı aynı — API farklı.",
+        note: "Python sqlite3, Python'a yerleşik gelir — pip kurulumu gerekmez. MySQL: mysql-connector-python; PostgreSQL: psycopg2.",
+      },
+      23: {
+        topic: 'SELECT Çalıştırma → Sonuçları Okuma',
+        why: "Java, rs.next() döngüsü ve sütun adıyla getter metodlar içeren ResultSet kullanır. Python'un cursor.fetchall() metodu basit bir demet listesi döndürür — çok daha az kod.",
+        note: "cursor.fetchall() tüm satırları demet listesi olarak döndürür. cursor.fetchone() bir satır ya da None döndürür — rs.next() bir kez çağırmaya eşdeğer.",
+      },
+      24: { text: '☕ Java Biliyorsan: DML Operasyonları Köprüsü' },
+      25: {
+        topic: 'INSERT → JPA persist() vs SQL INSERT INTO',
+        why: "Java kurumsal projelerinde büyük ihtimalle JPA/Hibernate (EntityManager.persist) ile nesne ekliyordunuz. SQL'de INSERT INTO doğrudan yazılır. İkisi de aynı SQL'i üretir — JPA sadece bunu sizin yerinize oluşturur.",
+        note: "SQL INSERT açık ve güçlüdür — toplu insert'ler ve INSERT-SELECT'in JPA'da custom query olmadan karşılığı yoktur. Test otomasyonunda hız ve sadelik için doğrudan SQL tercih edilir.",
+      },
+      26: {
+        topic: 'UPDATE/DELETE → JPA merge()/remove() vs SQL',
+        why: "JPA, UPDATE ve DELETE'i entity durum değişiklikleri üzerinden soyutlar. SQL doğrudan kontrol sağlar — WHERE ile tam olarak istediğiniz satırları güncelleyin/silin.",
+        note: "SQL UPDATE ve DELETE, WHERE ile tek sorguda çok sayıda satırı etkileyebilir. JPA her satır için ayrı entity yükleme gerektirir. Test otomasyonunda temizleme için doğrudan SQL daha hızlı ve yaygındır.",
+      },
+    }
+  }),
+  applyTr(sections[3], {
+    title: '🟡 Seviye 2: Orta Seviye SQL',
+    blocks: {
+      0: { text: 'Aggregate (Toplama) Fonksiyonları', difficulty: '🟡 Orta Seviye' },
+      2: { text: 'GROUP BY ve HAVING', difficulty: '🟡 Orta Seviye' },
+      3: { content: 'GROUP BY, aynı değere sahip satırları gruplar. HAVING ise bu grupları filtreler — WHERE gibi ama aggregate sonuçları için. COUNT/SUM gibi fonksiyonları WHERE içinde kullanamazsınız; bunun için HAVING kullanın.' },
+      5: { text: "JOIN'ler — Tabloları Birleştirme", difficulty: '🟡 Orta Seviye' },
+      6: { content: "JOIN'ler, birden fazla ilişkili tablodan tek sorguda veri almanızı sağlar. Gerçek dünya veritabanlarında veriler tablolar arasında bölündüğünden JOIN'ler vazgeçilmezdir." },
+      8: { text: 'Alt Sorgular (Subquery)', difficulty: '🟡 Orta Seviye' },
+      10: { text: 'LIKE, BETWEEN, IN', difficulty: '🟡 Orta Seviye' },
+      12: { text: 'Bug Takip DB — İnteraktif Örnek', difficulty: '🟡 Orta Seviye' },
+      14: { text: 'Görsel JOIN Kılavuzu — Tam Olarak Hangi Satırların Döndüğünü Gör' },
+      15: { content: "Aşağıdaki 4 diyagram aynı veriyi kullanıyor. Eşleşen satırları vurgulamak için 'Eşleşmeleri Göster', sorgu sonucunu görmek için 'Sonucu Göster'e tıklayın. JOIN'leri gerçekten anlamanın en hızlı yolu bu." },
+      16: {
+        explanation: 'INNER JOIN, yalnızca HER İKİ tabloda da eşleşen satırları döndürür. Carol\'un hiç hatası yok — sonuçtan tamamen hariç tutulur.',
+      },
+      17: {
+        explanation: 'LEFT JOIN, SOL tablodan (testers) TÜM satırları döndürür, artı bugs\'dan eşleşmeleri. Carol bug_count=0 ile görünür — LEFT JOIN, "sıfır dahil her kullanıcı başına say" için mükemmeldir.',
+      },
+      18: {
+        explanation: 'RIGHT JOIN, SAĞ tablodan (bugs) TÜM satırları döndürür. Bug #4\'ün test uzmanı yok — hâlâ tester=NULL ile görünür. Nadiren kullanılır — çoğu geliştirici bunu tablolar yer değiştirilerek LEFT JOIN olarak yeniden yazar.',
+      },
+      19: {
+        left: {
+          label: '❌ Yavaş — Her satır için alt sorgu',
+          code: `SELECT name,
+  (SELECT COUNT(*) FROM bugs
+   WHERE tester_id = t.id) AS bug_count
+FROM testers t;
+-- İç SELECT her tester satırı için bir kez çalışır!`,
+          note: "Bağıntılı alt sorgu: O(n) iç sorgu",
+        },
+        right: {
+          label: '✅ Hızlı — Tek JOIN + GROUP BY',
+          code: `SELECT t.name, COUNT(b.id) AS bug_count
+FROM testers t
+LEFT JOIN bugs b ON t.id = b.tester_id
+GROUP BY t.id, t.name;
+-- Her iki tabloda tek geçiş`,
+          note: "LEFT JOIN: 0 hatalı durumları da doğru işler",
+        },
+      },
+      20: {
+        question: 'Hangi JOIN türü, sağ tabloda eşleşmesi olmayan satırlar dahil sol tablodan TÜM satırları döndürür?',
+        options: ['INNER JOIN', 'CROSS JOIN', 'LEFT JOIN', 'RIGHT JOIN'],
+        correct: 2,
+        explanation: "LEFT JOIN (LEFT OUTER JOIN olarak da bilinir), sol tablodan her satırı döndürür. Sağ tabloda eşleşme yoksa NULL değerler görünür. \"Sıfır hataya sahip olanlar dahil tüm test uzmanları\" gibi durumlarda kullanılır.",
+      },
+      21: { text: '☕ Java Biliyorsan: PreparedStatement ve Transaction Köprüsü' },
+      22: {
+        topic: "PreparedStatement → Parametreli Sorgu",
+        why: "SQL Injection önleme! Java, PreparedStatement ile ? yer tutucuları kullanır. Python aynı konsepti uygular — %s (MySQL/PostgreSQL) veya ? (SQLite). Kullanıcı girdilerini asla SQL string'ine birleştirmeyin!",
+        note: "Python psycopg2/MySQL %s kullanır. SQLite ? kullanır (Java gibi!). SQL değerleri için asla f-string veya + birleştirme kullanmayın — her zaman parametreli sorgu kullanın.",
+      },
+      23: {
+        topic: "Transaction Yönetimi (commit / rollback)",
+        why: "Transaction'lar, hepsini-ya-da-hiçbirini değişiklikleri garanti eder — test verisi kurulumu için kritik. Java setAutoCommit(false) çağırır. Python sürücülerinde otomatik commit varsayılan olarak kapalıdır; siz commit() çağırırsınız.",
+        note: "QA ipucu: test verisi kurulumunu transaction içine sarın ve her testin ardından geri alın — DELETE temizlik sorguları yazmadan DB'yi temiz tutar.",
+      },
+    }
+  }),
+  applyTr(sections[4], {
+    title: '🔴 Seviye 3: İleri Seviye SQL',
+    blocks: {
+      0: { text: 'Window (Pencere) Fonksiyonları', difficulty: '🔴 İleri' },
+      1: { content: "Window fonksiyonları, GROUP BY'ın aksine satırları daraltmadan ilgili satırlar üzerinde hesaplamalar yapar. Her satır kendi sonucunu korurken komşu satırlar hakkında da bilgi alır." },
+      3: { text: 'CTE — Common Table Expressions (Ortak Tablo İfadeleri)', difficulty: '🔴 İleri' },
+      5: { text: "Transaction'lar — ACID Özellikleri", difficulty: '🔴 İleri' },
+      7: { text: "Index'ler — Sorguları Hızlandırma", difficulty: '🔴 İleri' },
+      9: { text: "View'lar (Görünümler)", difficulty: '🔴 İleri' },
+      11: { text: 'SQL Injection & Parametreli Sorgular', difficulty: '🔴 İleri' },
+      13: {
+        title: 'ACID Transaction Akışı — DB İçinde Neler Oluyor',
+        note: 'ACID garantileri, test verinizin her zaman tutarlı bir durumda olduğu anlamına gelir — kısmi insert yok, işlemler arası phantom read yok.',
+        steps: [
+          { num: 'A', label: 'Atomiklik', desc: 'Hepsi veya hiçbiri', highlight: true },
+          { num: 'C', label: 'Tutarlılık', desc: 'Kurallar zorlanır' },
+          { num: 'I', label: 'İzolasyon', desc: 'Eş zamanlı güvenli', highlight: true },
+          { num: 'D', label: 'Dayanıklılık', desc: 'Çökmeden sağ kaldı' },
+        ],
+      },
+      14: {
+        title: 'Transaction Yaşam Döngüsü — Her SQL Komutu Ne Yapar',
+        items: [
+          { icon: '🚀', label: 'START TRANSACTION', desc: 'Atomik bloğu başlat' },
+          { arrow: true },
+          { icon: '✏️', label: 'INSERT / UPDATE / DELETE', desc: 'Birden fazla ifade' },
+          { arrow: true },
+          { icon: '✅', label: 'COMMIT', desc: 'Tüm değişiklikleri kalıcı yap', highlight: true },
+          { arrow: true },
+          { icon: '↩️', label: 'ROLLBACK', desc: 'Hata varsa tümünü geri al' },
+        ],
+        note: 'COMMIT tüm değişiklikleri kalıcı kılar. ROLLBACK START TRANSACTION\'a kadar her şeyi geri alır — tüm batch için Ctrl+Z gibi.',
+      },
+    }
+  }),
+  applyTr(sections[5], {
+    title: '🧪 QA için SQL — Gerçek Test Senaryoları',
+    blocks: {
+      0: { text: 'Senaryo 1: Son 7 Günde Başarısız Olan Testleri Bul' },
+      2: { text: 'Senaryo 2: Tekrarlanan Test Verisi Girişlerini Bul' },
+      4: { text: 'Senaryo 3: Foreign Key İlişkilerini Doğrula (Yetim Kayıtları Bul)' },
+      6: { text: 'Senaryo 4: Test Sonuçlarını Duruma Göre Yüzdeyle Say' },
+      8: { text: 'Senaryo 5: 30 Günden Eski Test Verilerini Temizle' },
+      10: { text: 'Senaryo 6: EXPLAIN — Yavaş Sorguları Bul ve Düzelt' },
+    }
+  }),
+  applyTr(sections[6], {
+    title: '💼 SQL Mülakat Soruları & Cevapları',
+    blocks: {
+      0: { content: 'Model cevabı görmek için her soruya tıklayın. Kod örnekleri içerir.' },
+      1: { text: '🟢 Temel Sorular' },
+      2: { question: 'S1: WHERE ile HAVING arasındaki fark nedir?', answer: 'WHERE, gruplama yapılmadan önce tek tek SATIRLARI filtreler — ham sütun değerleri üzerinde çalışır.\nHAVING, GROUP BY çalıştıktan sonra GRUPLARI filtreler — aggregate fonksiyon sonuçları üzerinde çalışır.\n\nKural: Filtrenizde COUNT, SUM, AVG gibi fonksiyonlar varsa → HAVING. Aksi hâlde → WHERE.' },
+      3: { question: 'S2: Farklı JOIN türlerini açıklayın.', answer: 'INNER JOIN: Yalnızca her iki tabloda da eşleşen satırları döndürür. Eşleşmeyen satırlar hariç tutulur.\n\nLEFT (OUTER) JOIN: Sol tablodaki TÜM satırları + eşleşen sağ satırları döndürür. Eşleşme yoksa sağ taraf NULL olur.\n\nRIGHT (OUTER) JOIN: Sağ tablodaki TÜM satırları döndürür; sol taraf eşleşmiyorsa NULL.\n\nFULL OUTER JOIN: Her iki tablodaki TÜM satırları döndürür; eşleşme yoksa NULL.\n\nCROSS JOIN: Kartezyen çarpım — sol tablodaki her satır sağ tablodaki her satırla birleştirilir.' },
+      4: { question: 'S3: PRIMARY KEY ile FOREIGN KEY arasındaki fark nedir?', answer: "PRIMARY KEY (PK): Tablodaki her satırı benzersiz olarak tanımlar. NULL olamaz. Her tabloda yalnızca bir tane bulunur. Genellikle otomatik artan tam sayıdır.\n\nFOREIGN KEY (FK): Başka bir tablonun PRIMARY KEY'ini referans alan sütundur. Referans bütünlüğünü zorunlu kılar — ana tabloda bulunmayan bir FK değeri eklenemez." },
+      5: { question: 'S4: NULL nedir ve nasıl kontrol edilir?', answer: "NULL 'değer yok' veya 'bilinmiyor' anlamına gelir. 0, boş string '' ya da false'tan farklıdır. NULL'a yapılan her karşılaştırma NULL döndürür (true veya false değil).\n\nNULL kontrolü için = veya != kullanILAMAZ; IS NULL veya IS NOT NULL kullanılmalıdır. Varsayılan değer sağlamak için COALESCE() kullanın." },
+      6: { question: 'S5: DELETE, TRUNCATE ve DROP arasındaki fark nedir?', answer: "DELETE: WHERE koşuluna uyan satırları kaldırır. ROLLBACK destekler. Trigger'ları tetikler. Büyük tablolarda yavaştır.\n\nTRUNCATE: WHERE olmadan TÜM satırları anında kaldırır. MySQL'de ROLLBACK yapılamaz. DELETE'den çok daha hızlıdır. Trigger'ları tetiklemez.\n\nDROP: Tüm yapısıyla birlikte TABLOYU tamamen siler. DROP'tan sonra tablo artık mevcut değildir." },
+      7: { text: '🟡 Orta Seviye Sorular' },
+      8: { question: 'S6: UNION ile UNION ALL arasındaki fark nedir?', answer: 'UNION: İki sorgunun sonuçlarını birleştirir ve tekrarlanan satırları kaldırır. Tüm satırları tarayıp karşılaştırdığı için daha yavaştır.\n\nUNION ALL: Sonuçları birleştirir ve tekrarlananlar dahil TÜM satırları korur. Tekilleştirme adımı olmadığı için daha hızlıdır.\n\nHer iki sorgunun da uyumlu veri tiplerine sahip aynı sayıda sütunu olmalıdır.' },
+      9: { question: 'S7: Alt sorgular nasıl çalışır? Bağlantılı alt sorgu (correlated subquery) nedir?', answer: "Alt sorgu (subquery), başka bir sorgunun içindeki SELECT'tir. WHERE'de (değer veya küme döndürür), FROM'da (tablo gibi davranır) veya SELECT'te (satır başına bir değer döndürür) yer alabilir.\n\nBağlantılı alt sorgu (correlated subquery), dış sorgudaki bir sütunu referans alır — dış sorgunun her satırı için bir kez çalışır (yavaş olabilir!). Daha iyi performans için mümkünse JOIN kullanın." },
+      10: { question: "S8: Index nedir, performansı nasıl etkiler?", answer: "Index, veritabanının her satırı taramadan koşula uyan satırları bulmasını sağlayan bir veri yapısıdır (genellikle B-tree). Kitabın dizini gibi — sayfaları tek tek okumak yerine doğrudan atlarsınız.\n\nHızlandırır: WHERE içeren SELECT, JOIN ON, ORDER BY.\nYavaşlatır: INSERT, UPDATE, DELETE (index'ler de güncellenmeli).\nIndex ekleyin: WHERE sütunları, FK sütunları, sık sıralanan sütunlar.\nIndex eklemeyin: Küçük tablolar, az farklı değerli sütunlar (boolean, 3 değerli status), sık güncellenen sütunlar." },
+      11: { question: 'S9: Bir tablodaki en yüksek ikinci değeri bulan sorgu yazın.', answer: 'Klasik mülakat sorusu. LIMIT/OFFSET, alt sorgu veya window fonksiyonu ile birden fazla yaklaşım vardır.' },
+      12: { question: 'S10: GROUP BY — SELECT sütunlarına hangi kurallar uygulanır?', answer: "KURAL: SELECT listesindeki her sütun ya GROUP BY'da bulunmalı ya da bir aggregate fonksiyonuna (COUNT, SUM, AVG vb.) sarılmalıdır.\n\nNeden? GROUP BY ile birden fazla satır tek bir gruba çöker. Aggregate edilmemiş sütunlar için DB hangi satırın değerini göstereceğini bilemez — ya GROUP BY'a ekleyin ya da aggregate edin." },
+      13: { text: '🔴 İleri Seviye Sorular' },
+      14: { question: 'S11: Window fonksiyonlarını pratik bir örnekle açıklayın.', answer: "Window fonksiyonları, satırları daraltmadan ilgili satırlar 'penceresi' üzerinde hesaplamalar yapar. GROUP BY'ın aksine her satır kendi kimliğini korur ve window hesaplaması sonucunu alır.\n\nOVER() pencereyi tanımlar. PARTITION BY gruplar (GROUP BY gibi ama daraltmaz). OVER içindeki ORDER BY bir sıra oluşturur. Kullanım alanları: sıralama, kümülatif toplamlar, önceki/sonraki satırla karşılaştırma." },
+      15: { question: "S12: CTE nedir? Alt sorguya göre ne zaman tercih edilmeli?", answer: "CTE (WITH ifadesi), adlandırılmış geçici bir sonuç kümesidir. Bir kez değerlendirilir ve birden fazla kez referans alınabilir.\n\nCTE'yi alt sorgulara tercih edin: sorguyu adlandırılmış alt adımlara bölmek okunabilirliği artırıyorsa, aynı alt sorguya birden fazla referans verecekseniz, recursive sorgular (hiyerarşik veri) yazıyorsanız. Basit tek kullanımlık türetmeler için alt sorgular yeterlidir." },
+      16: { question: "S13: Transaction nasıl çalışır? ACID özellikleri nelerdir?", answer: "Transaction, tek bir birim olarak işlenen bir dizi SQL işlemidir — ya TÜMÜ başarılı olur ya da HİÇBİRİ olmaz.\n\nACID:\nAtomicity (Atomiklik): Ya hepsi ya hiç — tek başarısızlık her şeyi geri alır.\nConsistency (Tutarlılık): Transaction, DB'yi bir geçerli durumdan diğerine taşır.\nIsolation (İzolasyon): Eş zamanlı transaction'lar birbirinin devam eden değişikliklerini görmez.\nDurability (Kalıcılık): Commit edilen veriler çökmelerden sağ çıkar (diske yazılır)." },
+      17: { question: 'S14: SQL injection nedir ve parametreli sorgular bunu nasıl önler?', answer: "SQL injection: Kullanıcı girişi SQL kodu olarak yorumlanır; saldırganlar kimlik doğrulamayı atlayabilir, tüm verileri okuyabilir veya tabloları silebilir.\n\nParametreli sorgular (hazırlanmış ifadeler), değerleri SQL yapısından ayrı olarak DATA şeklinde iletir. DB motoru değerleri otomatik olarak escape eder — içeriklerinden bağımsız olarak asla SQL kodu olarak yorumlanamaz." },
+      18: { question: 'S15: Yavaş bir sorguyu nasıl optimize edersiniz?', answer: "1. Sorgu planını görmek için EXPLAIN/EXPLAIN ANALYZE çalıştırın — 'full table scan' (type:ALL) ve NULL index'lere bakın.\n2. WHERE sütunlarına, JOIN sütunlarına uygun index'ler ekleyin.\n3. Mümkünse alt sorguları JOIN'lere çevirin.\n4. SELECT * yerine yalnızca gerekli sütunları seçin.\n5. Sonuç boyutunu azaltmak için LIMIT kullanın.\n6. Toplamalar için GROUP BY sütunlarının index'li olduğundan emin olun.\n7. Karmaşık sorgular için CTE kullanın.\n8. Eksik FK index'lerini kontrol edin.\n9. Her değişiklikten sonra EXPLAIN çıktısını doğrulayın." },
+    }
+  }),
+  applyTr(sections[7], {
+    title: '📝 Pratik Alıştırmalar & Hızlı Referans',
+    blocks: {
+      0: { text: 'Pratik Alıştırmalar' },
+      1: {
+        difficulty: '🟢 Başlangıç',
+        title: 'Alıştırma 1: Başarısız Test Çalıştırmalarını Sorgula',
+        description: 'id, test_name, status (PASS/FAIL/SKIP), duration_ms, run_date sütunlarına sahip bir test_runs tablosu verilmektedir. ÜÇ sorgu yazın: (a) bugünün tüm başarısız çalıştırmaları, (b) her durumun sayısı, (c) en yavaş 3 test.',
+        hint: 'WHERE status="FAIL" AND DATE(run_date)=CURDATE() kullanın. Sayımlar için GROUP BY status. En yavaş için ORDER BY duration_ms DESC LIMIT 3.',
+        explanation: "DATE() bir DATETIME'den yalnızca tarih bölümünü çıkarır. CURDATE() bugünün tarihini döndürür. Bunlar MySQL fonksiyonlarıdır — PostgreSQL'de CURRENT_DATE kullanılır.",
+      },
+      2: {
+        difficulty: '🟡 Orta',
+        title: 'Alıştırma 2: Çoklu Tablo JOIN',
+        description: 'Üç tablonuz var: users (id, name, email), test_cases (id, title, category), results (id, user_id, test_case_id, status, run_date). Son 30 günde çalıştırılan testler için: test uzmanı adı, test case başlığı, durum ve tarihi gösteren, en yenisi önce sıralı bir sorgu yazın.',
+        hint: '3 tabloyu JOIN edin: users→results (user_id üzerinden), test_cases→results (test_case_id üzerinden). WHERE run_date >= NOW() - INTERVAL 30 DAY kullanın.',
+        explanation: '"results" tablosundan (users ve test_cases\'ı birleştiren ara tablo) başlayıp JOIN yapın. Bu, istenmeyen kartezyen çarpımı önler.',
+      },
+      3: {
+        difficulty: '🔴 İleri',
+        title: 'Alıştırma 3: CTE + Window Fonksiyonu — Test Uzmanlarını Başarı Oranına Göre Sırala',
+        description: 'results tablosunu (user_id, status, sprint) kullanarak: CTE ile istatistikleri hesaplayıp RANK() window fonksiyonu ile test uzmanlarını SPRINT BAŞINA başarı oranına göre sıralayan bir sorgu yazın. Göster: sprint, uzman adı, toplam test, başarı sayısı, başarı oranı %, sprint içi sıralama.',
+        hint: 'CTE: sayımlar için sprint ve user_id grupla. Sonra isimler için users JOIN. Ardından RANK() OVER (PARTITION BY sprint ORDER BY pass_rate DESC) ekle.',
+        explanation: "İki CTE: birincisi ham sayımları toplar, ikincisi oranı hesaplar ve kullanıcı adlarını JOIN eder. Son SELECT window fonksiyonunu ekler. CTE'lere bölmek her adımı ayrıca hata ayıklanabilir kılar.",
+      },
+      4: { text: 'Hızlı Referans Kartı' },
+      5: {
+        headers: ['Komut', 'Söz Dizimi', 'Amaç'],
+        rows: [
+          ['SELECT', 'SELECT col FROM tbl WHERE cond', 'Tablodan veri oku'],
+          ['INSERT', 'INSERT INTO tbl (cols) VALUES (...)', 'Yeni satır ekle'],
+          ['UPDATE', 'UPDATE tbl SET col=val WHERE cond', 'Mevcut satırları güncelle'],
+          ['DELETE', 'DELETE FROM tbl WHERE cond', 'Satırları sil'],
+          ['CREATE TABLE', 'CREATE TABLE t (id INT PRIMARY KEY, ...)', 'Yeni tablo tanımla'],
+          ['JOIN (INNER)', 'JOIN t2 ON t1.id = t2.fk', 'Her iki tabloda eşleşen satırlar'],
+          ['LEFT JOIN', 'LEFT JOIN t2 ON t1.id = t2.fk', 'Sol tablodaki tüm satırlar + eşleşen sağ'],
+          ['GROUP BY', 'GROUP BY col HAVING COUNT(*) > N', 'Topla + grupları filtrele'],
+          ['ORDER BY', 'ORDER BY col DESC LIMIT N', 'Sırala ve sınırla'],
+          ['COUNT/SUM/AVG', 'SELECT COUNT(*), AVG(col)', 'Aggregate fonksiyonlar'],
+          ['NULL kontrolü', 'WHERE col IS NULL', 'Eksik değerleri bul'],
+          ['COALESCE', 'COALESCE(col, default)', "NULL'ı varsayılan ile değiştir"],
+          ['CTE', 'WITH name AS (SELECT ...) SELECT ...', 'Adlandırılmış geçici alt sorgu'],
+          ['Window RANK', 'RANK() OVER (PARTITION BY ... ORDER BY ...)', 'Gruplar içinde sırala'],
+          ['EXPLAIN', 'EXPLAIN SELECT ...', 'Sorgu yürütme planını göster'],
+        ]
+      },
+      6: { content: "Hızlı deneyler için db-fiddle.com'u yer imlerine ekleyin. DELETE veya UPDATE çalıştırmadan önce WHERE koşulunu SELECT ile test edin — tek bir eksik WHERE tüm tabloyu silebilir." },
+    }
+  }),
+]
+
 const trHero = {
   title: '🗄️ SQL',
   subtitle: 'Sıfırdan Veritabanı Test Uzmanına',
@@ -1123,5 +2102,5 @@ const enTabs = ['🎯 Intro & Why', '📦 Installation', '🟢 Foundations', '�
 
 export const sqlData = {
   en: { hero: enHero, tabs: enTabs, sections },
-  tr: { hero: trHero, tabs: trTabs, sections },
+  tr: { hero: trHero, tabs: trTabs, sections: trSections },
 }

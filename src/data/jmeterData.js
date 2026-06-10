@@ -64,6 +64,62 @@ export const jmeterData = {
               'Microservices: Identify which service is the bottleneck',
             ]
           },
+          { type: 'heading', text: 'Performance Testing Pyramid' },
+          {
+            type: 'visual', variant: 'pyramid',
+            title: 'Load Testing Strategy — How Much is Enough?',
+            levels: [
+              { label: 'Endurance (Soak) Tests', color: 'red', desc: 'Hours/days at moderate load — rare, expensive' },
+              { label: 'Stress Tests', color: 'orange', desc: 'Push past limits — find breaking point' },
+              { label: 'Spike Tests', color: 'yellow', desc: 'Sudden traffic bursts — test elasticity' },
+              { label: 'Load Tests', color: 'blue', desc: 'Expected peak users — run every release' },
+              { label: 'Smoke / Baseline', color: 'green', desc: '1-5 users — verify system works at all' },
+            ],
+            note: 'Start at the base. Establish a baseline first, then load test, then stress. Endurance tests run least often but reveal memory leaks.',
+          },
+          { type: 'heading', text: 'JMeter Test Plan Architecture' },
+          {
+            type: 'visual', variant: 'boxes',
+            title: 'How JMeter Test Components Fit Together',
+            items: [
+              { icon: '📋', label: 'Test Plan', desc: 'Root container' },
+              { arrow: true },
+              { icon: '👥', label: 'Thread Group', desc: 'Virtual users', highlight: true },
+              { arrow: true },
+              { icon: '📡', label: 'Samplers', desc: 'HTTP requests' },
+              { arrow: true },
+              { icon: '🔍', label: 'Assertions', desc: 'Verify responses' },
+              { arrow: true },
+              { icon: '📊', label: 'Listeners', desc: 'Collect results' },
+            ],
+            note: 'Thread Group = users. Samplers = what they do. Assertions = did it work? Listeners = what happened?',
+          },
+          {
+            type: 'visual', variant: 'flow',
+            title: 'JMeter Test Execution Flow',
+            steps: [
+              { num: '1', label: 'Thread Group', desc: 'N users start' },
+              { num: '2', label: 'Ramp-up', desc: 'Gradual start' },
+              { num: '3', label: 'Send Request', desc: 'HTTP Sampler', highlight: true },
+              { num: '4', label: 'Receive Response', desc: 'Status + body' },
+              { num: '5', label: 'Assert', desc: 'Check status 200' },
+              { num: '6', label: 'Record', desc: 'Store metrics' },
+              { num: '7', label: 'Report', desc: 'HTML output' },
+            ],
+            note: 'Steps 3-6 repeat for every request in every thread. 100 users × 10 requests = 1,000 data points.',
+          },
+          {
+            type: 'quiz',
+            question: 'You want to simulate 500 users gradually starting over 60 seconds in JMeter. Which component controls this?',
+            options: [
+              'HTTP Request Sampler — controls what to test',
+              'Thread Group — controls number of users and ramp-up period',
+              'Response Assertion — controls pass/fail conditions',
+              'Listener — controls result collection',
+            ],
+            correct: 1,
+            explanation: 'Thread Group defines: (1) Number of threads = virtual users, (2) Ramp-up period = seconds to start all users, (3) Loop count = repetitions per user. 500 users with 60s ramp-up means ~8 new users start every second.',
+          },
         ],
       },
 
@@ -286,6 +342,80 @@ diana,pass4
               'Check results in View Results Tree (green = pass, red = fail)',
             ]
           },
+          {
+            type: 'visual', variant: 'boxes',
+            title: 'JMeter Test Plan Anatomy — Component Pipeline',
+            items: [
+              { icon: '📋', label: 'Test Plan', desc: 'root container' },
+              { arrow: true },
+              { icon: '👥', label: 'Thread Group', desc: 'virtual users' },
+              { arrow: true },
+              { icon: '🌐', label: 'HTTP Sampler', desc: 'sends requests' },
+              { arrow: true },
+              { icon: '✅', label: 'Assertion', desc: 'validates response' },
+              { arrow: true },
+              { icon: '📊', label: 'Listener', desc: 'collects results' },
+            ],
+            note: 'Thread Group = how many users & how fast. HTTP Sampler = what to request. Assertion = what counts as pass/fail. Listener = how to view results.',
+          },
+          {
+            type: 'comparison',
+            left: {
+              label: '🔍 Debug Listeners (use while building)',
+              code: `// View Results Tree
+// - See every request & response
+// - Green = pass, Red = fail
+// - Shows headers, body, timing
+// - ❌ Disable for load tests
+//   (consumes huge memory!)
+
+// Simple Data Writer
+// - Write raw results to file
+// - Lightweight alternative`,
+              note: 'Always disable debug listeners before running real load tests.',
+            },
+            right: {
+              label: '📊 Report Listeners (use in load tests)',
+              code: `// Aggregate Report
+// - Avg, Min, Max, 90th/95th/99th %ile
+// - Error % per endpoint
+// - Throughput (req/sec)
+
+// Summary Report
+// - Lighter than Aggregate
+// - Good for 1000+ users
+
+// HTML Dashboard (--reportonly)
+// - Best: generate after test`,
+              note: 'Generate HTML dashboard with -e -o report/ flag in CLI mode.',
+            },
+          },
+          {
+            type: 'visual', variant: 'flow',
+            title: 'Thread Group: Ramp-Up Execution Timeline',
+            note: 'Ramp-up spreads user starts evenly over time — prevents a sudden spike from masking real performance behaviour.',
+            steps: [
+              { num: 'T=0s', label: 'Thread Group starts', desc: 'Number of Threads=100, Ramp-Up=60s, Duration=300s', highlight: true },
+              { num: 'T=0–60s', label: 'Ramp-up phase', desc: '~1.67 new users/second start sending requests' },
+              { num: 'T=60s', label: 'Full load reached', desc: 'All 100 virtual users running concurrently' },
+              { num: 'T=60–300s', label: 'Sustained load', desc: 'Steady-state: measure throughput, latency, errors', highlight: true },
+              { num: 'T=300s', label: 'Test ends', desc: 'Threads complete their current request and stop' },
+            ],
+          },
+          {
+            type: 'visual', variant: 'boxes',
+            title: 'Thread Group Parameters — What Each One Controls',
+            items: [
+              { icon: '👥', label: 'Number of Threads', desc: 'total virtual users (start with 10–50)' },
+              { arrow: true },
+              { icon: '⏱️', label: 'Ramp-Up (sec)', desc: 'seconds to start all threads (gradual increase)' },
+              { arrow: true },
+              { icon: '🔁', label: 'Loop Count / ∞', desc: 'repeats per user (-1 = infinite, use Duration instead)' },
+              { arrow: true },
+              { icon: '⏰', label: 'Duration (sec)', desc: 'total test run time — preferred over Loop Count' },
+            ],
+            note: 'Golden rule: Ramp-Up ≥ 10% of Duration. Too short a ramp-up creates an artificial spike — not a realistic load pattern.',
+          },
         ],
       },
 
@@ -495,6 +625,51 @@ jmeter.save.saveservice.samplerData=false    # Save only what you need
 jmeter.save.saveservice.requestHeaders=false
 summariser.interval=30                        # Log summary every 30 sec`
           },
+          {
+            type: 'visual', variant: 'flow',
+            title: 'Non-GUI CLI Command Pipeline',
+            note: 'Always use Non-GUI mode for real load tests. GUI overhead can skew results by 20-30% on large thread counts.',
+            steps: [
+              { num: '1', label: 'Write test.jmx', desc: 'Create in GUI' },
+              { num: '2', label: 'jmeter -n -t test.jmx', desc: 'Non-GUI mode', highlight: true },
+              { num: '3', label: '-l results.jtl', desc: 'Raw results file' },
+              { num: '4', label: '-e -o ./report', desc: 'HTML dashboard', highlight: true },
+              { num: '5', label: 'open report/index.html', desc: 'View metrics' },
+            ],
+          },
+          {
+            type: 'comparison',
+            left: {
+              label: '❌ Debug Listeners (Dev Only)',
+              code: `View Results Tree
+  → Shows every request/response
+  → Full request body visible
+  → Full response body visible
+
+⚠ NEVER use in real load tests:
+  • Stores ALL data in RAM
+  • Slows JMeter itself down
+  • Skews your test results
+  • Causes OOM crashes at 500+ users`,
+              note: 'View Results Tree is for debugging scripts only — disable it before running real tests',
+            },
+            right: {
+              label: '✅ Report Listeners (Production)',
+              code: `Aggregate Report
+  → Average, Min, Max, P90, P99
+  → Error rate, Throughput
+  → Memory-efficient counters only
+
+Summary Report
+  → Lightweight running totals
+
+HTML Dashboard (-e -o)
+  → Full interactive report
+  → Generated after test run
+  → No runtime overhead`,
+              note: 'Aggregate Report + HTML Dashboard is the standard combination for CI/CD pipelines',
+            },
+          },
         ],
       },
 
@@ -690,6 +865,62 @@ stage('Performance Test') {
               'Mikro servisler: Hangi servisin darboğaz olduğunu belirleme',
             ]
           },
+          { type: 'heading', text: 'Performans Testi Piramidi' },
+          {
+            type: 'visual', variant: 'pyramid',
+            title: 'Yük Testi Stratejisi — Ne Kadarı Yeterli?',
+            levels: [
+              { label: 'Dayanıklılık (Soak) Testleri', color: 'red', desc: 'Saatler/günler orta yük — nadir, pahalı' },
+              { label: 'Stres Testleri', color: 'orange', desc: 'Limiti aş — kırılma noktasını bul' },
+              { label: 'Spike Testleri', color: 'yellow', desc: 'Ani trafik artışı — esnekliği test et' },
+              { label: 'Yük Testleri', color: 'blue', desc: 'Beklenen zirve kullanıcılar — her sürümde çalıştır' },
+              { label: 'Smoke / Baseline', color: 'green', desc: '1-5 kullanıcı — sistemin çalıştığını doğrula' },
+            ],
+            note: 'Tabandan başla. Önce baseline belirle, sonra yük testi, sonra stres. Dayanıklılık testleri en seyrek çalıştırılır ama bellek sızıntılarını ortaya çıkarır.',
+          },
+          { type: 'heading', text: 'JMeter Test Planı Mimarisi' },
+          {
+            type: 'visual', variant: 'boxes',
+            title: 'JMeter Test Bileşenleri Nasıl Bir Araya Gelir?',
+            items: [
+              { icon: '📋', label: 'Test Planı', desc: 'Kök konteyner' },
+              { arrow: true },
+              { icon: '👥', label: 'Thread Group', desc: 'Sanal kullanıcılar', highlight: true },
+              { arrow: true },
+              { icon: '📡', label: 'Sampler\'lar', desc: 'HTTP istekleri' },
+              { arrow: true },
+              { icon: '🔍', label: 'Assertion\'lar', desc: 'Yanıt doğrulama' },
+              { arrow: true },
+              { icon: '📊', label: 'Listener\'lar', desc: 'Sonuç toplama' },
+            ],
+            note: 'Thread Group = kullanıcılar. Sampler\'lar = ne yapıyorlar. Assertion\'lar = çalışıyor mu? Listener\'lar = ne oldu?',
+          },
+          {
+            type: 'visual', variant: 'flow',
+            title: 'JMeter Test Çalıştırma Akışı',
+            steps: [
+              { num: '1', label: 'Thread Group', desc: 'N kullanıcı başlar' },
+              { num: '2', label: 'Ramp-up', desc: 'Kademeli başlangıç' },
+              { num: '3', label: 'İstek Gönder', desc: 'HTTP Sampler', highlight: true },
+              { num: '4', label: 'Yanıt Al', desc: 'Durum + gövde' },
+              { num: '5', label: 'Doğrula', desc: '200 kontrolü' },
+              { num: '6', label: 'Kaydet', desc: 'Metrikleri sakla' },
+              { num: '7', label: 'Raporla', desc: 'HTML çıktısı' },
+            ],
+            note: '3-6. adımlar her thread\'deki her istek için tekrar eder. 100 kullanıcı × 10 istek = test başına 1.000 veri noktası.',
+          },
+          {
+            type: 'quiz',
+            question: "JMeter'da 60 saniyede kademeli olarak başlayan 500 kullanıcıyı simüle etmek istiyorsunuz. Bunu hangi bileşen kontrol eder?",
+            options: [
+              'HTTP Request Sampler — neyin test edileceğini kontrol eder',
+              'Thread Group — kullanıcı sayısını ve ramp-up süresini kontrol eder',
+              'Response Assertion — geçme/başarısız koşullarını kontrol eder',
+              'Listener — sonuç toplamayı kontrol eder',
+            ],
+            correct: 1,
+            explanation: "Thread Group şunları tanımlar: (1) Thread sayısı = sanal kullanıcılar, (2) Ramp-up süresi = tüm kullanıcıları başlatmak için saniye sayısı, (3) Döngü sayısı = her kullanıcı başına tekrar. 60 saniyelik ramp-up ile 500 kullanıcı → saniyede ~8 yeni kullanıcı başlar.",
+          },
         ],
       },
       {
@@ -836,6 +1067,80 @@ ayse,sifre3
               'Sonuçları View Results Tree\'de kontrol et (yeşil = başarılı, kırmızı = başarısız)',
             ]
           },
+          {
+            type: 'visual', variant: 'boxes',
+            title: 'JMeter Test Planı Anatomisi — Bileşen Hattı',
+            items: [
+              { icon: '📋', label: 'Test Planı', desc: 'kök kapsayıcı' },
+              { arrow: true },
+              { icon: '👥', label: 'Thread Group', desc: 'sanal kullanıcılar' },
+              { arrow: true },
+              { icon: '🌐', label: 'HTTP Sampler', desc: 'istek gönderir' },
+              { arrow: true },
+              { icon: '✅', label: 'Assertion', desc: 'yanıtı doğrular' },
+              { arrow: true },
+              { icon: '📊', label: 'Listener', desc: 'sonuçları toplar' },
+            ],
+            note: 'Thread Group = kaç kullanıcı ve ne kadar hızlı. HTTP Sampler = ne talep edileceği. Assertion = neyin başarı/başarısız sayılacağı. Listener = sonuçların nasıl görüntüleneceği.',
+          },
+          {
+            type: 'comparison',
+            left: {
+              label: '🔍 Debug Listener\'lar (kurulum aşamasında kullan)',
+              code: `// View Results Tree
+// - Her istek ve yanıtı gör
+// - Yeşil = başarılı, Kırmızı = başarısız
+// - Başlıklar, body, zamanlama gösterir
+// - ❌ Yük testinde devre dışı bırak
+//   (çok fazla bellek tüketir!)
+
+// Simple Data Writer
+// - Sonuçları dosyaya yazar
+// - Hafif alternatif`,
+              note: 'Gerçek yük testleri çalıştırmadan önce debug listener\'ları mutlaka devre dışı bırakın.',
+            },
+            right: {
+              label: '📊 Rapor Listener\'lar (yük testinde kullan)',
+              code: `// Aggregate Report
+// - Ort, Min, Maks, 90./95./99. yüzdelik
+// - Endpoint başına Hata %
+// - Throughput (istek/sn)
+
+// Summary Report
+// - Aggregate\'den daha hafif
+// - 1000+ kullanıcı için uygun
+
+// HTML Dashboard (--reportonly)
+// - En iyisi: test sonrası üret`,
+              note: 'CLI modunda -e -o rapor/ parametresiyle HTML dashboard üretin.',
+            },
+          },
+          {
+            type: 'visual', variant: 'flow',
+            title: 'Thread Group: Ramp-Up Zaman Çizelgesi',
+            note: 'Ramp-up, kullanıcı başlangıçlarını zamana yayar — ani bir kullanıcı dalgasının gerçek performans davranışını gizlemesini önler.',
+            steps: [
+              { num: 'T=0sn', label: 'Thread Group başlar', desc: 'Kullanıcı Sayısı=100, Ramp-Up=60sn, Süre=300sn', highlight: true },
+              { num: 'T=0–60sn', label: 'Ramp-up aşaması', desc: 'Her saniye ~1.67 yeni kullanıcı istek göndermeye başlar' },
+              { num: 'T=60sn', label: 'Tam yüke ulaşıldı', desc: '100 sanal kullanıcının tamamı eşzamanlı çalışıyor' },
+              { num: 'T=60–300sn', label: 'Sürdürülen yük', desc: 'Sabit durum: throughput, gecikme, hata oranı ölçülür', highlight: true },
+              { num: 'T=300sn', label: 'Test sona erer', desc: 'Thread\'ler mevcut isteği tamamlayıp durur' },
+            ],
+          },
+          {
+            type: 'visual', variant: 'boxes',
+            title: 'Thread Group Parametreleri — Her Biri Neyi Kontrol Eder',
+            items: [
+              { icon: '👥', label: 'Number of Threads', desc: 'toplam sanal kullanıcı (10–50 ile başla)' },
+              { arrow: true },
+              { icon: '⏱️', label: 'Ramp-Up (sn)', desc: 'tüm thread\'leri başlatmak için saniye (kademeli artış)' },
+              { arrow: true },
+              { icon: '🔁', label: 'Loop Count / ∞', desc: 'kullanıcı başına tekrar (-1 = sonsuz, Duration ile kullan)' },
+              { arrow: true },
+              { icon: '⏰', label: 'Duration (sn)', desc: 'toplam test süresi — Loop Count yerine tercih edilir' },
+            ],
+            note: 'Altın kural: Ramp-Up ≥ Sürenin %10\'u olmalı. Çok kısa ramp-up yapay bir ani yük oluşturur — gerçekçi bir yük modeli değildir.',
+          },
         ],
       },
       {
@@ -923,6 +1228,51 @@ jobs:
               ['Throughput', 'Hedefe göre', 'Sistemin saniyede işlediği istek sayısı'],
               ['Apdex Skoru', '> 0.7 (iyi)', '0-1 ölçeği: yanıt sürelerine göre kullanıcı memnuniyeti'],
             ]
+          },
+          {
+            type: 'visual', variant: 'flow',
+            title: 'Non-GUI CLI Komut Pipeline\'ı',
+            note: 'Gerçek yük testleri için her zaman Non-GUI modu kullanın. GUI overhead\'i büyük thread sayılarında sonuçları %20-30 çarpıtabilir.',
+            steps: [
+              { num: '1', label: 'test.jmx yaz', desc: 'GUI\'de oluştur' },
+              { num: '2', label: 'jmeter -n -t test.jmx', desc: 'Non-GUI modu', highlight: true },
+              { num: '3', label: '-l sonuclar.jtl', desc: 'Ham sonuç dosyası' },
+              { num: '4', label: '-e -o ./rapor', desc: 'HTML dashboard', highlight: true },
+              { num: '5', label: 'rapor/index.html aç', desc: 'Metrikleri görüntüle' },
+            ],
+          },
+          {
+            type: 'comparison',
+            left: {
+              label: '❌ Debug Listener\'lar (Sadece Geliştirme)',
+              code: `View Results Tree
+  → Her istek/yanıtı gösterir
+  → Tam istek gövdesi görünür
+  → Tam yanıt gövdesi görünür
+
+⚠ Gerçek yük testlerinde ASLA kullanma:
+  • Tüm veriyi RAM\'de saklar
+  • JMeter\'ı yavaşlatır
+  • Test sonuçlarını çarpıtır
+  • 500+ kullanıcıda OOM çökmesine yol açar`,
+              note: 'View Results Tree sadece script hata ayıklama içindir — gerçek testleri çalıştırmadan önce devre dışı bırakın',
+            },
+            right: {
+              label: '✅ Rapor Listener\'lar (Üretim)',
+              code: `Aggregate Report
+  → Ortalama, Min, Max, P90, P99
+  → Hata oranı, Throughput
+  → Yalnızca bellek açısından verimli sayaçlar
+
+Summary Report
+  → Hafif çalışan toplamlar
+
+HTML Dashboard (-e -o)
+  → Tam etkileşimli rapor
+  → Test çalışmasından sonra oluşturulur
+  → Çalışma zamanı overhead yok`,
+              note: 'Aggregate Report + HTML Dashboard, CI/CD pipeline\'ları için standart kombinasyondur',
+            },
           },
         ],
       },

@@ -217,7 +217,7 @@ function SwaggerDocs({ onExecute, darkMode }) {
                                                 <h4 className="text-sm font-bold uppercase tracking-wider mb-2 text-indigo-500">
                                                     Example Request
                                                 </h4>
-                                                <div className={`p-4 rounded-lg text-sm font-mono overflow-x-auto ${darkMode ? 'bg-black/40' : 'bg-slate-900 text-green-300'}`}>
+                                                <div className={`p-4 rounded-lg text-sm font-mono overflow-x-auto ${darkMode ? 'bg-slate-800/60' : 'bg-slate-800 text-slate-100'}`}>
                                                     <div className="mb-2">
                                                         <span className="text-yellow-400">{endpoint.method}</span> <span className="text-white">https://api.automationexercise.com{endpoint.path}</span>
                                                     </div>

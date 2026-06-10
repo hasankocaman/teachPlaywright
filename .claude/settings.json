@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cd /d D:\\\\ANTIGRAVITY\\\\automationexercise)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:5175/automationexercise/test-frameworks.html)",
+      "PowerShell(Invoke-WebRequest -Uri \"http://localhost:5175/automationexercise/test-frameworks.html\" -UseBasicParsing -TimeoutSec 3)",
+      "Bash(awk -F: '$2 > 1214 && $2 < 1500 {print}')",
+      "Bash(python -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(d.get\\('scripts', {}\\)\\)\")"
+    ]
+  }
+}
