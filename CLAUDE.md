@@ -113,7 +113,7 @@ automationexercise/
 
 ## 5. İçerik Genişlik Kuralı (ZORUNLU)
 
-Python ve TypeScript sayfaları W3Schools'daki TÜM konuları kapsamalıdır.  
+Python, TypeScript **ve SQL** sayfaları W3Schools'daki TÜM konuları kapsamalıdır.  
 Eksik konu bırakılamaz. Detaylar: `.claude/CONTENT_RULES.md`
 
 ---
@@ -154,9 +154,10 @@ npm run build
 
 - Yeni bileşen eklerken mevcut `*Page.jsx` yapısını taklit et.
 - İçerik değişikliği = `src/data/*Data.js` dosyasını düzenle, component'e dokunma.
-- Renk paleti: `#1e1e2e` bg, `#7c3aed` accent, `#10b981` success, `#f59e0b` warning, `#ef4444` error.
-- Her sayfada zorunlular: TR/ENG toggle (sağ üst), sticky sidebar (sol), home butonu (sağ alt fixed), scroll progress bar (üst).
+- Renk paleti (WCAG AAA token): light bg `#F8F5EE`, dark bg `#1A1816`, accent `#7c3aed`, success `#10b981`, warning `#f59e0b`, error `#ef4444`. Tam token sistemi `src/index.css`'de.
+- Her sayfada zorunlular: TR/ENG toggle (sağ üst), sticky tab bar (üst nav), home butonu (sağ alt fixed — HER ZAMAN görünür, 🏠 ikonu, sayfanın başına döner), scroll progress bar (en üst).
 - Kod bloğu = Prism.js highlight + copy butonu + satır yorumları zorunlu.
+- `simple-box` block: `title` field YOK, sadece `emoji` + `content` (bilingual). Günlük hayat benzetmesiyle basitçe açıkla, teknik terim kullanma.
 
 ---
 
@@ -177,5 +178,5 @@ npm run build
 - ❌ Teknik terimi Türkçeye çevirme ("fixture" → "fikstür" değil, "fixture" kalır)
 - ❌ Editör olmadan kod bloğu bırakma (her kodun denenebilir editörü olmalı)
 - ❌ Java karşılaştırması yapmadan Python/TS konusu anlatma
-- ❌ W3Schools'daki bir konuyu atlama (Python/TS için)
+- ❌ W3Schools'daki bir konuyu atlama (Python/TS/SQL için)
 - ❌ Sayfayı ayrı HTML dosyasına çıkarma (React component kalmalı)

@@ -717,6 +717,77 @@ function TSEditor({ defaultCode, height = '180px' }) {
     )
 }
 
+// ─── SQLEditor ────────────────────────────────────────────────────────────────
+
+function SQLEditor({ defaultCode, schema, height = '120px' }) {
+    const [code, setCode] = useState(defaultCode || '')
+    const [output, setOutput] = useState('')
+    const [ready, setReady] = useState(!!window._sqlJsInstance)
+
+    useEffect(() => {
+        if (window._sqlJsInstance) { setReady(true); return }
+        if (window._sqlJsLoading) {
+            const iv = setInterval(() => {
+                if (window._sqlJsInstance) { setReady(true); clearInterval(iv) }
+            }, 300)
+            return () => clearInterval(iv)
+        }
+        window._sqlJsLoading = true
+        const s = document.createElement('script')
+        s.src = 'https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.2/sql-wasm.js'
+        s.onload = () => {
+            window.initSqlJs({ locateFile: f => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.2/${f}` })
+                .then(SQL => { window._sqlJsInstance = SQL; setReady(true) })
+                .catch(e => { window._sqlJsLoading = false; console.error('sql.js load failed', e) })
+        }
+        document.head.appendChild(s)
+    }, [])
+
+    const run = () => {
+        if (!window._sqlJsInstance) return
+        try {
+            const db = new window._sqlJsInstance.Database()
+            if (schema) db.run(schema)
+            const results = db.exec(code.trim())
+            db.close()
+            if (!results.length) {
+                setOutput('✅ Query executed. No rows returned.')
+                return
+            }
+            const { columns, values } = results[0]
+            const colWidths = columns.map((c, i) => Math.max(c.length, ...values.map(r => String(r[i] ?? '').length)))
+            const pad = (s, w) => String(s ?? '').padEnd(w)
+            const sep = colWidths.map(w => '-'.repeat(w)).join('-+-')
+            const header = columns.map((c, i) => pad(c, colWidths[i])).join(' | ')
+            const rows = values.map(r => r.map((v, i) => pad(v, colWidths[i])).join(' | ')).join('\n')
+            setOutput(`${header}\n${sep}\n${rows}\n\n(${values.length} row${values.length !== 1 ? 's' : ''})`)
+        } catch (e) {
+            setOutput('❌ ' + e.message)
+        }
+    }
+
+    return (
+        <div className="mt-4 rounded-xl overflow-hidden border border-cyan-800/40">
+            <div style={{ background: '#0c1a2e' }} className="flex items-center justify-between px-3 py-2">
+                <span className="text-xs font-mono" style={{ color: '#6c7086' }}>
+                    {ready ? '🗄️ SQL — Try it yourself' : '⏳ Loading SQL engine...'}
+                </span>
+                <button onClick={run} disabled={!ready}
+                    style={{ background: ready ? '#0369a1' : '#313148', color: '#fff', border: 'none', borderRadius: '6px', padding: '5px 16px', fontSize: '12px', fontWeight: 600, cursor: ready ? 'pointer' : 'not-allowed' }}>
+                    ▶ Run
+                </button>
+            </div>
+            <textarea value={code} onChange={e => setCode(e.target.value)} spellCheck={false}
+                style={{ display: 'block', width: '100%', minHeight: height, background: '#0c1a2e', color: '#7dd3fc', fontFamily: 'JetBrains Mono, monospace', fontSize: '13px', border: 'none', padding: '14px 16px', resize: 'vertical', boxSizing: 'border-box', outline: 'none' }} />
+            {output && (
+                <pre style={{ margin: 0, padding: '10px 16px', background: '#060f1e', color: output.startsWith('❌') ? '#ef4444' : '#10b981', fontFamily: 'JetBrains Mono, monospace', fontSize: '12px', borderTop: '1px solid #1e3a5f', whiteSpace: 'pre-wrap', overflowX: 'auto' }}>
+                    {output}
+                </pre>
+            )}
+        </div>
+    )
+}
+
 // ─── Bilingual content helper ─────────────────────────────────────────────────
 
 const tx = (val, lang) => {
@@ -752,13 +823,6 @@ function ScrollProgressBar() {
 // ─── HomeButton ───────────────────────────────────────────────────────────────
 
 function HomeButton() {
-    const [visible, setVisible] = useState(false)
-    useEffect(() => {
-        const check = () => setVisible(window.scrollY > 300)
-        window.addEventListener('scroll', check, { passive: true })
-        return () => window.removeEventListener('scroll', check)
-    }, [])
-    if (!visible) return null
     return (
         <button
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
@@ -767,7 +831,7 @@ function HomeButton() {
                 position: 'fixed', bottom: '24px', right: '24px',
                 width: '48px', height: '48px', borderRadius: '50%',
                 background: '#7c3aed', color: '#fff', border: 'none',
-                cursor: 'pointer', fontSize: '20px', zIndex: 999,
+                cursor: 'pointer', fontSize: '22px', zIndex: 999,
                 boxShadow: '0 4px 16px rgba(124,58,237,0.5)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 transition: 'transform 0.2s, box-shadow 0.2s',
@@ -775,7 +839,7 @@ function HomeButton() {
             onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.1)'; e.currentTarget.style.boxShadow = '0 6px 20px rgba(124,58,237,0.7)' }}
             onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 4px 16px rgba(124,58,237,0.5)' }}
         >
-            ↑
+            🏠
         </button>
     )
 }
@@ -1076,9 +1140,11 @@ function renderBlock(block, i, darkMode, language = 'en') {
             return <JavaCompareBlock key={i} block={block} darkMode={darkMode} />
 
         case 'editor':
-            return block.lang === 'typescript'
-                ? <TSEditor key={i} defaultCode={block.defaultCode || block.code || ''} height={block.height} />
-                : <PyodideEditor key={i} defaultCode={block.defaultCode || block.code || ''} height={block.height} />
+            if (block.lang === 'typescript')
+                return <TSEditor key={i} defaultCode={block.defaultCode || block.code || ''} height={block.height} />
+            if (block.lang === 'sql')
+                return <SQLEditor key={i} defaultCode={block.defaultCode || block.code || ''} schema={block.schema} height={block.height} />
+            return <PyodideEditor key={i} defaultCode={block.defaultCode || block.code || ''} height={block.height} />
 
         // ── New block types ────────────────────────────────────────────────────
 

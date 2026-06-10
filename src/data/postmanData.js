@@ -1,0 +1,1797 @@
+const httpFlowSvg = `<svg viewBox='0 0 680 200' xmlns='http://www.w3.org/2000/svg' style='background:#1e2030;border-radius:12px;font-family:sans-serif;'>
+  <defs>
+    <marker id='ag' markerWidth='8' markerHeight='6' refX='7' refY='3' orient='auto'><path d='M0,0 L0,6 L8,3 z' fill='#10b981'/></marker>
+    <marker id='ar' markerWidth='8' markerHeight='6' refX='7' refY='3' orient='auto'><path d='M0,0 L0,6 L8,3 z' fill='#f59e0b'/></marker>
+    <marker id='ab' markerWidth='8' markerHeight='6' refX='7' refY='3' orient='auto'><path d='M0,0 L0,6 L8,3 z' fill='#60a5fa'/></marker>
+  </defs>
+  <rect x='20' y='55' width='140' height='90' rx='10' fill='#FF6C37' opacity='0.15' stroke='#FF6C37' stroke-width='1.5'/>
+  <text x='90' y='88' fill='#FF6C37' text-anchor='middle' font-size='22'>📮</text>
+  <text x='90' y='110' fill='#FF6C37' text-anchor='middle' font-size='12' font-weight='bold'>Postman</text>
+  <text x='90' y='128' fill='#aaa' text-anchor='middle' font-size='10'>API Client / Tester</text>
+  <line x1='165' y1='88' x2='270' y2='88' stroke='#10b981' stroke-width='2' marker-end='url(#ag)'/>
+  <text x='218' y='80' fill='#10b981' text-anchor='middle' font-size='10' font-family='monospace'>GET /api/users</text>
+  <text x='218' y='100' fill='#6c7086' text-anchor='middle' font-size='9'>Headers + Auth + Body</text>
+  <rect x='275' y='45' width='140' height='110' rx='10' fill='#7c3aed' opacity='0.15' stroke='#7c3aed' stroke-width='1.5'/>
+  <text x='345' y='80' fill='#a78bfa' text-anchor='middle' font-size='22'>🖥️</text>
+  <text x='345' y='102' fill='#a78bfa' text-anchor='middle' font-size='12' font-weight='bold'>API Server</text>
+  <text x='345' y='120' fill='#aaa' text-anchor='middle' font-size='10'>Node / Python / Java</text>
+  <text x='345' y='140' fill='#6c7086' text-anchor='middle' font-size='9' font-family='monospace'>:8080</text>
+  <line x1='420' y1='100' x2='490' y2='100' stroke='#60a5fa' stroke-width='1.5' marker-end='url(#ab)'/>
+  <rect x='495' y='70' width='110' height='60' rx='10' fill='#1e3a5f' stroke='#60a5fa' stroke-width='1.5'/>
+  <text x='550' y='97' fill='#60a5fa' text-anchor='middle' font-size='22'>🗄️</text>
+  <text x='550' y='118' fill='#93c5fd' text-anchor='middle' font-size='11' font-weight='bold'>Database</text>
+  <line x1='270' y1='118' x2='165' y2='118' stroke='#f59e0b' stroke-width='2' marker-end='url(#ar)'/>
+  <text x='218' y='138' fill='#f59e0b' text-anchor='middle' font-size='10' font-family='monospace'>200 OK + JSON body</text>
+  <text x='340' y='185' fill='#4b5563' text-anchor='middle' font-size='10'>REQUEST (test gonder) --- RESPONSE (sonucu dogrula) --- DB sorgusu sunucu tarafinda</text>
+</svg>`
+
+const uiMockupSvg = `<svg viewBox='0 0 720 430' xmlns='http://www.w3.org/2000/svg' style='background:#1a1a2e;border-radius:12px;font-family:monospace;'>
+  <rect x='0' y='0' width='720' height='36' rx='10' fill='#0f0f23'/>
+  <circle cx='20' cy='18' r='6' fill='#ef4444' opacity='0.8'/>
+  <circle cx='40' cy='18' r='6' fill='#f59e0b' opacity='0.8'/>
+  <circle cx='60' cy='18' r='6' fill='#10b981' opacity='0.8'/>
+  <text x='360' y='24' fill='#FF6C37' text-anchor='middle' font-size='13' font-weight='bold'>📮 Postman</text>
+  <rect x='0' y='36' width='180' height='394' fill='#111827'/>
+  <text x='15' y='58' fill='#FF6C37' font-size='11' font-weight='bold'>📁 Collections</text>
+  <rect x='8' y='65' width='164' height='28' rx='5' fill='#1f2937'/>
+  <text x='20' y='84' fill='#d1d5db' font-size='10'>📂 User Endpoints</text>
+  <text x='32' y='100' fill='#9ca3af' font-size='9'>📄 GET /users</text>
+  <text x='32' y='114' fill='#9ca3af' font-size='9'>📄 POST /users</text>
+  <text x='32' y='128' fill='#9ca3af' font-size='9'>📄 DELETE /users/1</text>
+  <text x='20' y='148' fill='#d1d5db' font-size='10'>📂 Auth</text>
+  <text x='32' y='163' fill='#9ca3af' font-size='9'>📄 POST /login</text>
+  <text x='15' y='195' fill='#6b7280' font-size='9'>🌍 Environments</text>
+  <text x='20' y='212' fill='#60a5fa' font-size='9' font-weight='bold'>▶ dev</text>
+  <text x='20' y='226' fill='#6b7280' font-size='9'>○ staging</text>
+  <text x='20' y='240' fill='#6b7280' font-size='9'>○ production</text>
+  <rect x='5' y='350' width='170' height='22' rx='4' fill='#7c3aed' opacity='0.3' stroke='#7c3aed' stroke-width='1'/>
+  <text x='90' y='365' fill='#a78bfa' text-anchor='middle' font-size='9'>① Sidebar: Collections + Envs</text>
+  <rect x='183' y='36' width='537' height='394' fill='#161625'/>
+  <rect x='190' y='45' width='523' height='38' rx='7' fill='#0f0f1e' stroke='#374151' stroke-width='1'/>
+  <rect x='196' y='50' width='65' height='28' rx='5' fill='#10b981'/>
+  <text x='229' y='69' fill='white' text-anchor='middle' font-size='12' font-weight='bold'>GET</text>
+  <rect x='268' y='50' width='350' height='28' rx='5' fill='#1f2937'/>
+  <text x='280' y='69' fill='#60a5fa' font-size='11'>https://api.example.com/users</text>
+  <rect x='625' y='50' width='80' height='28' rx='5' fill='#FF6C37'/>
+  <text x='665' y='69' fill='white' text-anchor='middle' font-size='12' font-weight='bold'>Send</text>
+  <rect x='190' y='88' width='523' height='18' rx='3' fill='#f59e0b' opacity='0.15' stroke='#f59e0b' stroke-width='1'/>
+  <text x='452' y='101' fill='#f59e0b' text-anchor='middle' font-size='9'>② Method + URL + Send — her istegin kalbi</text>
+  <rect x='190' y='110' width='523' height='28' fill='#111827'/>
+  <text x='200' y='128' fill='#FF6C37' font-size='10' font-weight='bold'>Params</text>
+  <text x='255' y='128' fill='#9ca3af' font-size='10'>Authorization</text>
+  <text x='360' y='128' fill='#9ca3af' font-size='10'>Headers</text>
+  <text x='430' y='128' fill='#9ca3af' font-size='10'>Body</text>
+  <text x='475' y='128' fill='#9ca3af' font-size='10'>Pre-request</text>
+  <text x='545' y='128' fill='#9ca3af' font-size='10'>Tests</text>
+  <rect x='190' y='138' width='523' height='18' rx='3' fill='#7c3aed' opacity='0.15' stroke='#7c3aed' stroke-width='1'/>
+  <text x='452' y='151' fill='#a78bfa' text-anchor='middle' font-size='9'>③ Request Tabs — params, auth, headers, body, test scriptleri</text>
+  <rect x='190' y='160' width='523' height='100' fill='#0d0d1e'/>
+  <text x='205' y='183' fill='#6b7280' font-size='10'>Key</text>
+  <text x='380' y='183' fill='#6b7280' font-size='10'>Value</text>
+  <line x1='190' y1='190' x2='713' y2='190' stroke='#1f2937' stroke-width='1'/>
+  <text x='205' y='208' fill='#60a5fa' font-size='10'>page</text>
+  <text x='380' y='208' fill='#10b981' font-size='10'>1</text>
+  <text x='205' y='226' fill='#60a5fa' font-size='10'>limit</text>
+  <text x='380' y='226' fill='#10b981' font-size='10'>10</text>
+  <text x='205' y='244' fill='#374151' font-size='10'>+ Add param</text>
+  <rect x='190' y='264' width='523' height='32' fill='#111827'/>
+  <text x='205' y='285' fill='#f59e0b' font-size='11' font-weight='bold'>Response</text>
+  <text x='530' y='285' fill='#10b981' font-size='11' font-weight='bold'>200 OK</text>
+  <text x='590' y='285' fill='#9ca3af' font-size='10'>128 ms</text>
+  <text x='645' y='285' fill='#9ca3af' font-size='10'>2.1 KB</text>
+  <rect x='190' y='296' width='523' height='24' fill='#0f0f1e'/>
+  <text x='205' y='313' fill='#FF6C37' font-size='10' font-weight='bold'>Body</text>
+  <text x='243' y='313' fill='#9ca3af' font-size='10'>Cookies</text>
+  <text x='298' y='313' fill='#9ca3af' font-size='10'>Headers</text>
+  <text x='360' y='313' fill='#9ca3af' font-size='10'>Test Results 2/2</text>
+  <rect x='190' y='320' width='523' height='110' fill='#0a0a18'/>
+  <text x='205' y='340' fill='#6b7086' font-size='10'>{</text>
+  <text x='220' y='355' fill='#60a5fa' font-size='10'>"data": [</text>
+  <text x='235' y='370' fill='#9ca3af' font-size='10'>{ "id": 1, "name": "Alice" },</text>
+  <text x='235' y='385' fill='#9ca3af' font-size='10'>{ "id": 2, "name": "Bob" }</text>
+  <text x='220' y='400' fill='#6b7086' font-size='10'>]</text>
+  <rect x='190' y='415' width='523' height='15' rx='3' fill='#10b981' opacity='0.15' stroke='#10b981' stroke-width='1'/>
+  <text x='452' y='426' fill='#34d399' text-anchor='middle' font-size='9'>④ Response — status, sure, boyut, body, headers, test sonuclari</text>
+</svg>`
+
+const varScopeSvg = `<svg viewBox='0 0 640 290' xmlns='http://www.w3.org/2000/svg' style='background:#1e2030;border-radius:12px;font-family:sans-serif;'>
+  <rect x='20' y='20' width='580' height='250' rx='12' fill='none' stroke='#ef4444' stroke-width='2' stroke-dasharray='6,3'/>
+  <text x='38' y='44' fill='#ef4444' font-size='11' font-weight='bold'>🌐 Global Variables — tum workspace</text>
+  <text x='38' y='60' fill='#9ca3af' font-size='9' font-family='monospace'>pm.globals.set("apiKey", "abc123")</text>
+  <rect x='50' y='72' width='520' height='185' rx='10' fill='none' stroke='#f59e0b' stroke-width='2' stroke-dasharray='6,3'/>
+  <text x='68' y='92' fill='#f59e0b' font-size='11' font-weight='bold'>🌍 Environment Variables — secili ortam (dev / staging / prod)</text>
+  <text x='68' y='108' fill='#9ca3af' font-size='9' font-family='monospace'>pm.environment.set("baseUrl", "https://dev.api.com")</text>
+  <rect x='80' y='118' width='460' height='127' rx='8' fill='none' stroke='#10b981' stroke-width='2' stroke-dasharray='6,3'/>
+  <text x='98' y='138' fill='#10b981' font-size='11' font-weight='bold'>📁 Collection Variables — bu koleksiyon</text>
+  <text x='98' y='154' fill='#9ca3af' font-size='9' font-family='monospace'>pm.collectionVariables.set("token", "jwt...")</text>
+  <rect x='110' y='163' width='400' height='72' rx='6' fill='none' stroke='#60a5fa' stroke-width='2' stroke-dasharray='6,3'/>
+  <text x='126' y='182' fill='#60a5fa' font-size='11' font-weight='bold'>📄 Local Variables — tek istek</text>
+  <text x='126' y='197' fill='#9ca3af' font-size='9' font-family='monospace'>pm.variables.set("tmpId", "42")  // istek bittikten sonra silinir</text>
+  <text x='126' y='213' fill='#a78bfa' font-size='9' font-family='monospace'>URL: {{baseUrl}}/users/{{tmpId}}  — cift suslu parantez kullan</text>
+  <text x='126' y='228' fill='#a78bfa' font-size='9' font-family='monospace'>Header: Authorization: {{token}}</text>
+  <text x='525' y='158' fill='#6b7280' font-size='8' text-anchor='middle'>Oncelik:</text>
+  <text x='525' y='172' fill='#60a5fa' font-size='8' text-anchor='middle'>Local</text>
+  <text x='525' y='186' fill='#10b981' font-size='8' text-anchor='middle'>Collection</text>
+  <text x='525' y='200' fill='#f59e0b' font-size='8' text-anchor='middle'>Environment</text>
+  <text x='525' y='214' fill='#ef4444' font-size='8' text-anchor='middle'>Global</text>
+  <text x='525' y='228' fill='#6b7280' font-size='7' text-anchor='middle'>(en dusuk)</text>
+  <text x='525' y='140' fill='#6b7280' font-size='8' text-anchor='middle'>(en yuksek)</text>
+</svg>`
+
+const collectionHierarchySvg = `<svg viewBox='0 0 640 260' xmlns='http://www.w3.org/2000/svg' style='background:#1e2030;border-radius:12px;font-family:monospace;'>
+  <text x='30' y='35' fill='#a78bfa' font-size='12' font-weight='bold'>🏢 Workspace</text>
+  <line x1='45' y1='40' x2='45' y2='260' stroke='#374151' stroke-width='1' stroke-dasharray='4,3'/>
+  <line x1='45' y1='65' x2='75' y2='65' stroke='#374151' stroke-width='1'/>
+  <text x='80' y='70' fill='#FF6C37' font-size='11' font-weight='bold'>📁 My API Tests  (Collection)</text>
+  <line x1='90' y1='75' x2='90' y2='230' stroke='#374151' stroke-width='1' stroke-dasharray='4,3'/>
+  <line x1='90' y1='100' x2='120' y2='100' stroke='#374151' stroke-width='1'/>
+  <text x='125' y='105' fill='#60a5fa' font-size='10'>📂 User Endpoints  (Folder)</text>
+  <line x1='135' y1='110' x2='135' y2='185' stroke='#374151' stroke-width='1' stroke-dasharray='4,3'/>
+  <line x1='135' y1='125' x2='160' y2='125' stroke='#374151' stroke-width='1'/>
+  <text x='165' y='130' fill='#10b981' font-size='10'>📄 GET /users</text>
+  <text x='400' y='130' fill='#6b7280' font-size='9'>Tum kullanicilari getir</text>
+  <line x1='135' y1='148' x2='160' y2='148' stroke='#374151' stroke-width='1'/>
+  <text x='165' y='153' fill='#f59e0b' font-size='10'>📄 POST /users</text>
+  <text x='400' y='153' fill='#6b7280' font-size='9'>Yeni kullanici olustur</text>
+  <line x1='135' y1='171' x2='160' y2='171' stroke='#374151' stroke-width='1'/>
+  <text x='165' y='176' fill='#ef4444' font-size='10'>📄 DELETE /users/1</text>
+  <text x='400' y='176' fill='#6b7280' font-size='9'>Kullanici sil</text>
+  <line x1='90' y1='205' x2='120' y2='205' stroke='#374151' stroke-width='1'/>
+  <text x='125' y='210' fill='#60a5fa' font-size='10'>📂 Auth  (Folder)</text>
+  <line x1='135' y1='215' x2='135' y2='248' stroke='#374151' stroke-width='1' stroke-dasharray='4,3'/>
+  <line x1='135' y1='228' x2='160' y2='228' stroke='#374151' stroke-width='1'/>
+  <text x='165' y='233' fill='#10b981' font-size='10'>📄 POST /login</text>
+  <text x='400' y='233' fill='#6b7280' font-size='9'>Token al, env'e kaydet</text>
+  <line x1='135' y1='248' x2='160' y2='248' stroke='#374151' stroke-width='1'/>
+  <text x='165' y='253' fill='#f59e0b' font-size='10'>📄 POST /logout</text>
+</svg>`
+
+const microservicesSvg = `<svg viewBox='0 0 700 390' xmlns='http://www.w3.org/2000/svg' style='background:#1e2030;border-radius:12px;font-family:sans-serif;'>
+  <style>
+    .ms-auth { animation: ms-glow 2s ease-in-out 0s infinite alternate; }
+    .ms-user { animation: ms-glow 2s ease-in-out 0.5s infinite alternate; }
+    .ms-order { animation: ms-glow 2s ease-in-out 1s infinite alternate; }
+    .ms-pay { animation: ms-glow 2s ease-in-out 1.5s infinite alternate; }
+    .ms-la { animation: ms-dash 1.5s linear 0s infinite; stroke-dasharray: 8 5; }
+    .ms-lu { animation: ms-dash 1.5s linear 0.4s infinite; stroke-dasharray: 8 5; }
+    .ms-lo { animation: ms-dash 1.5s linear 0.8s infinite; stroke-dasharray: 8 5; }
+    .ms-lp { animation: ms-dash 1.5s linear 1.2s infinite; stroke-dasharray: 8 5; }
+    @keyframes ms-glow { from { opacity:0.5; } to { opacity:1; } }
+    @keyframes ms-dash { to { stroke-dashoffset: -26; } }
+  </style>
+  <rect x='270' y='158' width='160' height='74' rx='12' fill='#FF6C37' opacity='0.2' stroke='#FF6C37' stroke-width='2'/>
+  <text x='350' y='193' fill='#FF6C37' text-anchor='middle' font-size='26'>📮</text>
+  <text x='350' y='214' fill='#FF6C37' text-anchor='middle' font-size='12' font-weight='bold'>Postman</text>
+  <text x='350' y='228' fill='#9ca3af' text-anchor='middle' font-size='9'>Test Client</text>
+  <rect x='265' y='20' width='170' height='72' rx='10' fill='#7c3aed' opacity='0.15' stroke='#7c3aed' stroke-width='1.5' class='ms-auth'/>
+  <text x='350' y='52' fill='#a78bfa' text-anchor='middle' font-size='22'>🔐</text>
+  <text x='350' y='70' fill='#c4b5fd' text-anchor='middle' font-size='11' font-weight='bold'>Auth Service</text>
+  <text x='350' y='84' fill='#6b7280' text-anchor='middle' font-size='9'>:3001 — POST /login  POST /refresh</text>
+  <line x1='350' y1='158' x2='350' y2='96' stroke='#7c3aed' stroke-width='1.5' class='ms-la'/>
+  <rect x='20' y='163' width='168' height='72' rx='10' fill='#60a5fa' opacity='0.15' stroke='#60a5fa' stroke-width='1.5' class='ms-user'/>
+  <text x='104' y='196' fill='#93c5fd' text-anchor='middle' font-size='22'>👤</text>
+  <text x='104' y='214' fill='#bfdbfe' text-anchor='middle' font-size='11' font-weight='bold'>User Service</text>
+  <text x='104' y='228' fill='#6b7280' text-anchor='middle' font-size='9'>:3002 — GET/POST /users</text>
+  <line x1='270' y1='197' x2='192' y2='197' stroke='#60a5fa' stroke-width='1.5' class='ms-lu'/>
+  <rect x='512' y='163' width='168' height='72' rx='10' fill='#f59e0b' opacity='0.15' stroke='#f59e0b' stroke-width='1.5' class='ms-order'/>
+  <text x='596' y='196' fill='#fcd34d' text-anchor='middle' font-size='22'>📦</text>
+  <text x='596' y='214' fill='#fde68a' text-anchor='middle' font-size='11' font-weight='bold'>Order Service</text>
+  <text x='596' y='228' fill='#6b7280' text-anchor='middle' font-size='9'>:3003 — POST/GET /orders</text>
+  <line x1='430' y1='197' x2='510' y2='197' stroke='#f59e0b' stroke-width='1.5' class='ms-lo'/>
+  <rect x='265' y='308' width='170' height='72' rx='10' fill='#10b981' opacity='0.15' stroke='#10b981' stroke-width='1.5' class='ms-pay'/>
+  <text x='350' y='340' fill='#34d399' text-anchor='middle' font-size='22'>💳</text>
+  <text x='350' y='358' fill='#6ee7b7' text-anchor='middle' font-size='11' font-weight='bold'>Payment Service</text>
+  <text x='350' y='372' fill='#6b7280' text-anchor='middle' font-size='9'>:3004 — POST /payments</text>
+  <line x1='350' y1='235' x2='350' y2='306' stroke='#10b981' stroke-width='1.5' class='ms-lp'/>
+  <text x='350' y='388' fill='#374151' text-anchor='middle' font-size='9'>Her servis kendi ortam degiskenini kullanir: {{authUrl}} {{userUrl}} {{orderUrl}} {{payUrl}}</text>
+</svg>`
+
+const varCreateSvg = `<svg viewBox='0 0 700 330' xmlns='http://www.w3.org/2000/svg' style='background:#1a1a2e;border-radius:12px;font-family:monospace;'>
+  <style>
+    .vc-r1 { animation: vc-in 0.4s ease-out 0.3s both; }
+    .vc-r2 { animation: vc-in 0.4s ease-out 0.8s both; }
+    .vc-r3 { animation: vc-in 0.4s ease-out 1.3s both; }
+    .vc-r4 { animation: vc-in 0.4s ease-out 1.8s both; }
+    .vc-cur { animation: vc-blink 1s step-start infinite; }
+    @keyframes vc-in { from { opacity:0; transform:translateX(-16px); } to { opacity:1; transform:translateX(0); } }
+    @keyframes vc-blink { 50% { opacity:0; } }
+  </style>
+  <rect x='0' y='0' width='700' height='34' fill='#0d0d1e' rx='8'/>
+  <text x='350' y='22' fill='#FF6C37' text-anchor='middle' font-size='12' font-weight='bold'>Environments → + Create environment → "microservices-dev"</text>
+  <rect x='10' y='42' width='680' height='270' rx='10' fill='#111827'/>
+  <text x='24' y='64' fill='#FF6C37' font-size='10' font-weight='bold'>Adim 1: Sol sidebar → Environments → + Create → Adi: microservices-dev</text>
+  <rect x='18' y='72' width='664' height='22' fill='#1f2937' rx='3'/>
+  <text x='110' y='87' fill='#9ca3af' font-size='9'>VARIABLE</text>
+  <text x='300' y='87' fill='#9ca3af' font-size='9'>INITIAL VALUE</text>
+  <text x='500' y='87' fill='#9ca3af' font-size='9'>CURRENT VALUE</text>
+  <g class='vc-r1'>
+    <rect x='18' y='94' width='664' height='30' fill='#161625' stroke='#1f2937' stroke-width='0.5'/>
+    <rect x='22' y='98' width='150' height='22' rx='3' fill='#1f2937' stroke='#60a5fa' stroke-width='1'/>
+    <text x='30' y='113' fill='#60a5fa' font-size='10'>baseUrl</text>
+    <rect x='222' y='98' width='240' height='22' rx='3' fill='#1f2937'/>
+    <text x='230' y='113' fill='#10b981' font-size='9'>https://dev.api.company.com</text>
+    <rect x='472' y='98' width='200' height='22' rx='3' fill='#1f2937'/>
+    <text x='480' y='113' fill='#10b981' font-size='9'>https://dev.api.company.com</text>
+  </g>
+  <g class='vc-r2'>
+    <rect x='18' y='124' width='664' height='30' fill='#161625' stroke='#1f2937' stroke-width='0.5'/>
+    <rect x='22' y='128' width='150' height='22' rx='3' fill='#1f2937' stroke='#60a5fa' stroke-width='1'/>
+    <text x='30' y='143' fill='#60a5fa' font-size='10'>authToken</text>
+    <rect x='222' y='128' width='240' height='22' rx='3' fill='#1f2937'/>
+    <text x='230' y='143' fill='#6b7280' font-size='9'>(login test scripti dolduracak)</text>
+    <rect x='472' y='128' width='200' height='22' rx='3' fill='#1f2937'/>
+    <text x='480' y='143' fill='#6b7280' font-size='9'>eyJhbGci... (test sonrasi)</text>
+  </g>
+  <g class='vc-r3'>
+    <rect x='18' y='154' width='664' height='30' fill='#161625' stroke='#1f2937' stroke-width='0.5'/>
+    <rect x='22' y='158' width='150' height='22' rx='3' fill='#1f2937' stroke='#60a5fa' stroke-width='1'/>
+    <text x='30' y='173' fill='#60a5fa' font-size='10'>userId</text>
+    <rect x='222' y='158' width='240' height='22' rx='3' fill='#1f2937'/>
+    <text x='230' y='173' fill='#6b7280' font-size='9'>(POST /users sonrasi kayit)</text>
+    <rect x='472' y='158' width='200' height='22' rx='3' fill='#1f2937'/>
+    <text x='480' y='173' fill='#6b7280' font-size='9'>42</text>
+  </g>
+  <g class='vc-r4'>
+    <rect x='18' y='184' width='664' height='30' fill='#161625' stroke='#1f2937' stroke-width='0.5'/>
+    <rect x='22' y='188' width='150' height='22' rx='3' fill='#1f2937' stroke='#60a5fa' stroke-width='1'/>
+    <text x='30' y='203' fill='#60a5fa' font-size='10'>orderId</text>
+    <rect x='222' y='188' width='240' height='22' rx='3' fill='#1f2937'/>
+    <text x='230' y='203' fill='#6b7280' font-size='9'>(POST /orders sonrasi kayit)</text>
+    <rect x='472' y='188' width='200' height='22' rx='3' fill='#1f2937'/>
+    <text x='480' y='203' fill='#6b7280' font-size='9'>101</text>
+  </g>
+  <rect x='578' y='230' width='110' height='26' rx='5' fill='#FF6C37'/>
+  <text x='633' y='247' fill='white' text-anchor='middle' font-size='11' font-weight='bold'>Update</text>
+  <text x='24' y='278' fill='#10b981' font-size='10' font-weight='bold'>Adim 2: URL barinda cift suslu parantez kullan:</text>
+  <rect x='18' y='285' width='664' height='22' rx='4' fill='#0f0f1e' stroke='#374151' stroke-width='1'/>
+  <text x='26' y='300' fill='#60a5fa' font-size='9'>GET {{baseUrl}}/api/orders/{{orderId}}     Authorization: Bearer {{authToken}}</text>
+  <rect x='667' y='128' width='6' height='22' rx='2' fill='#FF6C37' class='vc-cur'/>
+</svg>`
+
+const collectionRunnerSvg = `<svg viewBox='0 0 700 355' xmlns='http://www.w3.org/2000/svg' style='background:#1a1a2e;border-radius:12px;font-family:sans-serif;'>
+  <style>
+    .cr-prog { animation: cr-p 4s ease-out 0.5s both; }
+    .cr-1 { animation: cr-row 0.3s ease-out 1.0s both; }
+    .cr-2 { animation: cr-row 0.3s ease-out 1.8s both; }
+    .cr-3 { animation: cr-row 0.3s ease-out 2.6s both; }
+    .cr-4 { animation: cr-row 0.3s ease-out 3.4s both; }
+    .cr-5 { animation: cr-row 0.3s ease-out 4.2s both; }
+    .cr-chk1 { animation: cr-chk 0.2s ease-out 1.2s both; }
+    .cr-chk2 { animation: cr-chk 0.2s ease-out 2.0s both; }
+    .cr-chk3 { animation: cr-chk 0.2s ease-out 2.8s both; }
+    .cr-chk4 { animation: cr-chk 0.2s ease-out 3.6s both; }
+    .cr-chk5 { animation: cr-chk 0.2s ease-out 4.4s both; }
+    @keyframes cr-p {
+      from { stroke-dashoffset: 640; }
+      to   { stroke-dashoffset: 0; }
+    }
+    @keyframes cr-row { from { opacity:0; } to { opacity:1; } }
+    @keyframes cr-chk { from { opacity:0; transform:scale(0); } to { opacity:1; transform:scale(1); } }
+  </style>
+  <rect x='0' y='0' width='700' height='32' fill='#0d0d1e' rx='8'/>
+  <text x='350' y='21' fill='#FF6C37' text-anchor='middle' font-size='12' font-weight='bold'>Collection Runner — Microservices E2E Akisi (5 istek, 12 test)</text>
+  <rect x='28' y='40' width='644' height='16' rx='8' fill='#1f2937'/>
+  <line x1='28' y1='48' x2='672' y2='48' stroke='#10b981' stroke-width='16' stroke-linecap='round' stroke-dasharray='644 644' stroke-dashoffset='644' class='cr-prog'/>
+  <text x='350' y='52' fill='white' text-anchor='middle' font-size='9' font-weight='bold'>5 / 5</text>
+  <g class='cr-1'>
+    <rect x='18' y='65' width='664' height='42' rx='6' fill='#0d2818'/>
+    <rect x='26' y='72' width='54' height='18' rx='3' fill='#10b981'/>
+    <text x='53' y='85' fill='white' text-anchor='middle' font-size='9' font-weight='bold'>POST</text>
+    <text x='92' y='83' fill='#d1d5db' font-size='10'>{{authUrl}}/login</text>
+    <text x='92' y='97' fill='#9ca3af' font-size='8'>Auth Service · 200 OK · token kaydet → pm.environment.set("authToken", body.token)</text>
+  </g>
+  <text x='655' y='91' fill='#10b981' font-size='18' text-anchor='middle' class='cr-chk1'>✓</text>
+  <g class='cr-2'>
+    <rect x='18' y='115' width='664' height='42' rx='6' fill='#0d2818'/>
+    <rect x='26' y='122' width='54' height='18' rx='3' fill='#f59e0b'/>
+    <text x='53' y='135' fill='white' text-anchor='middle' font-size='9' font-weight='bold'>POST</text>
+    <text x='92' y='133' fill='#d1d5db' font-size='10'>{{userUrl}}/users</text>
+    <text x='92' y='147' fill='#9ca3af' font-size='8'>User Service · 201 Created · userId kaydet → pm.environment.set("userId", body.id)</text>
+  </g>
+  <text x='655' y='141' fill='#10b981' font-size='18' text-anchor='middle' class='cr-chk2'>✓</text>
+  <g class='cr-3'>
+    <rect x='18' y='165' width='664' height='42' rx='6' fill='#0d2818'/>
+    <rect x='26' y='172' width='44' height='18' rx='3' fill='#10b981'/>
+    <text x='48' y='185' fill='white' text-anchor='middle' font-size='9' font-weight='bold'>GET</text>
+    <text x='82' y='183' fill='#d1d5db' font-size='10'>{{userUrl}}/users/{{userId}}</text>
+    <text x='82' y='197' fill='#9ca3af' font-size='8'>User Service · 200 OK · ad, email alanlari kontrol edildi</text>
+  </g>
+  <text x='655' y='191' fill='#10b981' font-size='18' text-anchor='middle' class='cr-chk3'>✓</text>
+  <g class='cr-4'>
+    <rect x='18' y='215' width='664' height='42' rx='6' fill='#0d2818'/>
+    <rect x='26' y='222' width='54' height='18' rx='3' fill='#f59e0b'/>
+    <text x='53' y='235' fill='white' text-anchor='middle' font-size='9' font-weight='bold'>POST</text>
+    <text x='92' y='233' fill='#d1d5db' font-size='10'>{{orderUrl}}/orders</text>
+    <text x='92' y='247' fill='#9ca3af' font-size='8'>Order Service · 201 Created · orderId kaydet → pm.environment.set("orderId", body.id)</text>
+  </g>
+  <text x='655' y='241' fill='#10b981' font-size='18' text-anchor='middle' class='cr-chk4'>✓</text>
+  <g class='cr-5'>
+    <rect x='18' y='265' width='664' height='42' rx='6' fill='#0d2818'/>
+    <rect x='26' y='272' width='54' height='18' rx='3' fill='#ef4444'/>
+    <text x='53' y='285' fill='white' text-anchor='middle' font-size='9' font-weight='bold'>POST</text>
+    <text x='92' y='283' fill='#d1d5db' font-size='10'>{{payUrl}}/payments</text>
+    <text x='92' y='297' fill='#9ca3af' font-size='8'>Payment Service · 201 Created · odeme tamamlandi dogrulandi</text>
+  </g>
+  <text x='655' y='291' fill='#10b981' font-size='18' text-anchor='middle' class='cr-chk5'>✓</text>
+  <rect x='18' y='318' width='664' height='26' rx='5' fill='#064e3b'/>
+  <text x='350' y='335' fill='#34d399' text-anchor='middle' font-size='11' font-weight='bold'>5 istek · 12 test · 0 basarisizlik · 847ms toplam sure</text>
+</svg>`
+
+const shareFlowSvg = `<svg viewBox='0 0 700 290' xmlns='http://www.w3.org/2000/svg' style='background:#1e2030;border-radius:12px;font-family:sans-serif;'>
+  <style>
+    .sf-1 { animation: sf-up 0.4s ease-out 0.2s both; }
+    .sf-2 { animation: sf-up 0.4s ease-out 0.5s both; }
+    .sf-3 { animation: sf-up 0.4s ease-out 0.8s both; }
+    .sf-4 { animation: sf-up 0.4s ease-out 1.1s both; }
+    @keyframes sf-up { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+  </style>
+  <rect x='265' y='14' width='170' height='60' rx='10' fill='#FF6C37' opacity='0.2' stroke='#FF6C37' stroke-width='2'/>
+  <text x='350' y='42' fill='#FF6C37' text-anchor='middle' font-size='24'>📮</text>
+  <text x='350' y='62' fill='#FF6C37' text-anchor='middle' font-size='11' font-weight='bold'>collection.json</text>
+  <line x1='308' y1='76' x2='104' y2='162' stroke='#374151' stroke-width='1.5' stroke-dasharray='5 3'/>
+  <line x1='328' y1='76' x2='265' y2='162' stroke='#374151' stroke-width='1.5' stroke-dasharray='5 3'/>
+  <line x1='372' y1='76' x2='435' y2='162' stroke='#374151' stroke-width='1.5' stroke-dasharray='5 3'/>
+  <line x1='392' y1='76' x2='596' y2='162' stroke='#374151' stroke-width='1.5' stroke-dasharray='5 3'/>
+  <g class='sf-1'>
+    <rect x='22' y='164' width='162' height='104' rx='10' fill='#1f2937' stroke='#60a5fa' stroke-width='1.5'/>
+    <text x='103' y='194' fill='#60a5fa' text-anchor='middle' font-size='24'>📄</text>
+    <text x='103' y='213' fill='#93c5fd' text-anchor='middle' font-size='11' font-weight='bold'>Export JSON</text>
+    <text x='103' y='229' fill='#9ca3af' text-anchor='middle' font-size='9'>Sag tikla → Export</text>
+    <text x='103' y='244' fill='#6b7280' text-anchor='middle' font-size='9'>Collection v2.1 formatinda</text>
+    <text x='103' y='258' fill='#6b7280' text-anchor='middle' font-size='9'>Tek seferlik paylasim</text>
+  </g>
+  <g class='sf-2'>
+    <rect x='196' y='164' width='162' height='104' rx='10' fill='#1f2937' stroke='#10b981' stroke-width='1.5'/>
+    <text x='277' y='194' fill='#10b981' text-anchor='middle' font-size='24'>🌿</text>
+    <text x='277' y='213' fill='#34d399' text-anchor='middle' font-size='11' font-weight='bold'>Git Repository</text>
+    <text x='277' y='229' fill='#9ca3af' text-anchor='middle' font-size='9'>tests/postman/ klasoru</text>
+    <text x='277' y='244' fill='#6b7280' text-anchor='middle' font-size='9'>Versiyon kontrollu</text>
+    <text x='277' y='258' fill='#6b7280' text-anchor='middle' font-size='9'>CI/CD icin zorunlu</text>
+  </g>
+  <g class='sf-3'>
+    <rect x='370' y='164' width='162' height='104' rx='10' fill='#1f2937' stroke='#a78bfa' stroke-width='1.5'/>
+    <text x='451' y='194' fill='#a78bfa' text-anchor='middle' font-size='24'>☁️</text>
+    <text x='451' y='213' fill='#c4b5fd' text-anchor='middle' font-size='11' font-weight='bold'>Postman Cloud</text>
+    <text x='451' y='229' fill='#9ca3af' text-anchor='middle' font-size='9'>Share → Workspace</text>
+    <text x='451' y='244' fill='#6b7280' text-anchor='middle' font-size='9'>Gercek zamanli sync</text>
+    <text x='451' y='258' fill='#6b7280' text-anchor='middle' font-size='9'>Takim paylasimi</text>
+  </g>
+  <g class='sf-4'>
+    <rect x='544' y='164' width='162' height='104' rx='10' fill='#1f2937' stroke='#f59e0b' stroke-width='1.5'/>
+    <text x='625' y='194' fill='#f59e0b' text-anchor='middle' font-size='24'>⚡</text>
+    <text x='625' y='213' fill='#fcd34d' text-anchor='middle' font-size='11' font-weight='bold'>Newman CLI</text>
+    <text x='625' y='229' fill='#9ca3af' text-anchor='middle' font-size='9'>newman run col.json</text>
+    <text x='625' y='244' fill='#6b7280' text-anchor='middle' font-size='9'>Otomatik regresyon</text>
+    <text x='625' y='258' fill='#6b7280' text-anchor='middle' font-size='9'>Exit code 1 = FAIL</text>
+  </g>
+</svg>`
+
+export const postmanData = {
+  en: {
+    hero: {
+      title: '📮 Postman',
+      subtitle: 'API Testing & Collaboration Platform',
+      intro: 'From zero to interview-level Postman mastery. Learn to send requests, write automated test scripts, manage environments, chain requests, run collections with Newman, and integrate into CI/CD pipelines — with real QA scenarios throughout.',
+    },
+    tabs: ['🎯 Introduction', '📦 Installation', '📚 Core Concepts', '🔥 Test Automation', '💼 Interview Q&A'],
+    sections: [
+      // ── 0. INTRODUCTION ──────────────────────────────────────────────────
+      {
+        title: '🎯 What is Postman & API Testing?',
+        blocks: [
+          {
+            type: 'simple-box',
+            emoji: '📱',
+            content: 'Imagine you want to order food from a restaurant. You could walk in and order at the counter — that\'s like using a website. But you can also call them on the phone and place an order directly without going in person — that\'s Postman! It lets you "call" a website\'s hidden services (APIs) directly, test what they return, and verify they work correctly.',
+          },
+          { type: 'heading', text: 'What is an API?' },
+          { type: 'text', content: 'An API (Application Programming Interface) is a contract between a client (your app, browser, or test tool) and a server. It defines what requests the server accepts, what data it expects, and what it returns. Every modern application — weather apps, payment systems, social media — runs on APIs behind the scenes.' },
+          {
+            type: 'diagram-svg',
+            title: 'HTTP Request-Response Cycle',
+            svg: httpFlowSvg,
+          },
+          { type: 'heading', text: 'What is Postman?' },
+          { type: 'text', content: 'Postman is a free GUI platform for building, sending, and verifying HTTP requests. QA engineers use it for manual API testing, automated regression suites, environment management, and sharing test collections with the team.' },
+          {
+            type: 'grid', cols: 3,
+            items: [
+              { icon: '🖱️', label: 'No Code Required', desc: 'Build and send requests with clicks — perfect for exploratory API testing.' },
+              { icon: '📁', label: 'Collections', desc: 'Group related requests, export as JSON, version-control in Git.' },
+              { icon: '🌍', label: 'Environments', desc: 'Switch dev/staging/prod with one click using variables.' },
+              { icon: '🤖', label: 'Test Scripts', desc: 'Write JavaScript assertions that run automatically after every request.' },
+              { icon: '⚡', label: 'Newman CLI', desc: 'Run entire collections from the command line — perfect for CI/CD.' },
+              { icon: '🔗', label: 'Mock Servers', desc: 'Create fake API endpoints to unblock frontend before backend is ready.' },
+            ],
+          },
+          { type: 'heading', text: 'HTTP Methods — The Core Vocabulary' },
+          {
+            type: 'table',
+            headers: ['Method', 'Action', 'Body?', 'Example', 'SQL Analogy'],
+            rows: [
+              ['GET', 'Read data', '❌', 'GET /users/42', 'SELECT * WHERE id=42'],
+              ['POST', 'Create new resource', '✅', 'POST /users', 'INSERT INTO users'],
+              ['PUT', 'Replace entire resource', '✅', 'PUT /users/42', 'UPDATE (full replace)'],
+              ['PATCH', 'Update partial fields', '✅', 'PATCH /users/42', 'UPDATE SET name=...'],
+              ['DELETE', 'Remove resource', '❌', 'DELETE /users/42', 'DELETE WHERE id=42'],
+            ],
+          },
+          { type: 'heading', text: 'HTTP Status Codes' },
+          {
+            type: 'visual', variant: 'pyramid',
+            title: 'HTTP Status Code Groups',
+            levels: [
+              { label: '5xx — Server Error', color: 'red', desc: '500 Internal Server Error · 503 Service Unavailable' },
+              { label: '4xx — Client Error', color: 'orange', desc: '400 Bad Request · 401 Unauthorized · 403 Forbidden · 404 Not Found' },
+              { label: '3xx — Redirection', color: 'yellow', desc: '301 Moved Permanently · 302 Found' },
+              { label: '2xx — Success', color: 'green', desc: '200 OK · 201 Created · 204 No Content' },
+              { label: '1xx — Informational', color: 'blue', desc: '100 Continue · 101 Switching Protocols' },
+            ],
+            note: '2xx = pass. 4xx = your test data/auth is wrong. 5xx = server-side bug (escalate to dev).',
+          },
+          {
+            type: 'quiz',
+            question: 'A POST /api/login request returns status 401. What does this mean?',
+            options: [
+              { id: 'a', text: 'The server crashed — escalate immediately' },
+              { id: 'b', text: 'Unauthorized — wrong credentials or missing token' },
+              { id: 'c', text: 'Success — the user is logged in' },
+              { id: 'd', text: 'The endpoint does not exist — fix the URL' },
+            ],
+            correct: 'b',
+            explanation: '401 Unauthorized means the request reached the server but authentication failed. 4xx = client-side issue. 500 = server error. 404 = not found. 200/201 = success.',
+          },
+        ],
+      },
+
+      // ── 1. INSTALLATION ──────────────────────────────────────────────────
+      {
+        title: '📦 Installation & First Request',
+        blocks: [
+          {
+            type: 'simple-box',
+            emoji: '🔧',
+            content: 'Installing Postman is like getting a brand-new multi-tool kit. You open the box and every tool is already organized and labeled. Just pick up the right tool (GET, POST, DELETE...) and use it — no assembly required.',
+          },
+          { type: 'heading', text: 'Downloading Postman' },
+          {
+            type: 'installation',
+            title: 'Postman Setup',
+            steps: [
+              { cmd: '1. Go to postman.com/downloads', explanation: 'Postman is free for individual use. Download the desktop app for Windows, macOS, or Linux. A web version also exists at app.getpostman.com.' },
+              { cmd: '2. Run the installer', explanation: 'Windows: PostmanSetup.exe. macOS: drag to Applications. Linux: use the .tar.gz or AppImage. Under 2 minutes.' },
+              { cmd: '3. Sign in or skip', explanation: 'A free account syncs collections across devices and enables team sharing. You can skip login (just close the dialog).' },
+              { cmd: '4. Done!', explanation: 'Click the + tab to create your first request. No config files, no CLI setup needed.' },
+            ],
+          },
+          { type: 'heading', text: 'Postman Interface Overview' },
+          {
+            type: 'diagram-svg',
+            title: 'Postman UI — Key Areas (labeled)',
+            svg: uiMockupSvg,
+          },
+          { type: 'heading', text: 'Your First GET Request — Step by Step' },
+          {
+            type: 'steps',
+            items: [
+              { label: 'Click the "+" tab', desc: 'Opens a new request tab.' },
+              { label: 'Select method: GET', desc: 'Click the dropdown on the left (default is already GET).' },
+              { label: 'Enter URL', desc: 'Type: https://jsonplaceholder.typicode.com/users — a free test API.' },
+              { label: 'Click Send', desc: 'Postman sends the request and shows the response below.' },
+              { label: 'Read the response', desc: 'You should see 10 users in JSON. Status: "200 OK".' },
+            ],
+          },
+          {
+            type: 'code',
+            language: 'json',
+            label: 'Expected Response (first user):',
+            code: `{
+  "id": 1,                            // Unique user ID
+  "name": "Leanne Graham",            // Full name
+  "username": "Bret",                 // Login username
+  "email": "Sincere@april.biz",       // Email address
+  "phone": "1-770-736-0988",          // Phone
+  "website": "hildegard.org",         // Website
+  "address": {                        // Nested object
+    "street": "Kulas Light",
+    "city": "Gwenborough",
+    "zipcode": "92998-3874"
+  }
+}`,
+            expected: 'Status: 200 OK | 10 users returned as a JSON array',
+          },
+          { type: 'heading', text: 'Making a POST Request' },
+          {
+            type: 'code',
+            language: 'json',
+            label: 'POST /api/users — Body → raw → JSON:',
+            code: `{
+  "name": "Alice Johnson",      // Required: full name
+  "email": "alice@test.com",    // Required: must be unique
+  "role": "tester",             // Optional
+  "active": true                // Boolean
+}`,
+          },
+          {
+            type: 'code',
+            language: 'json',
+            label: 'Expected Response — 201 Created:',
+            code: `{
+  "id": 99,                          // Server-generated ID
+  "name": "Alice Johnson",           // Echoed back
+  "email": "alice@test.com",         // Echoed back
+  "createdAt": "2024-01-15T10:30:00Z" // Server timestamp
+}`,
+          },
+          {
+            type: 'quiz',
+            question: 'You send POST /api/users and the server responds 201. What should you verify next as a QA tester?',
+            options: [
+              { id: 'a', text: 'Nothing — 201 means success, you\'re done' },
+              { id: 'b', text: 'Verify the response body contains the created user data, then send GET to confirm persistence' },
+              { id: 'c', text: 'The test failed — POST should return 200, not 201' },
+              { id: 'd', text: 'Report a bug — 201 is not a valid status code' },
+            ],
+            correct: 'b',
+            explanation: '201 Created is the correct status for a successful POST. Good QA: 1) Verify the response body, 2) Confirm the resource was persisted by fetching it with GET. 200 is for updates, 201 is specifically for resource creation.',
+          },
+        ],
+      },
+
+      // ── 2. CORE CONCEPTS ────────────────────────────────────────────────
+      {
+        title: '📚 Collections, Variables & Microservices',
+        blocks: [
+          {
+            type: 'simple-box',
+            emoji: '🏙️',
+            content: 'Imagine a big office building with 4 departments: Security (Auth), HR (Users), Logistics (Orders), Finance (Payments). Each has its own phone extension. Postman is your master phone directory — it can call all 4 departments at once, remembers every number, and automatically tests that everyone picks up correctly!',
+          },
+          { type: 'heading', text: 'Microservices — Why Postman Collections Are Essential' },
+          { type: 'text', content: 'In a microservices architecture each service lives at its own URL and has its own auth. Testing manually means switching URLs, updating tokens, and managing base addresses constantly. Postman Collections + Environments solve this: one collection, four environment files (dev, staging, prod) — switch with a single click. Variables like {{baseUrl}}, {{authToken}}, {{userId}} carry data automatically between requests.' },
+          {
+            type: 'diagram-svg',
+            title: 'Microservices Architecture — One Postman, 4 Services (Animated)',
+            svg: microservicesSvg,
+          },
+          { type: 'heading', text: 'Creating Variables — Method 1: Environment UI' },
+          { type: 'text', content: 'Environments store key-value pairs scoped to a deployment context. Create one per environment (dev, staging, prod). Every request that uses {{baseUrl}} automatically picks up the right value — no manual editing needed when switching contexts.' },
+          {
+            type: 'steps',
+            items: [
+              { label: 'Click the 🌍 Environments icon (left sidebar)', desc: 'Opens the Environments panel.' },
+              { label: 'Click "+ Create environment"', desc: 'Name it "microservices-dev".' },
+              { label: 'Add row: Variable = baseUrl, Initial Value = https://dev.api.company.com', desc: 'Click the first empty row to type. Initial value is the template; current value is runtime-overridable.' },
+              { label: 'Add: authToken — leave blank', desc: 'The POST /login test script will fill this after login. Current value is set dynamically at runtime.' },
+              { label: 'Add: userId, orderId — leave blank', desc: 'These get populated as your E2E test suite runs in sequence via pm.environment.set().' },
+              { label: 'Click "Save" then select from the top-right dropdown', desc: 'All {{variables}} in every request now resolve to this environment\'s values.' },
+            ],
+          },
+          {
+            type: 'diagram-svg',
+            title: 'Environment Editor — Variables Animating In',
+            svg: varCreateSvg,
+          },
+          { type: 'heading', text: 'Creating Variables — Method 2: Via Script (pm.environment.set)' },
+          { type: 'text', content: 'Use pm.environment.set() in a Tests tab script to dynamically set variables during a run. This is how request chaining works — POST /login saves the token, all subsequent requests use {{authToken}} automatically. Java analogy: this is like writing to a shared Properties object that all test classes can read.' },
+          {
+            type: 'code',
+            language: 'javascript',
+            label: 'Tests tab — Save response values as environment variables:',
+            code: `// ── Request 1: POST /auth/login ─────────────────────────
+pm.test("Login success", () => pm.response.to.have.status(200));
+const auth = pm.response.json();
+pm.environment.set("authToken", auth.token);       // → {{authToken}}
+pm.environment.set("tokenExpiry", Date.now() + 3600000);
+
+// ── Request 2: POST /users (User Service) ────────────
+pm.test("User created 201", () => pm.response.to.have.status(201));
+const user = pm.response.json();
+pm.environment.set("userId", user.id);             // → {{userId}}
+
+// ── Request 3: GET /users/{{userId}} ─────────────────
+// URL bar: {{baseUrl}}/users/{{userId}}   resolves to: .../users/42
+// Header:  Authorization: Bearer {{authToken}}
+
+// ── Request 4: POST /orders (Order Service) ──────────
+pm.test("Order created 201", () => pm.response.to.have.status(201));
+const order = pm.response.json();
+pm.environment.set("orderId", order.id);           // → {{orderId}}
+
+// ── Request 5: POST /payments (Payment Service) ──────
+// Body: { "orderId": "{{orderId}}", "userId": "{{userId}}" }`,
+          },
+          { type: 'heading', text: 'Creating Variables — Method 3: Collection Variables' },
+          {
+            type: 'code',
+            language: 'javascript',
+            label: 'Collection variables — shared constants across all environments:',
+            code: `// Collection variables: right-click Collection → Edit → Variables tab
+// Or set via script — persists for the whole collection run:
+
+pm.collectionVariables.set("apiVersion", "v1");    // {{apiVersion}}
+pm.collectionVariables.set("pageSize", "20");      // {{pageSize}}
+
+// Use in URL bar:
+// {{baseUrl}}/api/{{apiVersion}}/users?limit={{pageSize}}
+// → resolves to: https://dev.api.company.com/api/v1/users?limit=20
+
+// When to use which:
+// pm.globals.set()             → whole workspace (API key, shared constant)
+// pm.environment.set()         → changes per env (baseUrl, token, dynamic IDs)
+// pm.collectionVariables.set() → constant within collection (apiVersion, pageSize)
+// pm.variables.set()           → single request only (temp calculation, deleted after)`,
+          },
+          { type: 'heading', text: 'Creating a Collection — Step by Step' },
+          { type: 'text', content: 'One collection per microservice is the recommended QA pattern. Start with the Auth Service collection — once login works and saves the token, all other services inherit authentication through environment variables.' },
+          {
+            type: 'steps',
+            items: [
+              { label: 'Click "New" → "Collection" (or the + icon in the Collections sidebar)', desc: 'A new empty collection appears.' },
+              { label: 'Name it "Auth Service Tests"', desc: 'Add a description explaining what this collection covers.' },
+              { label: 'Right-click collection → "Add folder"', desc: 'Create folders: "Auth Flows", "Token Refresh", "Negative Tests".' },
+              { label: 'Inside a folder: "Add request"', desc: 'Name it "POST /login — valid credentials". Set method, URL, body, and Tests script.' },
+              { label: 'Save with Ctrl+S', desc: 'The request is now permanently saved in the collection. Zero re-typing needed.' },
+              { label: 'Repeat for each service', desc: 'User Service Collection → Order Service Collection → Payment Service Collection.' },
+            ],
+          },
+          {
+            type: 'diagram-svg',
+            title: 'Collection Hierarchy — Microservices Structure',
+            svg: collectionHierarchySvg,
+          },
+          {
+            type: 'code',
+            language: 'javascript',
+            label: 'Recommended collection folder structure for microservices:',
+            code: `// Workspace
+// ├── 📁 Auth Service Tests
+// │   ├── 📂 Auth Flows
+// │   │   ├── POST /login — valid credentials       → 200 + save authToken
+// │   │   ├── POST /login — wrong password          → 401 expected
+// │   │   └── POST /refresh — expired token         → 200 + new authToken
+// │   └── 📂 Negative Tests
+// │       └── POST /login — missing body fields     → 400 expected
+// │
+// ├── 📁 User Service Tests
+// │   ├── 📂 CRUD
+// │   │   ├── POST /users — create user             → 201 + save userId
+// │   │   ├── GET /users/{{userId}}                 → 200 + verify name/email
+// │   │   └── DELETE /users/{{userId}}              → 204 expected
+// │   └── 📂 Validation
+// │       └── POST /users — duplicate email         → 409 Conflict
+// │
+// ├── 📁 Order Service Tests
+// │   └── POST /orders — create order              → 201 + save orderId
+// │
+// └── 📁 Payment Service Tests
+//     └── POST /payments — process payment        → 201 Created`,
+          },
+          { type: 'heading', text: 'Sharing a Collection — 4 Methods' },
+          { type: 'text', content: 'Once your collection is ready, sharing it ensures the whole team tests consistently. Git is the recommended approach for CI/CD teams — version-controlled, reviewable in PRs, and runnable by Newman on every commit.' },
+          {
+            type: 'diagram-svg',
+            title: 'Collection Sharing — 4 Distribution Methods (Animated)',
+            svg: shareFlowSvg,
+          },
+          {
+            type: 'grid', cols: 2,
+            items: [
+              { icon: '📄', label: 'Export as JSON', desc: 'Right-click collection → Export → Collection v2.1. Send the .json file. Recipient imports via File → Import. Best for one-off sharing without Git.' },
+              { icon: '🌿', label: 'Git (Recommended for CI/CD)', desc: 'Export collection.json + env.json into a tests/postman/ directory in your repo. CI/CD pipeline pulls and runs them on every push. Version-controlled and auditable.' },
+              { icon: '☁️', label: 'Postman Cloud Workspace', desc: 'Share → "Via Run in Postman" link, or invite teammates to a shared Workspace. Changes sync in real-time — everyone sees the latest version immediately.' },
+              { icon: '⚡', label: 'Newman CLI', desc: 'Export JSON → commit to Git → run via newman run. Exit code 1 on any test failure automatically fails the CI build. The core of automated regression.' },
+            ],
+          },
+          {
+            type: 'code',
+            language: 'bash',
+            label: 'Git workflow for collection version control:',
+            code: `# 1. Create postman directory in project
+mkdir tests/postman
+
+# 2. Export from Postman (File → Export):
+#    tests/postman/auth-service.collection.json
+#    tests/postman/user-service.collection.json
+#    tests/postman/env.dev.json
+#    tests/postman/env.staging.json
+
+# 3. Commit
+git add tests/postman/
+git commit -m "chore: add postman collections for microservices e2e"
+
+# 4. Run from CI/CD:
+newman run tests/postman/auth-service.collection.json \\
+  -e tests/postman/env.staging.json \\
+  -r cli,htmlextra \\
+  --reporter-htmlextra-export results/auth-report.html`,
+          },
+          { type: 'heading', text: 'Running a Collection — Collection Runner GUI' },
+          { type: 'text', content: 'Collection Runner executes all requests in sequence — each request\'s test scripts run automatically after the response. Perfect for manual regression checks after a deployment. Java analogy: it\'s like running a full TestNG suite but clicking a button instead of "mvn test".' },
+          {
+            type: 'steps',
+            items: [
+              { label: 'Click "▶ Run" next to a collection name', desc: 'Opens the Collection Runner panel.' },
+              { label: 'Select Environment: "microservices-dev"', desc: 'All {{variables}} resolve to this environment\'s values.' },
+              { label: 'Set Iterations (default: 1)', desc: 'Increase for data-driven testing — each iteration reads one row from a CSV file.' },
+              { label: 'Set Delay (optional)', desc: 'Add milliseconds between requests if the server needs processing time between steps.' },
+              { label: 'Click "Run [collection name]"', desc: 'Postman executes every request in the order you arranged them. Test scripts fire after each response.' },
+              { label: 'Review the results panel', desc: 'Green ✅ = assertion passed. Red ❌ = failed — click to see which assertion and what was expected vs actual.' },
+            ],
+          },
+          {
+            type: 'diagram-svg',
+            title: 'Collection Runner — E2E Microservices Flow (Animated)',
+            svg: collectionRunnerSvg,
+          },
+          { type: 'heading', text: 'Running via Newman CLI' },
+          {
+            type: 'code',
+            language: 'bash',
+            label: 'Newman — CLI options for all scenarios:',
+            code: `# Basic run
+newman run auth-service.collection.json
+
+# With environment file
+newman run auth-service.collection.json -e env.dev.json
+
+# With HTML report
+newman run auth-service.collection.json \\
+  -e env.staging.json \\
+  -r cli,htmlextra \\
+  --reporter-htmlextra-export report.html
+
+# Data-driven testing (CSV with 1 row per test scenario)
+newman run user-service.collection.json \\
+  -e env.dev.json \\
+  --iteration-data test-users.csv \\
+  --iteration-count 10
+
+# Run all 4 microservices in sequence (fails fast on first error)
+newman run tests/postman/auth-service.collection.json   -e env.staging.json &&
+newman run tests/postman/user-service.collection.json   -e env.staging.json &&
+newman run tests/postman/order-service.collection.json  -e env.staging.json &&
+newman run tests/postman/payment-service.collection.json -e env.staging.json`,
+          },
+          { type: 'heading', text: 'Variable Scope — Priority Order' },
+          {
+            type: 'diagram-svg',
+            title: 'Variable Scope — Which Value Wins',
+            svg: varScopeSvg,
+          },
+          {
+            type: 'table',
+            headers: ['Scope', 'Set With', 'Lifetime', 'Best For'],
+            rows: [
+              ['Local (highest priority)', 'pm.variables.set()', 'Single request', 'Temp calculations'],
+              ['Collection', 'pm.collectionVariables.set()', 'Whole collection run', 'API version, page size'],
+              ['Environment', 'pm.environment.set()', 'Until changed', 'baseUrl, authToken, dynamic IDs'],
+              ['Global (lowest priority)', 'pm.globals.set()', 'Whole workspace', 'Shared API keys, constants'],
+            ],
+          },
+          {
+            type: 'quiz',
+            question: 'Your E2E flow: POST /login → POST /users → POST /orders → POST /payments. The /orders request needs the userId from step 2. What is the correct approach?',
+            options: [
+              { id: 'a', text: 'Manually copy the userId from step 2 response and paste into step 3 URL each time' },
+              { id: 'b', text: 'In step 2 Tests tab: pm.environment.set("userId", body.id). Use {{userId}} in step 3 URL.' },
+              { id: 'c', text: 'Hardcode a known userId in all requests — it won\'t change' },
+              { id: 'd', text: 'Create a separate collection per step so they don\'t interfere' },
+            ],
+            correct: 'b',
+            explanation: 'Request chaining via environment variables is the core Postman E2E pattern. Step 2\'s Tests script saves the dynamic server-generated ID; step 3 reads it via {{userId}}. This works even when the server generates different IDs on each run. Hardcoding breaks after the first test run deletes the user.',
+          },
+        ],
+      },
+
+      // ── 3. TEST AUTOMATION ──────────────────────────────────────────────
+      {
+        title: '🔥 Writing Automated Tests',
+        blocks: [
+          {
+            type: 'simple-box',
+            emoji: '🔍',
+            content: 'Test scripts in Postman are like a quality inspector on a factory line. After each product comes off the line (API response), you check a checklist: Is the shape correct? Is the value right? If anything fails, you mark it "FAIL" and the alarm goes off.',
+          },
+          { type: 'heading', text: 'The pm.test() API — Writing Assertions' },
+          { type: 'text', content: 'The Tests tab runs JavaScript after every request. The pm (Postman) object provides all assertion tools. Results appear in the "Test Results" tab in the response panel — with green ✅ or red ❌ per test.' },
+          {
+            type: 'code',
+            language: 'javascript',
+            label: 'Tests Tab — Core Assertions:',
+            code: `// Test 1: Status code
+pm.test("Status is 200 OK", function() {
+    pm.response.to.have.status(200);           // fails if status != 200
+});
+
+// Test 2: Response time (performance assertion)
+pm.test("Response time < 500ms", function() {
+    pm.expect(pm.response.responseTime).to.be.below(500);
+});
+
+// Test 3: Response is valid JSON
+pm.test("Response is JSON", function() {
+    pm.response.to.be.json;                    // fails if not JSON content-type
+});
+
+// Test 4: Specific field check
+pm.test("User name is Alice", function() {
+    const json = pm.response.json();           // parse the JSON body
+    pm.expect(json.name).to.equal("Alice");    // exact equality check
+});
+
+// Test 5: Array has items
+pm.test("Users list not empty", function() {
+    const json = pm.response.json();
+    pm.expect(json).to.be.an("array");         // type check
+    pm.expect(json.length).to.be.greaterThan(0); // length check
+});`,
+          },
+          {
+            type: 'java-compare',
+            topic: 'API Assertions',
+            why: 'Java QA engineers use REST Assured for API testing. Postman uses the same BDD-style assertion concepts — just JavaScript (Chai library) instead of Java.',
+            java: `// Java — REST Assured (TestNG/JUnit)
+@Test
+public void testGetUsers() {
+    given()
+        .header("Authorization","Bearer " + token)
+    .when()
+        .get("/api/users")
+    .then()
+        .statusCode(200)                     // status assertion
+        .body("name[0]", equalTo("Alice"))   // body assertion
+        .body("", hasSize(greaterThan(0)))   // array size
+        .time(lessThan(500L));               // performance
+}`,
+            python: `// Postman — JavaScript (Tests tab)
+pm.test("Status 200", () => {
+    pm.response.to.have.status(200);
+});
+pm.test("First user Alice", () => {
+    const users = pm.response.json();
+    pm.expect(users[0].name).to.equal("Alice");
+});
+pm.test("Has users", () => {
+    pm.expect(pm.response.json()).to.have.length.above(0);
+});
+pm.test("Fast response", () => {
+    pm.expect(pm.response.responseTime).to.be.below(500);
+});`,
+            note: 'Both use given/when/then style. pm.test() names the test; pm.expect() is the assertion. Chai assertion library is built into Postman.',
+          },
+          { type: 'heading', text: 'Chaining Requests — Passing Data Between Requests' },
+          {
+            type: 'code',
+            language: 'javascript',
+            label: 'Request 1 (POST /login) — Tests tab: save the token',
+            code: `// After POST /login succeeds, extract and save the JWT
+pm.test("Login successful", function() {
+    pm.response.to.have.status(200);           // verify login worked first
+});
+
+const responseJson = pm.response.json();           // parse the response
+pm.environment.set("authToken", responseJson.token); // save for next request
+console.log("Token saved:", responseJson.token);   // visible in Postman Console`,
+          },
+          {
+            type: 'code',
+            language: 'javascript',
+            label: 'Request 2 (GET /profile) — use the saved token:',
+            code: `// In Headers tab:
+// Authorization: Bearer {{authToken}}   ← uses what Request 1 saved
+
+// In Tests tab:
+pm.test("Profile returned", function() {
+    const profile = pm.response.json();
+    pm.expect(profile.email).to.include("@");   // email format check
+    pm.expect(profile).to.have.property("id");   // id field exists
+});`,
+          },
+          { type: 'heading', text: 'Pre-request Scripts — Setup Before the Request' },
+          {
+            type: 'code',
+            language: 'javascript',
+            label: 'Pre-request Script tab (runs BEFORE the request):',
+            code: `// Generate a unique email for each test run (avoid duplicate conflicts)
+const timestamp = Date.now();                                   // epoch ms
+pm.environment.set("testEmail", "test+" + timestamp + "@qa.com");
+
+// Set a dynamic date
+const today = new Date().toISOString().split("T")[0];          // "2024-01-15"
+pm.environment.set("today", today);
+
+// Use in request body:
+// { "email": "{{testEmail}}", "date": "{{today}}" }`,
+          },
+          { type: 'heading', text: 'Newman — Running Collections from CLI' },
+          { type: 'text', content: 'Newman is the command-line runner for Postman collections. It executes every request and runs all test scripts. Newman is how you put Postman tests into Jenkins, GitHub Actions, or any CI/CD pipeline.' },
+          {
+            type: 'installation',
+            title: 'Newman Setup',
+            steps: [
+              { cmd: 'npm install -g newman', explanation: 'Install Newman globally via npm. Requires Node.js 14+.' },
+              { cmd: 'npm install -g newman-reporter-htmlextra', explanation: 'Install the HTML reporter for beautiful test reports.' },
+              { cmd: 'newman --version', explanation: 'Verify installation — should print newman/6.x.x.' },
+              { cmd: 'newman run collection.json -e env.json -r htmlextra --reporter-htmlextra-export report.html', explanation: 'Run collection with environment. Exports an HTML report to report.html. This is your CI/CD command.' },
+            ],
+          },
+          {
+            type: 'code',
+            language: 'yaml',
+            label: 'GitHub Actions — CI/CD integration:',
+            code: `# .github/workflows/api-tests.yml
+name: API Tests (Newman)
+
+on:
+  push:
+    branches: [main, develop]     # run on every push
+  pull_request:
+    branches: [main]              # run on PR to main
+
+jobs:
+  api-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3             # clone repo
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install Newman
+        run: npm install -g newman newman-reporter-htmlextra
+
+      - name: Run API Tests
+        run: |
+          newman run postman/collection.json \\
+            -e postman/env_staging.json \\    # use staging env file
+            -r cli,htmlextra \\              # CLI output + HTML
+            --reporter-htmlextra-export report.html
+
+      - name: Upload Report
+        uses: actions/upload-artifact@v3
+        if: always()                          # upload even if tests fail
+        with:
+          name: api-test-report
+          path: report.html`,
+          },
+          { type: 'heading', text: 'Common Postman Errors & Solutions' },
+          {
+            type: 'error-dictionary',
+            framework: 'Postman',
+            errors: [
+              {
+                error: 'ECONNREFUSED',
+                fullMessage: 'Error: connect ECONNREFUSED 127.0.0.1:3000',
+                cause: { tr: 'Hedef sunucu çalışmıyor veya yanlış port/URL kullanılıyor.', en: 'Target server is not running, or wrong port/URL.' },
+                solution: { tr: '1) Sunucunun çalıştığını doğrula. 2) Port numarasını kontrol et. 3) localhost yerine 127.0.0.1 dene.', en: '1) Verify the server is running. 2) Check the port. 3) Try 127.0.0.1 instead of localhost.' },
+                codeWrong: `// Server is not running
+GET http://localhost:3000/api/users
+// Error: connect ECONNREFUSED`,
+                codeFixed: `// 1. Start your server first:
+// npm start  OR  python app.py  OR  java -jar app.jar
+
+// 2. Then send:
+GET http://localhost:3000/api/users
+// 200 OK`,
+              },
+              {
+                error: 'SSL Certificate Error',
+                fullMessage: 'Error: unable to verify the first certificate',
+                cause: { tr: 'Sunucu self-signed SSL sertifikası kullanıyor (lokal geliştirme ortamı).', en: 'Server uses a self-signed SSL certificate (common in local dev).' },
+                solution: { tr: 'Postman Settings → General → SSL certificate verification → OFF. Sadece dev ortamında yap, production\'da asla.', en: 'Postman Settings → General → SSL certificate verification → OFF. Dev only — never in production.' },
+                codeWrong: `// SSL verification ON — fails for self-signed certs
+GET https://local-dev.example.com/api
+// Error: unable to verify the first certificate`,
+                codeFixed: `// Postman Settings → SSL certificate verification → OFF
+GET https://local-dev.example.com/api
+// 200 OK (for self-signed cert environments)`,
+              },
+              {
+                error: 'AssertionError: expected 404 to equal 200',
+                fullMessage: 'AssertionError: expected 404 to deeply equal 200',
+                cause: { tr: 'URL yanlış, endpoint adı değişmiş veya resource silinmiş.', en: 'Wrong URL, endpoint was renamed, or the resource no longer exists.' },
+                solution: { tr: '1) URL\'yi API dokümantasyonuyla karşılaştır. 2) /v1/ gibi versiyonu kontrol et. 3) Auth token eksik olabilir (bazı API\'ler 404 döner yetkisiz isteklere).', en: '1) Compare URL against API docs. 2) Check version prefix (/v1/). 3) Missing auth token — some APIs return 404 instead of 401.' },
+                codeWrong: `// Wrong path — missing plural 's'
+GET https://api.example.com/user/42   // 404`,
+                codeFixed: `// Correct
+GET https://api.example.com/users/42  // 200`,
+              },
+              {
+                error: 'SyntaxError in Tests script',
+                fullMessage: 'SyntaxError: Unexpected token } (in Tests tab)',
+                cause: { tr: 'Test scriptinde JavaScript sözdizimi hatası — eksik parantez veya yanlış noktalı virgül.', en: 'JavaScript syntax error in the test script — missing brackets or wrong semicolons.' },
+                solution: { tr: 'Postman\'daki kırmızı hata satırına tıkla. Parantezlerin kapalı olduğunu kontrol et.', en: 'Click the red error line at the bottom. Verify all brackets are properly closed.' },
+                codeWrong: `// Missing closing });
+pm.test("Status OK", function() {
+    pm.response.to.have.status(200);
+// ERROR: missing });`,
+                codeFixed: `// Correct — all brackets closed
+pm.test("Status OK", function() {       // open
+    pm.response.to.have.status(200);    // assertion
+});                                     // close`,
+              },
+            ],
+          },
+          {
+            type: 'quiz',
+            question: 'You need to run your Postman collection every night at 2 AM as a scheduled regression. What should you use?',
+            options: [
+              { id: 'a', text: 'Open Postman manually at 2 AM and click Run Collection' },
+              { id: 'b', text: 'Newman in a cron job or scheduled CI/CD pipeline — runs collections from CLI without GUI' },
+              { id: 'c', text: 'Postman emails you results automatically — no extra tools needed' },
+              { id: 'd', text: 'Duplicate all requests into Selenium for scheduling' },
+            ],
+            correct: 'b',
+            explanation: 'Newman is the CLI runner for Postman. Set up a cron job (Linux: crontab -e) or a scheduled CI/CD pipeline trigger. The --reporter-junit flag generates JUnit XML that CI/CD platforms parse for pass/fail.',
+          },
+        ],
+      },
+
+      // ── 4. INTERVIEW Q&A ────────────────────────────────────────────────
+      {
+        title: '💼 Interview Questions',
+        blocks: [
+          {
+            type: 'simple-box',
+            emoji: '💼',
+            content: 'These questions appear in QA interviews at all levels. Basic: daily Postman knowledge. Intermediate: environments, automation, Newman. Advanced: CI/CD integration, data-driven testing, API design principles.',
+          },
+          {
+            type: 'interview-questions',
+            topic: 'Postman & API Testing',
+            questions: [
+              { level: 'basic', q: 'What is Postman and why do QA engineers use it?', a: 'Postman is a GUI-based API testing platform for sending HTTP requests, inspecting responses, and writing automated test scripts without application code. QA engineers use it for manual API testing (exploratory), automated regression suites, environment management across dev/staging/prod, and sharing collections with the team. It\'s faster than writing Java/Python test code for exploratory testing, and collections can be automated via Newman in CI/CD.' },
+              { level: 'basic', q: 'What is the difference between GET, POST, PUT, PATCH, and DELETE?', a: 'GET retrieves data without modifying anything — it\'s idempotent (calling twice gives same result). POST creates a new resource — NOT idempotent (calling twice creates two resources). PUT replaces an entire resource — sending partial data would blank out missing fields. PATCH updates only the specified fields. DELETE removes a resource — idempotent (deleting twice still results in it being gone). Always test idempotency: GET and DELETE twice should behave identically.' },
+              { level: 'basic', q: 'What is a Collection in Postman and why is it useful?', a: 'A Collection groups related API requests with their URL, method, headers, body, and test scripts saved together. Useful because: 1) No re-typing URLs, 2) Run the entire collection at once with Collection Runner or Newman, 3) Export as JSON and version-control in Git, 4) Share with developers or import from API spec files. Think of it as a test suite for your API — the equivalent of a JUnit test class but for HTTP requests.' },
+              { level: 'basic', q: 'Which status codes do you commonly assert in API tests?', a: '200 OK (successful GET/PATCH), 201 Created (successful POST), 204 No Content (successful DELETE), 400 Bad Request (invalid input), 401 Unauthorized (missing/invalid token), 403 Forbidden (valid token, insufficient permissions), 404 Not Found, 409 Conflict (duplicate), 422 Unprocessable Entity (validation failed), 500 Internal Server Error. I always assert the exact expected code — a POST creating a user should return 201, NOT 200.' },
+              { level: 'basic', q: 'How do you send a JSON body in a POST request in Postman?', a: 'Select the request tab → Body → raw → choose JSON from the dropdown. Then type the JSON object. Also add the Content-Type: application/json header (Postman adds it automatically when you select JSON). Example: { "name": "Alice", "email": "alice@test.com" }. Make sure the JSON is valid — use a validator if needed. For form submissions, use Body → form-data or x-www-form-urlencoded instead.' },
+              { level: 'intermediate', q: 'How do you pass data from one request to another (request chaining)?', a: 'Via environment variables and test scripts. In Request 1\'s Tests tab: const body = pm.response.json(); pm.environment.set("userId", body.id). In Request 2, use {{userId}} in the URL or body. Example flow: POST /login → save token → GET /profile with saved token. Always assert the first step succeeded before extracting (assert status 200, then extract). This is essential for testing workflows like: register → login → create order → verify order.' },
+              { level: 'intermediate', q: 'What is Newman and how do you use it in CI/CD?', a: 'Newman is the CLI runner for Postman collections. Install: npm install -g newman. Run: newman run collection.json -e env.json -r htmlextra. For CI/CD: 1) Export collection and environment as JSON, commit to Git. 2) In the pipeline add a step: install Newman, run the collection. 3) Use --reporter-junit for XML reports that CI parses. 4) Newman exits with code 1 if any test fails — this automatically fails the CI build, acting as a quality gate. This is how Postman tests become part of automated regression.' },
+              { level: 'intermediate', q: 'Explain the difference between environment, collection, and global variables.', a: 'Global variables are available everywhere in your workspace — use for shared constants like an API key that never changes. Environment variables are scoped to the selected environment (dev/staging/prod) — use for values that differ per environment like base URLs and tokens. Collection variables scope to one collection — ideal for tokens obtained during a collection run shared across multiple requests. Local variables are created in scripts and disappear after the request ends. Priority (which wins if same name): Local > Collection > Environment > Global.' },
+              { level: 'intermediate', q: 'How do you write a test that checks a specific field value in a JSON response?', a: 'Parse the response first: const body = pm.response.json(). Then use Chai assertions: pm.expect(body.name).to.equal("Alice") for exact match, pm.expect(body.email).to.include("@") for partial, pm.expect(body.age).to.be.a("number") for type, pm.expect(body.roles).to.include("admin") for array membership, pm.expect(body).to.have.property("id") to verify key exists. Always wrap in pm.test() for named results: pm.test("Name is Alice", () => { pm.expect(body.name).to.equal("Alice") }).' },
+              { level: 'intermediate', q: 'How do you handle endpoints requiring an auth token that expires?', a: 'Use a Pre-request Script at the collection level to check token validity and refresh if expired. Check the stored expiry timestamp: const expiry = pm.environment.get("tokenExpiry"); if (!expiry || Date.now() > expiry) { pm.sendRequest({ url: baseUrl+"/auth/refresh", method: "POST" ... }, (err, res) => { pm.environment.set("token", res.json().token); pm.environment.set("tokenExpiry", Date.now() + 3600000) }) }. This runs before every request, automatically refreshing — no manual intervention needed during long regression runs.' },
+              { level: 'advanced', q: 'How do you implement data-driven API testing in Postman?', a: 'Data-driven testing uses an external CSV or JSON file where each row is a separate test iteration. Create a CSV: email,password,expectedStatus\\nalice@test.com,pass123,200\\nwrong@test.com,badpass,401. In test scripts access values: pm.iterationData.get("expectedStatus"). Run via Collection Runner (GUI) by loading the CSV, or Newman CLI: newman run collection.json --iteration-data data.csv. This tests 100 login scenarios without 100 separate requests — essential for boundary value and equivalence partition testing.' },
+              { level: 'advanced', q: 'What API testing strategies ensure comprehensive coverage?', a: '1) Happy path — valid inputs, expected outputs. 2) Boundary testing — empty strings, null, max-length, negative numbers. 3) Authorization matrix — each endpoint tested with no auth, wrong auth, insufficient permissions, correct auth. 4) Schema validation — verify response structure matches contract (use Ajv/tv4 built into Postman). 5) Idempotency — GET/DELETE called twice gives same result. 6) Error messages — 4xx responses should be informative enough for debugging. 7) Concurrent requests — detect race conditions. 8) Performance — assert responseTime below threshold.' },
+              { level: 'advanced', q: 'A developer says "we changed /users to return snake_case instead of camelCase." How do you respond?', a: 'This is a breaking API contract change. My response: 1) Immediately run the collection — all camelCase assertions fail, documenting the impact. 2) Assess: is frontend using old field names? If yes, escalate — this needs API versioning (/v2/users) or deprecation plan. 3) If agreed to proceed, update test assertions from body.firstName to body.first_name. 4) Document in collection description and Git commit message. 5) Create regression tests verifying v1 still works during transition period. This shows Postman tests guard API contracts, not just "does it return 200".' },
+              { level: 'advanced', q: 'How would you design a Postman test suite for a microservices architecture?', a: 'One workspace, multiple collections — one per microservice. Each collection has: 1) Collection-level Pre-request script for token refresh. 2) Folders by endpoint group. 3) Environment files per deployment environment. 4) A "Smoke Tests" folder — one key test per service for deployment health checks. 5) An "Integration Tests" folder for cross-service flows (create user → create order → process payment). Store all collection.json and env.json in a tests/ directory in the monorepo, run Newman in CI/CD for each service on every merge to main.' },
+              { level: 'advanced', q: 'How do you validate JSON schema in Postman to guard against accidental breaking changes?', a: 'Schema validation checks the response structure matches a contract — catching when devs rename or remove fields. Postman includes the tv4 validator. Example: const schema = { type: "object", required: ["id","name","email"], properties: { id: {type:"number"}, name: {type:"string"}, email: {type:"string"} } }; pm.test("Schema valid", () => { pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true }). Run this on every API response. When a developer accidentally removes "email" or changes "id" from number to string, this test catches it immediately — before manual QA even starts.' },
+            ],
+          },
+          {
+            type: 'glossary-section',
+            terms: [
+              { term: 'API', definition: { tr: 'Application Programming Interface — uygulamalar arası iletişim sözleşmesi.', en: 'Application Programming Interface — a contract between applications.' } },
+              { term: 'REST', definition: { tr: 'HTTP üzerinden çalışan durumsuz API mimarisi. En yaygın stil.', en: 'Stateless API architecture over HTTP. The most common API style today.' } },
+              { term: 'Collection', definition: { tr: 'İlişkili isteklerin grubu. Export edilebilir, Git\'e eklenebilir, Newman ile çalıştırılabilir.', en: 'Group of related requests. Exportable, version-controllable, runnable with Newman.' } },
+              { term: 'Environment', definition: { tr: 'Ortam bazlı değişkenler (dev/staging/prod). Değiştirince tüm istekler güncellenir.', en: 'Holds environment-specific variables. Switching updates all requests automatically.' } },
+              { term: 'pm.test()', definition: { tr: 'Test assertion fonksiyonu. Test adı + assertion içerir.', en: 'Test assertion function. Contains test name and assertion logic.' } },
+              { term: 'pm.expect()', definition: { tr: 'Chai tabanlı değer doğrulama. .to.equal(), .include(), .be.a() destekler.', en: 'Chai-based value assertion. Supports .to.equal(), .include(), .be.a() etc.' } },
+              { term: 'Newman', definition: { tr: 'Koleksiyonları CLI\'dan çalıştırır. CI/CD entegrasyonu için zorunlu.', en: 'CLI runner for collections. Essential for CI/CD integration.' } },
+              { term: 'Pre-request Script', definition: { tr: 'İstek gönderilmeden önce çalışan JavaScript. Token yenileme veya dinamik değer üretme için.', en: 'JavaScript that runs before a request. Used for token refresh or dynamic value generation.' } },
+              { term: 'Bearer Token', definition: { tr: 'Authorization: Bearer <token> formatında JWT. Authorization başlığında taşınır.', en: 'JWT sent as Authorization: Bearer <token>.' } },
+              { term: 'ECONNREFUSED', definition: { tr: 'Sunucu çalışmıyor veya yanlış port. Sunucunun ayakta olduğunu kontrol et.', en: 'Server not running or wrong port. Verify the server is up.' } },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+
+  tr: {
+    hero: {
+      title: '📮 Postman',
+      subtitle: 'API Test ve İşbirliği Platformu',
+      intro: 'Sıfırdan mülakat seviyesine Postman uzmanlığı. İstek göndermeyi, otomatik test yazmayı, ortamları yönetmeyi, Newman ile CI/CD\'ye entegre etmeyi gerçek QA senaryolarıyla öğren.',
+    },
+    tabs: ['🎯 Giriş', '📦 Kurulum', '📚 Temel Kavramlar', '🔥 Test Otomasyonu', '💼 Mülakat Q&A'],
+    sections: [
+      // ── 0. GİRİŞ ─────────────────────────────────────────────────────────
+      {
+        title: '🎯 Postman ve API Testi Nedir?',
+        blocks: [
+          {
+            type: 'simple-box',
+            emoji: '📱',
+            content: 'Bir restorana gidip sipariş vermek yerine telefon edip sipariş verdiğini düşün. Restoran içine girmeden (web sitesini açmadan) doğrudan mutfakla (API) konuşuyorsun. Postman tam olarak bu telefon! Web sitelerinin arka planda kullandığı gizli servisleri (API\'leri) doğrudan arayıp ne döndürdüklerini test edebiliyorsun.',
+          },
+          { type: 'heading', text: 'API Nedir?' },
+          { type: 'text', content: 'API (Application Programming Interface), bir istemci (uygulaman, tarayıcın veya test aracın) ile sunucu arasındaki sözleşmedir. Sunucunun hangi istekleri kabul ettiğini, hangi veriyi beklediğini ve ne döndürdüğünü tanımlar. Hava durumu uygulaması, ödeme sistemi, sosyal medya — tüm modern uygulamalar arka planda API\'ler üzerinden çalışır.' },
+          {
+            type: 'diagram-svg',
+            title: 'HTTP İstek-Yanıt Döngüsü',
+            svg: httpFlowSvg,
+          },
+          { type: 'heading', text: 'Postman Nedir?' },
+          { type: 'text', content: 'Postman, HTTP istekleri oluşturmak, göndermek ve doğrulamak için ücretsiz bir GUI platformudur. QA mühendisleri API\'leri manuel test etmek, otomatik regresyon süitleri yazmak, ortam yönetimi yapmak ve test koleksiyonlarını ekiple paylaşmak için kullanır.' },
+          {
+            type: 'grid', cols: 3,
+            items: [
+              { icon: '🖱️', label: 'Kod Gerekmez', desc: 'Tıklama ile istek oluştur ve gönder — keşif API testleri için idealdir.' },
+              { icon: '📁', label: 'Koleksiyonlar', desc: 'İlgili istekleri grupla, JSON olarak export et, Git\'te versiyonla.' },
+              { icon: '🌍', label: 'Ortamlar', desc: 'Tek tıkla dev/staging/prod arası geçiş — değişkenler her şeyi halleder.' },
+              { icon: '🤖', label: 'Test Scriptleri', desc: 'Her istekten sonra otomatik çalışan JavaScript assertion\'ları yaz.' },
+              { icon: '⚡', label: 'Newman CLI', desc: 'Komut satırından tüm koleksiyonları çalıştır — CI/CD için mükemmel.' },
+              { icon: '🔗', label: 'Mock Sunucular', desc: 'Backend hazır olmadan frontend\'i kaldırmak için sahte API endpoint\'leri oluştur.' },
+            ],
+          },
+          { type: 'heading', text: 'HTTP Metodları — Temel Kelime Hazinesi' },
+          {
+            type: 'table',
+            headers: ['Metot', 'Eylem', 'Body?', 'Örnek', 'SQL Karşılığı'],
+            rows: [
+              ['GET', 'Veri oku', '❌', 'GET /users/42', 'SELECT * WHERE id=42'],
+              ['POST', 'Yeni kaynak oluştur', '✅', 'POST /users', 'INSERT INTO users'],
+              ['PUT', 'Tüm kaynağı değiştir', '✅', 'PUT /users/42', 'UPDATE (tam değiştirme)'],
+              ['PATCH', 'Belirli alanları güncelle', '✅', 'PATCH /users/42', 'UPDATE SET name=...'],
+              ['DELETE', 'Kaynağı sil', '❌', 'DELETE /users/42', 'DELETE WHERE id=42'],
+            ],
+          },
+          { type: 'heading', text: 'HTTP Durum Kodları' },
+          {
+            type: 'visual', variant: 'pyramid',
+            title: 'HTTP Durum Kodu Grupları',
+            levels: [
+              { label: '5xx — Sunucu Hatası', color: 'red', desc: '500 Internal Server Error · 503 Service Unavailable' },
+              { label: '4xx — İstemci Hatası', color: 'orange', desc: '400 Bad Request · 401 Unauthorized · 403 Forbidden · 404 Not Found' },
+              { label: '3xx — Yönlendirme', color: 'yellow', desc: '301 Moved Permanently · 302 Found' },
+              { label: '2xx — Başarı', color: 'green', desc: '200 OK · 201 Created · 204 No Content' },
+              { label: '1xx — Bilgilendirme', color: 'blue', desc: '100 Continue · 101 Switching Protocols' },
+            ],
+            note: '2xx = geçti. 4xx = test verim/auth hatalı. 5xx = sunucu hatası (geliştirici ekibine eskalasyon yap).',
+          },
+          {
+            type: 'quiz',
+            question: 'POST /api/login isteği 401 durumu döndürdü. Bu ne anlama gelir?',
+            options: [
+              { id: 'a', text: 'Sunucu çöktü — hemen eskalasyon yap' },
+              { id: 'b', text: 'Yetkisiz — yanlış kimlik bilgileri veya eksik token' },
+              { id: 'c', text: 'Başarılı — kullanıcı oturum açtı' },
+              { id: 'd', text: 'Endpoint bulunamadı — URL\'yi düzelt' },
+            ],
+            correct: 'b',
+            explanation: '401 Unauthorized, isteğin sunucuya ulaştığını ama kimlik doğrulamanın başarısız olduğunu gösterir. 4xx = istemci tarafı sorun. 500 = sunucu hatası. 404 = bulunamadı. 200/201 = başarı.',
+          },
+        ],
+      },
+
+      // ── 1. KURULUM ────────────────────────────────────────────────────────
+      {
+        title: '📦 Kurulum ve İlk İstek',
+        blocks: [
+          {
+            type: 'simple-box',
+            emoji: '🔧',
+            content: 'Postman kurmak, yepyeni bir alet kutusu açmak gibi. Kutuyu açıyorsun ve içinde her alet zaten düzenli ve etiketli. Doğru aleti (GET, POST, DELETE...) alıp kullanmaya başlıyorsun — hiçbir şeyi birleştirmen gerekmiyor.',
+          },
+          { type: 'heading', text: 'Postman\'ı İndirmek' },
+          {
+            type: 'installation',
+            title: 'Postman Kurulumu',
+            steps: [
+              { cmd: '1. postman.com/downloads adresine git', explanation: 'Postman bireysel kullanım için ücretsiz. Windows, macOS veya Linux için masaüstü uygulamasını indir. app.getpostman.com\'da web versiyonu da var — kurulum gerekmez.' },
+              { cmd: '2. Kurulum dosyasını çalıştır', explanation: 'Windows: PostmanSetup.exe. macOS: Postman.app\'i Applications\'a sürükle. Linux: .tar.gz veya AppImage kullan. 2 dakikadan az sürer.' },
+              { cmd: '3. Giriş yap veya atla', explanation: 'Ücretsiz hesap, koleksiyonları cihazlar arasında senkronize eder ve ekip paylaşımını sağlar. Giriş ekranını kapatarak atlanabilir.' },
+              { cmd: '4. Hazırsın!', explanation: '+ sekmesine tıkla ve ilk isteğini oluştur. Config dosyası yok, CLI kurulumu yok.' },
+            ],
+          },
+          { type: 'heading', text: 'Postman Arayüzüne Genel Bakış' },
+          {
+            type: 'diagram-svg',
+            title: 'Postman UI — Temel Alanlar (etiketli)',
+            svg: uiMockupSvg,
+          },
+          { type: 'heading', text: 'İlk GET İsteği — Adım Adım' },
+          {
+            type: 'steps',
+            items: [
+              { label: '"+" sekmesine tıkla', desc: 'Yeni bir istek sekmesi açılır.' },
+              { label: 'Metot: GET seç', desc: 'Sol taraftaki dropdown\'a tıkla (varsayılan zaten GET).' },
+              { label: 'URL gir', desc: 'https://jsonplaceholder.typicode.com/users — ücretsiz test API\'si.' },
+              { label: 'Send\'e tıkla', desc: 'Postman isteği gönderir ve yanıtı aşağıda gösterir.' },
+              { label: 'Yanıtı oku', desc: 'JSON formatında 10 kullanıcı görmelisin. Durum: "200 OK".' },
+            ],
+          },
+          {
+            type: 'code',
+            language: 'json',
+            label: 'Beklenen Yanıt (ilk kullanıcı):',
+            code: `{
+  "id": 1,                            // Benzersiz kullanıcı ID
+  "name": "Leanne Graham",            // Tam ad
+  "username": "Bret",                 // Kullanıcı adı
+  "email": "Sincere@april.biz",       // E-posta
+  "phone": "1-770-736-0988",          // Telefon
+  "website": "hildegard.org",         // Web sitesi
+  "address": {                        // İç içe nesne
+    "street": "Kulas Light",
+    "city": "Gwenborough",
+    "zipcode": "92998-3874"
+  }
+}`,
+            expected: 'Durum: 200 OK | JSON dizisi olarak 10 kullanıcı döner',
+          },
+          { type: 'heading', text: 'POST İsteği Yapmak' },
+          {
+            type: 'code',
+            language: 'json',
+            label: 'POST /api/users — Body → raw → JSON:',
+            code: `{
+  "name": "Ayşe Kaya",          // Zorunlu: tam ad
+  "email": "ayse@test.com",     // Zorunlu: benzersiz olmalı
+  "role": "tester",             // Opsiyonel
+  "active": true                // Boolean
+}`,
+          },
+          {
+            type: 'code',
+            language: 'json',
+            label: 'Beklenen Yanıt — 201 Created:',
+            code: `{
+  "id": 99,                          // Sunucu tarafından üretilen ID
+  "name": "Ayşe Kaya",               // Geri döndürüldü
+  "email": "ayse@test.com",          // Geri döndürüldü
+  "createdAt": "2024-01-15T10:30:00Z" // Sunucu zaman damgası
+}`,
+          },
+          {
+            type: 'quiz',
+            question: 'POST /api/users gönderdin ve sunucu 201 döndürdü. QA test uzmanı olarak bundan sonra ne doğrulamalısın?',
+            options: [
+              { id: 'a', text: 'Hiçbir şey — 201 başarı demek, bitti' },
+              { id: 'b', text: 'Yanıt body\'nin oluşturulan kullanıcıyı içerdiğini doğrula, ardından GET ile kaydın kalıcı olup olmadığını kontrol et' },
+              { id: 'c', text: 'Test başarısız — POST 200 dönmeli, 201 değil' },
+              { id: 'd', text: 'Hata bildir — 201 geçerli bir durum kodu değil' },
+            ],
+            correct: 'b',
+            explanation: '201 Created, başarılı POST için doğru durum kodudur. İyi QA pratiği: 1) Yanıt body\'sini doğrula, 2) GET ile kaydın gerçekten oluşturulduğunu teyit et. 200 güncelleme içindir, 201 kaynak oluşturma içindir.',
+          },
+        ],
+      },
+
+      // ── 2. TEMEL KAVRAMLAR ────────────────────────────────────────────────
+      {
+        title: '📚 Collections, Variables ve Microservisler',
+        blocks: [
+          {
+            type: 'simple-box',
+            emoji: '🏙️',
+            content: 'Büyük bir ofis binasındaki 4 bölümü düşün: Güvenlik (Auth), İK (Users), Lojistik (Orders), Finans (Payments). Her birinin ayrı dahili hattı var. Postman, tüm hatları bilen ana rehber — tek tuşla 4 bölümü arayıp hepsinin doğru cevap verip vermediğini otomatik test edebiliyorsun!',
+          },
+          { type: 'heading', text: 'Microservisler — Postman Collections Neden Şart?' },
+          { type: 'text', content: 'Microservis mimarisinde her servis kendi URL\'inde yaşar, kendi auth\'una sahiptir. Auth (:3001), User (:3002), Order (:3003), Payment (:3004) — her biri farklı base URL. Manuel test etmek URL değiştirmeyi, token güncellemeyi ve base adresleri yönetmeyi gerektirir. Collections + Environment\'lar bu kaosa son verir: tek collection, dört environment dosyası — tek tıkla geçiş. {{baseUrl}}, {{authToken}}, {{userId}} gibi variable\'lar veriyi request\'ler arasında otomatik taşır.' },
+          {
+            type: 'diagram-svg',
+            title: 'Microservis Mimarisi — Postman ile 4 Servis (Animasyonlu)',
+            svg: microservicesSvg,
+          },
+          { type: 'heading', text: 'Variable Oluşturma — Yöntem 1: Environment Arayüzü' },
+          { type: 'text', content: 'Environment\'lar, bir deployment bağlamına özel key-value çiftleri tutar. Her context için bir tane oluştur (dev, staging, prod). {{baseUrl}} kullanan her request, environment değiştirilince otomatik güncellenir — 20 request\'i tek tek düzenlemeye gerek yok.' },
+          {
+            type: 'steps',
+            items: [
+              { label: '🌍 Environments ikonuna tıkla (sol sidebar)', desc: 'Environments paneli açılır.' },
+              { label: '"+ Create environment" tıkla', desc: '"microservices-dev" olarak adlandır.' },
+              { label: 'Satır ekle: Variable = baseUrl, Initial Value = https://dev.api.company.com', desc: 'İlk boş satıra tıkla ve yaz. Initial value şablon; current value runtime\'da değiştirilebilir.' },
+              { label: 'authToken ekle — boş bırak', desc: 'POST /login test script\'i çalışıp token alınca bu variable otomatik dolar.' },
+              { label: 'userId, orderId ekle — boş bırak', desc: 'E2E akış ilerledikçe pm.environment.set() ile otomatik atanır.' },
+              { label: '"Save" → sağ üst dropdown\'dan seç', desc: 'Her request\'teki {{variable\'lar}} artık bu environment\'ın değerleriyle çözümlenir.' },
+            ],
+          },
+          {
+            type: 'diagram-svg',
+            title: 'Environment Editor — Variable\'lar Oluşturuluyor (Animasyonlu)',
+            svg: varCreateSvg,
+          },
+          { type: 'heading', text: 'Variable Oluşturma — Yöntem 2: Script ile (pm.environment.set)' },
+          { type: 'text', content: 'pm.environment.set() metodunu Tests sekmesindeki script\'te kullanarak çalışma sırasında variable\'ı dinamik olarak ata. Request chaining böyle çalışır: POST /login token kaydeder, sonraki tüm request\'ler {{authToken}} variable\'ını otomatik kullanır. Java analogisi: tüm test sınıflarının okuyabildiği paylaşılan bir Properties nesnesine yazmak gibi.' },
+          {
+            type: 'code',
+            language: 'javascript',
+            label: 'Tests sekmesi — yanıt değerlerini ortam değişkenlerine kaydet:',
+            code: `// ── İstek 1: POST /auth/login ───────────────────────────
+pm.test("Giris basarili", () => pm.response.to.have.status(200));
+const auth = pm.response.json();
+pm.environment.set("authToken", auth.token);       // → {{authToken}}
+pm.environment.set("tokenExpiry", Date.now() + 3600000);
+
+// ── İstek 2: POST /users (User Service) ──────────────
+pm.test("Kullanici olusturuldu 201", () => pm.response.to.have.status(201));
+const user = pm.response.json();
+pm.environment.set("userId", user.id);             // → {{userId}}
+
+// ── İstek 3: GET /users/{{userId}} ───────────────────
+// URL bar: {{baseUrl}}/users/{{userId}}   → cozumlenir: .../users/42
+// Header:  Authorization: Bearer {{authToken}}
+
+// ── İstek 4: POST /orders (Order Service) ────────────
+pm.test("Siparis olusturuldu 201", () => pm.response.to.have.status(201));
+const order = pm.response.json();
+pm.environment.set("orderId", order.id);           // → {{orderId}}
+
+// ── İstek 5: POST /payments (Payment Service) ────────
+// Body: { "orderId": "{{orderId}}", "userId": "{{userId}}" }`,
+          },
+          { type: 'heading', text: 'Variable Oluşturma — Yöntem 3: Collection Variables' },
+          {
+            type: 'code',
+            language: 'javascript',
+            label: 'Collection variables — tüm environment\'larda sabit paylaşılan değerler:',
+            code: `// Koleksiyon değişkenleri: Koleksiyona sag tikla → Edit → Variables sekmesi
+// Ya da script ile — tüm koleksiyon boyunca kalıcı:
+
+pm.collectionVariables.set("apiVersion", "v1");    // {{apiVersion}}
+pm.collectionVariables.set("pageSize", "20");      // {{pageSize}}
+
+// URL barında:
+// {{baseUrl}}/api/{{apiVersion}}/users?limit={{pageSize}}
+// → cozumlenir: https://dev.api.company.com/api/v1/users?limit=20
+
+// Hangisini ne zaman kullan:
+// pm.globals.set()             → tum workspace (API key, paylasilan sabit)
+// pm.environment.set()         → ortama gore degisir (baseUrl, token, dinamik ID)
+// pm.collectionVariables.set() → koleksiyonda sabit (apiVersion, pageSize)
+// pm.variables.set()           → yalnizca tek istek (gecici hesaplama, sonra silinir)`,
+          },
+          { type: 'heading', text: 'Koleksiyon Oluşturma — Adım Adım' },
+          { type: 'text', content: 'Her microservis için ayrı Collection, önerilen QA yaklaşımıdır. Auth Service Collection\'ıyla başla — login çalışıp token environment variable\'ına kaydedilince, diğer tüm servisler bu token\'ı miras alır.' },
+          {
+            type: 'steps',
+            items: [
+              { label: '"New" → "Collection" tıkla (ya da sidebar\'daki "+" ikonu)', desc: 'Yeni boş Collection oluşur.' },
+              { label: '"Auth Service Tests" olarak adlandır', desc: 'Bu Collection\'ın neyi kapsadığını açıklayan bir description ekle.' },
+              { label: 'Collection\'a sağ tıkla → "Add folder"', desc: '"Auth Flows", "Token Refresh", "Negative Tests" klasörlerini oluştur.' },
+              { label: 'Klasörün içinde "Add request" tıkla', desc: '"POST /login — geçerli kimlik" adını ver. Method, URL, body ve Tests script\'ini ayarla.' },
+              { label: 'Ctrl+S ile kaydet', desc: 'Request Collection\'a kalıcı kaydedildi. Bir daha yazmana gerek yok.' },
+              { label: 'Her servis için tekrarla', desc: 'User Service → Order Service → Payment Service Collection\'larını oluştur.' },
+            ],
+          },
+          {
+            type: 'diagram-svg',
+            title: 'Collection Hiyerarşisi — Microservis Yapısı',
+            svg: collectionHierarchySvg,
+          },
+          {
+            type: 'code',
+            language: 'javascript',
+            label: 'Microservisler için önerilen koleksiyon klasör yapısı:',
+            code: `// Workspace
+// ├── 📁 Auth Service Testleri
+// │   ├── 📂 Auth Akislari
+// │   │   ├── POST /login — gecerli kimlik          → 200 + authToken kaydet
+// │   │   ├── POST /login — yanlis sifre            → 401 beklenir
+// │   │   └── POST /refresh — suresi dolmus token   → 200 + yeni authToken
+// │   └── 📂 Negatif Testler
+// │       └── POST /login — eksik alanlar           → 400 beklenir
+// │
+// ├── 📁 User Service Testleri
+// │   ├── 📂 CRUD
+// │   │   ├── POST /users — kullanici olustur       → 201 + userId kaydet
+// │   │   ├── GET /users/{{userId}}                 → 200 + ad/email kontrol
+// │   │   └── DELETE /users/{{userId}}              → 204 beklenir
+// │   └── 📂 Dogrulama
+// │       └── POST /users — ayni e-posta            → 409 Conflict
+// │
+// ├── 📁 Order Service Testleri
+// │   └── POST /orders — siparis olustur           → 201 + orderId kaydet
+// │
+// └── 📁 Payment Service Testleri
+//     └── POST /payments — odemeyi isle            → 201 Created`,
+          },
+          { type: 'heading', text: 'Collection Paylaşma — 4 Yöntem' },
+          { type: 'text', content: 'Collection hazır olunca ekiple paylaşmak şarttır. CI/CD ekipleri için Git en iyi yaklaşımdır — versiyonlanmış, PR\'da incelenebilir, her commit\'te Newman ile otomatik çalıştırılabilir.' },
+          {
+            type: 'diagram-svg',
+            title: 'Collection Paylaşımı — 4 Dağıtım Yöntemi (Animasyonlu)',
+            svg: shareFlowSvg,
+          },
+          {
+            type: 'grid', cols: 2,
+            items: [
+              { icon: '📄', label: 'JSON Export', desc: 'Collection\'a sağ tıkla → Export → Collection v2.1. .json dosyasını gönder. Alıcı File → Import ile içe aktarır. Git olmadan tek seferlik paylaşım için idealdir.' },
+              { icon: '🌿', label: 'Git (CI/CD için Önerilen)', desc: 'collection.json + env.json dosyalarını repo\'nun tests/postman/ klasörüne export et. CI/CD pipeline her push\'ta bunları çeker ve çalıştırır. Versiyonlanmış, denetlenebilir.' },
+              { icon: '☁️', label: 'Postman Cloud Workspace', desc: 'Share → "Run in Postman" linki oluştur veya takım üyesini paylaşılan Workspace\'e davet et. Gerçek zamanlı sync — herkes güncel sürümü anında görür.' },
+              { icon: '⚡', label: 'Newman CLI', desc: 'JSON export → Git\'e ekle → newman run. Herhangi bir test başarısız olursa exit code 1 döner ve CI build\'i otomatik durdurur. Otomatik regresyonun çekirdeği.' },
+            ],
+          },
+          {
+            type: 'code',
+            language: 'bash',
+            label: 'Collection dosyaları için Git iş akışı:',
+            code: `# 1. Projede postman dizini oluştur
+mkdir tests/postman
+
+# 2. Postman'dan dosyaları export et (File → Export):
+#    tests/postman/auth-service.collection.json
+#    tests/postman/user-service.collection.json
+#    tests/postman/env.dev.json
+#    tests/postman/env.staging.json
+
+# 3. Git'e ekle
+git add tests/postman/
+git commit -m "chore: microservisler icin postman e2e koleksiyonlari eklendi"
+
+# 4. CI/CD pipeline'ından çalıştır:
+newman run tests/postman/auth-service.collection.json \\
+  -e tests/postman/env.staging.json \\
+  -r cli,htmlextra \\
+  --reporter-htmlextra-export results/auth-report.html`,
+          },
+          { type: 'heading', text: 'Collection Çalıştırma — Collection Runner GUI' },
+          { type: 'text', content: 'Collection Runner tüm request\'leri sırayla yürütür — her request\'in test script\'leri yanıttan sonra otomatik çalışır. Deployment sonrası manuel regresyon kontrolleri için mükemmel. Java analogisi: "mvn test" yerine bir buton tıklayarak tam TestNG suite\'ini çalıştırmak gibi.' },
+          {
+            type: 'steps',
+            items: [
+              { label: 'Collection adının yanındaki "▶ Run" düğmesine tıkla', desc: 'Collection Runner paneli sağda açılır.' },
+              { label: 'Environment seç: "microservices-dev"', desc: 'Tüm {{variable\'lar}} bu environment\'ın değerleriyle çözümlenir.' },
+              { label: 'Iterations ayarla (varsayılan: 1)', desc: 'Data-driven test için artır — her iteration CSV dosyasından bir satır okur.' },
+              { label: 'Delay ayarla (opsiyonel)', desc: 'Request\'ler arasında işleme süresi gerekiyorsa milisaniye ekle.' },
+              { label: '"Run [collection adı]"\'na tıkla', desc: 'Postman her request\'i sırayla çalıştırır. Her yanıttan sonra test script\'leri tetiklenir.' },
+              { label: 'Sonuçları incele', desc: 'Yeşil ✅ = geçti. Kırmızı ❌ = başarısız — hangi assertion\'ın tutmadığını ve expected/actual değerleri görmek için tıkla.' },
+            ],
+          },
+          {
+            type: 'diagram-svg',
+            title: 'Collection Runner — Microservis E2E Akışı (Animasyonlu)',
+            svg: collectionRunnerSvg,
+          },
+          { type: 'heading', text: 'Newman CLI ile Çalıştırma' },
+          {
+            type: 'code',
+            language: 'bash',
+            label: 'Newman — tüm senaryo seçenekleri:',
+            code: `# Temel çalıştırma
+newman run auth-service.collection.json
+
+# Ortam dosyasıyla
+newman run auth-service.collection.json -e env.dev.json
+
+# HTML rapor ile
+newman run auth-service.collection.json \\
+  -e env.staging.json \\
+  -r cli,htmlextra \\
+  --reporter-htmlextra-export report.html
+
+# Data-driven test (her senaryo için CSV)
+newman run user-service.collection.json \\
+  -e env.dev.json \\
+  --iteration-data test-kullanicilar.csv \\
+  --iteration-count 10
+
+# 4 servisi sırayla çalıştır (ilk hatada dur)
+newman run tests/postman/auth-service.collection.json   -e env.staging.json &&
+newman run tests/postman/user-service.collection.json   -e env.staging.json &&
+newman run tests/postman/order-service.collection.json  -e env.staging.json &&
+newman run tests/postman/payment-service.collection.json -e env.staging.json`,
+          },
+          { type: 'heading', text: 'Variable Scope — Öncelik Sırası' },
+          {
+            type: 'diagram-svg',
+            title: 'Variable Scope — Hangisi Kazanır',
+            svg: varScopeSvg,
+          },
+          {
+            type: 'table',
+            headers: ['Scope', 'Nasıl Set Edilir', 'Ömrü', 'En İyi Kullanım'],
+            rows: [
+              ['Local (en yüksek öncelik)', 'pm.variables.set()', 'Tek request', 'Geçici hesaplamalar'],
+              ['Collection', 'pm.collectionVariables.set()', 'Tüm collection run', 'API versiyonu, sayfa boyutu'],
+              ['Environment', 'pm.environment.set()', 'Değiştirilene kadar', 'baseUrl, authToken, dinamik ID'],
+              ['Global (en düşük öncelik)', 'pm.globals.set()', 'Tüm workspace', 'Paylaşılan API key, sabitler'],
+            ],
+          },
+          {
+            type: 'quiz',
+            question: 'E2E akışın: POST /login → POST /users → POST /orders → POST /payments. /orders request\'i (3. adım) 2. adımdaki userId\'yi kullanıyor. Doğru Postman yaklaşımı nedir?',
+            options: [
+              { id: 'a', text: '2. adımın yanıtından userId\'yi manuel kopyalayıp 3. adımın URL\'ine her seferinde yapıştır' },
+              { id: 'b', text: '2. adımın Tests sekmesinde: pm.environment.set("userId", body.id). 3. adımın URL\'inde {{userId}} kullan.' },
+              { id: 'c', text: 'Tüm request\'lerde bilinen sabit bir userId kullan — değişmez' },
+              { id: 'd', text: 'Her adım için ayrı Collection oluştur ki birbirlerine karışmasın' },
+            ],
+            correct: 'b',
+            explanation: 'Environment variable\'ları üzerinden request chaining, E2E akışlar için temel Postman desenidir. 2. adımın Tests script\'i sunucu tarafından üretilen dinamik ID\'yi kaydeder; 3. adım {{userId}} ile okur. Bu sayede sunucu her çalışmada farklı ID üretse bile Collection çalışır. Sabit ID kullanmak, test kullanıcısı silindiğinde başarısız olur.',
+          },
+        ],
+      },
+
+      // ── 3. TEST OTOMASYONU ────────────────────────────────────────────────
+      {
+        title: '🔥 Otomatik Test Yazma',
+        blocks: [
+          {
+            type: 'simple-box',
+            emoji: '🔍',
+            content: 'Postman\'da test yazmak, fabrika hattındaki kalite kontrol gibi. Her ürün (API yanıtı) hattan çıktığında bir kontrol listesi uyguluyorsun: Şekil doğru mu? Değer doğru mu? Bir şey tutmazsa "BAŞARISIZ" işaretliyorsun ve alarm çalıyor.',
+          },
+          { type: 'heading', text: 'pm.test() API — Assertion Yazma' },
+          { type: 'text', content: 'Tests sekmesi, her istekten sonra JavaScript çalıştırır. pm (Postman) nesnesi tüm assertion araçlarını sağlar. Sonuçlar yanıt panelindeki "Test Results" sekmesinde ✅ veya ❌ olarak görünür.' },
+          {
+            type: 'code',
+            language: 'javascript',
+            label: 'Tests Sekmesi — Temel Assertion\'lar:',
+            code: `// Test 1: Durum kodu kontrolü
+pm.test("Durum 200 OK", function() {
+    pm.response.to.have.status(200);          // 200 değilse başarısız
+});
+
+// Test 2: Yanıt süresi (performans assertion)
+pm.test("Yanıt süresi < 500ms", function() {
+    pm.expect(pm.response.responseTime).to.be.below(500);
+});
+
+// Test 3: Geçerli JSON kontrolü
+pm.test("Yanıt JSON formatında", function() {
+    pm.response.to.be.json;                   // Content-Type JSON değilse başarısız
+});
+
+// Test 4: Belirli alan kontrolü
+pm.test("Kullanıcı adı Alice", function() {
+    const json = pm.response.json();          // JSON body'yi parse et
+    pm.expect(json.name).to.equal("Alice");   // Tam eşitlik kontrolü
+});
+
+// Test 5: Dizi boş değil
+pm.test("Kullanıcı listesi dolu", function() {
+    const json = pm.response.json();
+    pm.expect(json).to.be.an("array");        // Tür kontrolü
+    pm.expect(json.length).to.be.greaterThan(0); // Uzunluk kontrolü
+});`,
+          },
+          {
+            type: 'java-compare',
+            topic: 'API Assertion\'ları',
+            why: 'Java QA mühendisleri API testi için REST Assured kullanır. Postman aynı BDD tarzı assertion kavramlarını kullanır — Java yerine JavaScript (Chai kütüphanesi).',
+            java: `// Java — REST Assured (TestNG/JUnit)
+@Test
+public void testGetUsers() {
+    given()
+        .header("Authorization","Bearer " + token)
+    .when()
+        .get("/api/users")
+    .then()
+        .statusCode(200)                     // durum assertion
+        .body("name[0]", equalTo("Alice"))   // body assertion
+        .body("", hasSize(greaterThan(0)))   // dizi boyutu
+        .time(lessThan(500L));               // performans
+}`,
+            python: `// Postman — JavaScript (Tests sekmesi)
+pm.test("Durum 200", () => {
+    pm.response.to.have.status(200);
+});
+pm.test("İlk kullanıcı Alice", () => {
+    const users = pm.response.json();
+    pm.expect(users[0].name).to.equal("Alice");
+});
+pm.test("Kullanıcı var", () => {
+    pm.expect(pm.response.json()).to.have.length.above(0);
+});
+pm.test("Hızlı yanıt", () => {
+    pm.expect(pm.response.responseTime).to.be.below(500);
+});`,
+            note: 'Her iki araç da BDD tarzını (given/when/then) kullanır. pm.test() testi adlandırır; pm.expect() assertion\'ı yapar. Chai assertion kütüphanesi Postman\'a dahil.',
+          },
+          { type: 'heading', text: 'İstek Zincirleme — İstekler Arası Veri Aktarımı' },
+          {
+            type: 'code',
+            language: 'javascript',
+            label: 'İstek 1 (POST /login) — Tests sekmesi: token\'ı kaydet',
+            code: `// POST /login başarılı olduktan sonra JWT token'ı çıkar ve kaydet
+pm.test("Giriş başarılı", function() {
+    pm.response.to.have.status(200);          // Önce girişin çalıştığını doğrula
+});
+
+const responseJson = pm.response.json();          // Yanıtı parse et
+pm.environment.set("authToken", responseJson.token); // Sonraki istek için kaydet
+console.log("Token kaydedildi:", responseJson.token); // Postman Console'da görünür`,
+          },
+          {
+            type: 'code',
+            language: 'javascript',
+            label: 'İstek 2 (GET /profile) — kaydedilen token\'ı kullan:',
+            code: `// Headers sekmesinde:
+// Authorization: Bearer {{authToken}}  ← İstek 1'in kaydettiği token
+
+// Tests sekmesinde:
+pm.test("Profil döndü", function() {
+    const profile = pm.response.json();
+    pm.expect(profile.email).to.include("@");   // E-posta format kontrolü
+    pm.expect(profile).to.have.property("id");   // id alanı var mı
+});`,
+          },
+          { type: 'heading', text: 'Pre-request Script — İstekten Önce Hazırlık' },
+          {
+            type: 'code',
+            language: 'javascript',
+            label: 'Pre-request Script sekmesi (istek gönderilmeden ÖNCE çalışır):',
+            code: `// Her test çalışması için benzersiz e-posta üret (çakışmaları önler)
+const timestamp = Date.now();                                   // epoch ms
+pm.environment.set("testEmail", "test+" + timestamp + "@qa.com");
+
+// Dinamik tarih ayarla
+const today = new Date().toISOString().split("T")[0];          // "2024-01-15"
+pm.environment.set("today", today);
+
+// İstek body'sinde kullan:
+// { "email": "{{testEmail}}", "date": "{{today}}" }`,
+          },
+          { type: 'heading', text: 'Newman — CLI\'dan Koleksiyon Çalıştırma' },
+          { type: 'text', content: 'Newman, Postman koleksiyonlarını komut satırından çalıştıran araçtır. Her isteği gönderir ve tüm test scriptlerini çalıştırır. Newman, Postman testlerini Jenkins, GitHub Actions veya herhangi bir CI/CD pipeline\'ına dahil etmenin yoludur.' },
+          {
+            type: 'installation',
+            title: 'Newman Kurulumu',
+            steps: [
+              { cmd: 'npm install -g newman', explanation: 'Newman\'ı npm ile global olarak yükle. Node.js 14+ gerekir.' },
+              { cmd: 'npm install -g newman-reporter-htmlextra', explanation: 'Güzel HTML raporları için reporter\'ı yükle.' },
+              { cmd: 'newman --version', explanation: 'Kurulumu doğrula — newman/6.x.x yazmalı.' },
+              { cmd: 'newman run collection.json -e env.json -r htmlextra --reporter-htmlextra-export report.html', explanation: 'Ortam dosyasıyla koleksiyonu çalıştır. HTML raporu report.html\'e kaydet. CI/CD komutun bu.' },
+            ],
+          },
+          {
+            type: 'code',
+            language: 'yaml',
+            label: 'GitHub Actions — CI/CD entegrasyonu:',
+            code: `# .github/workflows/api-tests.yml
+name: API Testleri (Newman)
+
+on:
+  push:
+    branches: [main, develop]     # her push'ta çalış
+  pull_request:
+    branches: [main]              # main'e PR'da çalış
+
+jobs:
+  api-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3             # repo'yu klonla
+
+      - name: Node.js Kur
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Newman Kur
+        run: npm install -g newman newman-reporter-htmlextra
+
+      - name: API Testlerini Çalıştır
+        run: |
+          newman run postman/collection.json \\
+            -e postman/env_staging.json \\    # staging ortam dosyası
+            -r cli,htmlextra \\              # CLI çıktı + HTML rapor
+            --reporter-htmlextra-export report.html
+
+      - name: Raporu Yükle
+        uses: actions/upload-artifact@v3
+        if: always()                          # testler başarısız olsa da yükle
+        with:
+          name: api-test-raporu
+          path: report.html`,
+          },
+          { type: 'heading', text: 'Sık Karşılaşılan Postman Hataları ve Çözümleri' },
+          {
+            type: 'error-dictionary',
+            framework: 'Postman',
+            errors: [
+              {
+                error: 'ECONNREFUSED',
+                fullMessage: 'Error: connect ECONNREFUSED 127.0.0.1:3000',
+                cause: { tr: 'Hedef sunucu çalışmıyor veya yanlış port/URL kullanılıyor.', en: 'Target server is not running, or wrong port/URL.' },
+                solution: { tr: '1) Sunucunun çalıştığını doğrula. 2) Port numarasını kontrol et. 3) localhost yerine 127.0.0.1 dene.', en: '1) Verify the server is running. 2) Check the port. 3) Try 127.0.0.1 instead of localhost.' },
+                codeWrong: `// Sunucu çalışmıyor
+GET http://localhost:3000/api/users
+// Hata: connect ECONNREFUSED`,
+                codeFixed: `// 1. Önce sunucuyu başlat:
+// npm start  VEYA  python app.py  VEYA  java -jar app.jar
+
+// 2. Sonra gönder:
+GET http://localhost:3000/api/users
+// 200 OK`,
+              },
+              {
+                error: 'SSL Sertifika Hatası',
+                fullMessage: 'Error: unable to verify the first certificate',
+                cause: { tr: 'Sunucu self-signed SSL sertifikası kullanıyor (lokal geliştirme ortamında yaygın).', en: 'Server uses a self-signed SSL certificate (common in local dev).' },
+                solution: { tr: 'Postman Settings → General → SSL certificate verification → OFF. Sadece dev ortamında yap, production\'da asla kapatma.', en: 'Postman Settings → General → SSL certificate verification → OFF. Dev only — never in production.' },
+                codeWrong: `// SSL doğrulama AÇIK — self-signed sertifika için başarısız
+GET https://local-dev.example.com/api
+// Hata: unable to verify the first certificate`,
+                codeFixed: `// Postman Settings → SSL certificate verification → OFF
+GET https://local-dev.example.com/api
+// 200 OK (self-signed sertifika ortamları için)`,
+              },
+              {
+                error: 'AssertionError: expected 404 to equal 200',
+                fullMessage: 'AssertionError: expected 404 to deeply equal 200',
+                cause: { tr: 'URL yanlış, endpoint adı değişmiş veya kaynak silinmiş.', en: 'Wrong URL, endpoint was renamed, or resource was deleted.' },
+                solution: { tr: '1) URL\'yi API dokümantasyonuyla karşılaştır. 2) /v1/ versiyonunu kontrol et. 3) Auth token eksik olabilir.', en: '1) Compare URL with API docs. 2) Check version prefix (/v1/). 3) Missing auth token?' },
+                codeWrong: `// Yanlış yol — çoğul 's' eksik
+GET https://api.example.com/user/42   // 404`,
+                codeFixed: `// Doğru
+GET https://api.example.com/users/42  // 200`,
+              },
+              {
+                error: 'Tests sekmesinde SyntaxError',
+                fullMessage: 'SyntaxError: Unexpected token } (Tests sekmesinde)',
+                cause: { tr: 'Test scriptinde JavaScript sözdizimi hatası — eksik parantez veya yanlış noktalı virgül.', en: 'JavaScript syntax error — missing brackets or wrong semicolons.' },
+                solution: { tr: 'Alt paneldeki kırmızı hata satırına tıkla. Tüm parantezlerin düzgün kapatıldığını kontrol et.', en: 'Click the red error at the bottom. Verify all brackets are properly closed.' },
+                codeWrong: `// Kapanış }); eksik
+pm.test("Durum OK", function() {
+    pm.response.to.have.status(200);
+// HATA: }); eksik`,
+                codeFixed: `// Doğru — tüm parantezler kapalı
+pm.test("Durum OK", function() {       // aç
+    pm.response.to.have.status(200);   // assertion
+});                                    // kapat`,
+              },
+            ],
+          },
+          {
+            type: 'quiz',
+            question: 'Her gece saat 02:00\'de Postman koleksiyonunu zamanlanmış regresyon testi olarak çalıştırman gerekiyor. Ne kullanmalısın?',
+            options: [
+              { id: 'a', text: 'Her gece 02:00\'de Postman\'ı manuel açıp Run Collection\'a tıkla' },
+              { id: 'b', text: 'Cron job veya zamanlanmış CI/CD pipeline\'ında Newman — GUI olmadan CLI\'dan koleksiyonları çalıştırır' },
+              { id: 'c', text: 'Postman sonuçları otomatik e-posta gönderir — ek araç gerekmez' },
+              { id: 'd', text: 'Tüm istekleri zamanlama için Selenium\'a kopyala' },
+            ],
+            correct: 'b',
+            explanation: 'Newman, Postman için CLI çalıştırıcıdır. Cron job (Linux: crontab -e) veya zamanlanmış CI/CD pipeline tetikleyicisi kur. --reporter-junit flag\'i CI/CD platformlarının parse ettiği JUnit XML raporu üretir.',
+          },
+        ],
+      },
+
+      // ── 4. MÜLAKAT Q&A ────────────────────────────────────────────────────
+      {
+        title: '💼 Mülakat Soruları',
+        blocks: [
+          {
+            type: 'simple-box',
+            emoji: '💼',
+            content: 'Bu sorular her seviyede QA mühendisi mülakatlarında karşına çıkıyor. Temel sorular günlük Postman bilginizi test eder. Orta seviye ortamlar, test otomasyonu ve Newman\'ı. İleri seviye CI/CD entegrasyonu, data-driven test ve API tasarım prensiplerini test eder.',
+          },
+          {
+            type: 'interview-questions',
+            topic: 'Postman ve API Testi',
+            questions: [
+              { level: 'basic', q: { tr: 'Postman nedir ve QA mühendisleri neden kullanır?', en: 'What is Postman and why do QA engineers use it?' }, a: { tr: 'Postman, uygulama kodu yazmadan HTTP istekleri göndermeye, yanıtları incelemeye ve otomatik test scriptleri yazmaya yarayan GUI tabanlı bir API test platformudur. QA mühendisleri şu amaçlarla kullanır: manuel API testi (API\'nin çalışıp çalışmadığını keşif amaçlı doğrulama), otomatik regresyon süitleri, dev/staging/prod ortam yönetimi ve koleksiyonları ekiple paylaşma. Keşif testi için Java/Python test kodu yazmaktan çok daha hızlıdır. Koleksiyonlar daha sonra Newman üzerinden CI/CD\'de otomatikleştirilebilir.', en: 'Postman is a GUI-based API testing platform for sending HTTP requests, inspecting responses, and writing automated test scripts without code. QA engineers use it for manual API testing, automated regression suites, environment management, and team sharing. Faster than Java/Python code for exploratory testing; collections automate via Newman in CI/CD.' } },
+              { level: 'basic', q: { tr: 'GET, POST, PUT, PATCH ve DELETE arasındaki fark nedir?', en: 'What is the difference between GET, POST, PUT, PATCH, and DELETE?' }, a: { tr: 'GET veri okur ve değiştirmez — idempotent\'tir (iki kez çağırmak aynı sonucu verir). POST yeni kaynak oluşturur — idempotent DEĞİLDİR (iki kez çağırmak iki kaynak oluşturur). PUT kaynağın tamamını değiştirir — eksik alanlar boş kalır. PATCH yalnızca belirtilen alanları günceller. DELETE kaynağı kaldırır — idempotent\'tir. Test ederken idempotency\'yi mutlaka doğrula: GET ve DELETE iki kez çağrıldığında aynı sonucu vermeli.', en: 'GET reads without modifying — idempotent. POST creates — NOT idempotent. PUT replaces entirely. PATCH updates specified fields only. DELETE removes — idempotent. Always verify idempotency in tests.' } },
+              { level: 'basic', q: { tr: 'Postman\'da Koleksiyon nedir ve neden kullanışlıdır?', en: 'What is a Collection in Postman and why is it useful?' }, a: { tr: 'Koleksiyon, ilgili API isteklerini URL, metot, header, body ve test scriptleriyle birlikte gruplar. Kullanışlıdır çünkü: 1) URL\'leri her seferinde yeniden yazmazsın, 2) Koleksiyon Runner veya Newman ile tüm koleksiyonu bir seferde çalıştırabilirsin, 3) JSON olarak export edip Git\'te versiyonlayabilirsin, 4) Geliştiricilerle paylaşabilir veya API spec dosyasından import edebilirsin. API için test süiti gibi düşün — HTTP istekleri için JUnit test sınıfı karşılığı.', en: 'Groups related requests with URL, method, headers, body, and test scripts. Run as a suite, export to Git, share with team. Think of it as a JUnit test class for HTTP requests.' } },
+              { level: 'basic', q: { tr: 'Hangi durum kodlarını API testlerinde genellikle doğrularsın?', en: 'Which status codes do you assert in API tests?' }, a: { tr: '200 OK (başarılı GET/PATCH), 201 Created (başarılı POST), 204 No Content (başarılı DELETE), 400 Bad Request (geçersiz girdi), 401 Unauthorized (eksik/geçersiz token), 403 Forbidden (geçerli token, yetersiz izin), 404 Not Found, 409 Conflict (çakışan kayıt), 422 Unprocessable Entity (doğrulama hatası), 500 Internal Server Error. Hep tam beklenen kodu assert ederim — kullanıcı oluşturan POST 201 dönmeli, 200 değil.', en: '200 OK, 201 Created, 204 No Content, 400 Bad Request, 401 Unauthorized, 403 Forbidden, 404 Not Found, 409 Conflict, 422 Unprocessable, 500 Server Error. Always assert exact expected code.' } },
+              { level: 'basic', q: { tr: 'Postman\'da POST isteğine JSON body nasıl eklenir?', en: 'How do you add a JSON body to a POST request?' }, a: { tr: 'İstek sekmesi → Body → raw → dropdown\'dan JSON seç. JSON nesnesini yaz. Postman JSON seçince Content-Type: application/json header\'ını otomatik ekler. JSON\'un geçerli olduğundan emin ol. Form gönderimleri için Body → form-data veya x-www-form-urlencoded kullan.', en: 'Body tab → raw → select JSON from dropdown. Type the JSON object. Postman auto-adds Content-Type: application/json. For forms use form-data or x-www-form-urlencoded.' } },
+              { level: 'intermediate', q: { tr: 'Postman\'da istekler arası veri aktarımı (request chaining) nasıl yapılır?', en: 'How do you pass data between requests (request chaining)?' }, a: { tr: 'Ortam değişkenleri ve test scriptleriyle yapılır. İstek 1\'in Tests sekmesinde: const body = pm.response.json(); pm.environment.set("userId", body.id). İstek 2\'de URL veya body\'de {{userId}} kullan. Örnek akış: POST /login → token\'ı kaydet → GET /profile token ile. İlk adımın başarılı olduğunu assert ettikten sonra değer çıkar (önce durum 200 assert, sonra çıkar). Kayıt → giriş → sipariş oluştur → siparişi doğrula gibi iş akışlarını test etmek için zorunlu.', en: 'Via environment variables and test scripts. In Request 1 Tests tab: pm.environment.set("userId", body.id). Use {{userId}} in Request 2. Always assert success before extracting.' } },
+              { level: 'intermediate', q: { tr: 'Newman nedir ve CI/CD\'de nasıl kullanılır?', en: 'What is Newman and how is it used in CI/CD?' }, a: { tr: 'Newman, Postman koleksiyonları için CLI çalıştırıcıdır. Yükle: npm install -g newman. Çalıştır: newman run collection.json -e env.json -r htmlextra. CI/CD\'de: 1) Koleksiyon ve ortamı JSON olarak export et, Git\'e ekle. 2) Pipeline\'da Newman\'ı kur ve çalıştır. 3) --reporter-junit ile CI\'ın parse ettiği JUnit XML raporu üret. 4) Herhangi bir test başarısız olursa Newman 1 çıkış kodu verir — CI build\'i otomatik başarısız kılar. Bu, Postman testlerinin otomatik regresyonun parçası olmasını sağlar.', en: 'CLI runner for Postman collections. Install via npm. In CI/CD: export collection+env to Git, install Newman in pipeline, run collection. --reporter-junit generates XML for CI. Exits with code 1 on failure, failing the build automatically.' } },
+              { level: 'intermediate', q: { tr: 'Ortam, koleksiyon ve global değişkenler arasındaki fark nedir?', en: 'Difference between environment, collection, and global variables?' }, a: { tr: 'Global değişkenler tüm workspace\'de geçerli — asla değişmeyen paylaşılan sabitler için (API key gibi). Ortam değişkenleri seçili ortama özgü (dev/staging/prod) — ortama göre değişen base URL ve token\'lar için. Koleksiyon değişkenleri tek koleksiyona özel — koleksiyon çalışması sırasında alınan ve birden fazla istekte paylaşılan tokenlar için. Local değişkenler script\'de oluşturulur ve istek bittikten sonra silinir. Öncelik (aynı ada sahipse hangisi kazanır): Local > Koleksiyon > Ortam > Global.', en: 'Global: whole workspace. Environment: current env only. Collection: one collection. Local: single request. Priority: Local wins over Collection over Environment over Global.' } },
+              { level: 'intermediate', q: { tr: 'JSON yanıtındaki belirli bir alanı kontrol eden test nasıl yazılır?', en: 'How do you write a test checking a specific JSON field?' }, a: { tr: 'Önce parse et: const body = pm.response.json(). Sonra Chai assertion\'ları kullan: pm.expect(body.name).to.equal("Alice") tam eşleşme için, pm.expect(body.email).to.include("@") kısmi eşleşme, pm.expect(body.age).to.be.a("number") tür kontrolü, pm.expect(body.roles).to.include("admin") dizi üyeliği, pm.expect(body).to.have.property("id") alanın var olup olmadığı. Her zaman isimlendirilmiş sonuçlar için pm.test() içine sar.', en: 'Parse first: pm.response.json(). Then: .to.equal() exact, .to.include() partial, .to.be.a() type, .to.have.property() existence. Always wrap in pm.test() for named results.' } },
+              { level: 'intermediate', q: { tr: 'Sona eren token gerektiren endpoint\'leri nasıl test edersin?', en: 'How do you handle endpoints with expiring auth tokens?' }, a: { tr: 'Koleksiyon düzeyinde Pre-request Script kullanarak token geçerliliğini kontrol et ve gerekirse yenile: const expiry = pm.environment.get("tokenExpiry"); if (!expiry || Date.now() > expiry) { pm.sendRequest(...refresh request..., (err, res) => { pm.environment.set("token", res.json().token); pm.environment.set("tokenExpiry", Date.now() + 3600000) }) }. Bu, her istekten önce çalışarak token\'ı otomatik yeniler — uzun regresyon çalışmalarında manuel müdahale gerekmez.', en: 'Collection-level Pre-request Script checks expiry and refreshes: if (!expiry || Date.now() > expiry) pm.sendRequest to refresh endpoint, save new token. Runs before every request automatically.' } },
+              { level: 'advanced', q: { tr: 'Postman\'da data-driven API testi nasıl uygulanır?', en: 'How do you implement data-driven API testing in Postman?' }, a: { tr: 'Data-driven test, her satırın ayrı bir test iterasyonu olduğu harici CSV veya JSON dosyası kullanır. CSV oluştur: email,password,expectedStatus\\nayse@test.com,dogru_sifre,200\\nyanlish@test.com,kotu_sifre,401. Test scriptlerinde: pm.iterationData.get("expectedStatus"). Collection Runner ile (GUI) CSV dosyasını yükle. Newman CLI ile: newman run collection.json --iteration-data data.csv. 100 ayrı istek olmadan 100 giriş senaryosunu test eder — sınır değer testi ve denklik bölümleme için zorunlu.', en: 'Use external CSV/JSON where each row is an iteration. pm.iterationData.get("field") in scripts. Newman: --iteration-data data.csv. Test 100 scenarios without 100 separate requests.' } },
+              { level: 'advanced', q: { tr: 'Kapsamlı API test kapsamını sağlamak için hangi stratejileri kullanırsın?', en: 'What strategies ensure comprehensive API test coverage?' }, a: { tr: '1) Happy path — geçerli girdi, beklenen çıktı. 2) Sınır testi — boş string, null, maksimum uzunluk, negatif sayı. 3) Yetkilendirme matrisi — her endpoint\'i auth yok, yanlış auth, yetersiz izin ve doğru auth ile test et. 4) Şema doğrulama — yanıt yapısının sözleşmeyle eşleştiğini kontrol et. 5) Idempotency — GET/DELETE iki kez aynı sonucu vermeli. 6) Hata mesajları — 4xx yanıtlar hata ayıklama için yeterince bilgilendirici mi? 7) Performans — yanıt süresini her kritik endpoint için assert et.', en: 'Happy path, boundary testing, authorization matrix (no auth/wrong auth/insufficient/correct), schema validation, idempotency, informative error messages, performance assertions.' } },
+              { level: 'advanced', q: { tr: 'Bir geliştirici "/users endpoint\'i snake_case\'e geçiyor" dedi. Nasıl yaklaşırsın?', en: 'A dev says "/users endpoint is changing to snake_case." How do you respond?' }, a: { tr: 'Bu, mevcut API sözleşmesini bozan bir değişiklik. Yaklaşımım: 1) Koleksiyonu hemen çalıştırarak etkiyi belgele — tüm camelCase assertion\'ları başarısız olur. 2) Frontend eski alan adlarını kullanıyor mu? Evet ise eskalasyon — API versiyonlama (/v2/users) veya deprecation planı gerekir. 3) Devam kararı alınırsa test assertion\'larını güncelle. 4) Koleksiyon açıklamasına ve Git commit mesajına belgele. 5) Geçiş sürecinde v1\'in hâlâ çalıştığını doğrulayan regresyon testleri oluştur. Bu, Postman testlerinin sadece "200 dönüyor mu" değil, API sözleşmesini koruduğunu gösterir.', en: 'Breaking change. Run collection immediately to document impact — all camelCase assertions fail. If frontend uses old names, escalate for versioning. If proceeding, update assertions, document in Git, create v1/v2 regression tests.' } },
+              { level: 'advanced', q: { tr: 'Microservice mimarisi için Postman test süiti nasıl tasarlanır?', en: 'How do you design a Postman test suite for microservices?' }, a: { tr: 'Tek workspace, birden fazla koleksiyon — her microservice için bir koleksiyon. Her koleksiyonda: 1) Token yenileme için koleksiyon düzeyi Pre-request Script. 2) Endpoint grubuna göre klasörler. 3) Her deployment ortamı için env dosyaları. 4) "Smoke Tests" klasörü — deployment sağlık kontrolleri için her servisten bir kritik test. 5) "Integration Tests" klasörü — servisler arası akışlar için (kullanıcı oluştur → sipariş oluştur → ödeme yap). Tüm collection.json ve env.json dosyalarını monorepo\'da tests/ dizininde sakla, her main merge\'de CI/CD\'de Newman çalıştır.', en: 'One workspace, one collection per service. Each with: collection-level token refresh, endpoint-grouped folders, env files per environment, smoke tests folder for deployment health, integration tests folder for cross-service flows. Store JSON files in tests/, run Newman in CI/CD on every merge.' } },
+              { level: 'advanced', q: { tr: 'Postman\'da JSON şema doğrulaması nasıl yapılır?', en: 'How do you validate JSON schema in Postman?' }, a: { tr: 'Şema doğrulaması, yanıt yapısının sözleşmeyle eşleştiğini kontrol eder — geliştiricilerin yanlışlıkla alan ekleyip kaldırmasını yakalar. Postman tv4 doğrulayıcısını dahil eder. Örnek: const schema = { type: "object", required: ["id","name","email"], properties: { id: {type:"number"}, name: {type:"string"}, email: {type:"string"} } }; pm.test("Şema geçerli", () => { pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true }). Her API yanıtında çalıştır. Geliştirici "email"i yanlışlıkla kaldırırsa veya "id" tipini sayıdan stringe değiştirirse, bu test manuel QA başlamadan önce yakalar.', en: 'Use built-in tv4 validator. Define schema with required fields and types. pm.expect(tv4.validate(body, schema)).to.be.true catches renamed/removed fields immediately.' } },
+            ],
+          },
+          {
+            type: 'glossary-section',
+            terms: [
+              { term: 'API', definition: { tr: 'Application Programming Interface — uygulamalar arası iletişim sözleşmesi.', en: 'Application Programming Interface — a contract between applications.' } },
+              { term: 'REST', definition: { tr: 'HTTP üzerinden çalışan durumsuz API mimarisi. En yaygın stil.', en: 'Stateless API architecture over HTTP. Most common style.' } },
+              { term: 'Collection', definition: { tr: 'İlgili isteklerin grubu. Export, Git, Newman ile çalıştırılabilir.', en: 'Group of related requests. Exportable, versionable, runnable.' } },
+              { term: 'Environment', definition: { tr: 'Ortam bazlı değişkenler. dev/staging/prod arası tek tıkla geçiş.', en: 'Environment-specific variables. One-click switch between dev/staging/prod.' } },
+              { term: 'pm.test()', definition: { tr: 'Test assertion fonksiyonu. İsim + assertion içerir.', en: 'Named test assertion function.' } },
+              { term: 'pm.expect()', definition: { tr: 'Chai tabanlı değer doğrulama. .to.equal(), .include(), .be.a() gibi.', en: 'Chai-based value assertion.' } },
+              { term: 'Newman', definition: { tr: 'Koleksiyonları CLI\'dan çalıştırır. CI/CD için zorunlu.', en: 'CLI runner for collections. Essential for CI/CD.' } },
+              { term: 'Pre-request Script', definition: { tr: 'İstekten önce çalışan JavaScript. Token yenileme veya dinamik değer için.', en: 'JavaScript before request. Token refresh or dynamic values.' } },
+              { term: 'Bearer Token', definition: { tr: 'Authorization: Bearer <token> formatında JWT.', en: 'JWT sent as Authorization: Bearer <token>.' } },
+              { term: 'ECONNREFUSED', definition: { tr: 'Sunucu çalışmıyor veya yanlış port. Sunucuyu başlat.', en: 'Server not running or wrong port.' } },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+}

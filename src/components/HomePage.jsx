@@ -179,6 +179,13 @@ function HomePage() {
                         >
                             {t('python.navButton')}
                         </button>
+                        <button
+                            onClick={() => navigate('/postman')}
+                            data-testid="nav-postman"
+                            className={`px-6 py-3 rounded-lg font-semibold whitespace-nowrap transition-all duration-300 ${darkMode ? 'bg-gray-700 text-orange-300 hover:bg-orange-900 hover:text-orange-200 hover:scale-102' : 'bg-orange-50 text-orange-700 hover:bg-orange-100 hover:scale-102'}`}
+                        >
+                            {language === 'tr' ? '📮 Postman Öğren' : '📮 Learn Postman'}
+                        </button>
 
                         <div className={`w-px h-8 self-center mx-1 ${darkMode ? 'bg-gray-600' : 'bg-gray-300'}`} />
 

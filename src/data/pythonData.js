@@ -136,7 +136,7 @@ print(sys.version)                 # print Python version`,
       // W3Schools Topic 1 — Python Syntax
       // ═══════════════════════════════════════════════════════════════════════
       { type: 'heading', text: 'Python Syntax', difficulty: '🟢 Beginner' },
-      { type: 'simple-box', emoji: '📐', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: 'Python kodu yazmak, cümle yazmak gibi. Süslü parantez yok, noktalı virgül yok. Sadece düzgün hizalama (girinti) gerekiyor — sanki bir liste hazırlıyorsun.', en: 'Writing Python is like writing sentences. No curly braces, no semicolons. Just proper indentation — like writing a neat outline.' } },
+      { type: 'simple-box', emoji: '📐', content: { tr: 'Python kodu yazmak, cümle yazmak gibi. Süslü parantez yok, noktalı virgül yok. Sadece düzgün hizalama (girinti) gerekiyor — sanki bir liste hazırlıyorsun.', en: 'Writing Python is like writing sentences. No curly braces, no semicolons. Just proper indentation — like writing a neat outline.' } },
       { type: 'text', content: { tr: "Java\'da bloklar {} ile açılır-kapanır ve her satır \";\" ile biter. Python\'da bunların hiçbiri yok. Bloklar \":\" (iki nokta) ile başlar, girintileme ile devam eder.", en: 'In Java, blocks open/close with {} and every statement ends with ";". Python has neither. Blocks start with ":" and continue by indentation.' } },
       { type: 'code', language: 'python', code: `# Python Syntax Basics
 # NO semicolons, NO curly braces
@@ -175,7 +175,7 @@ for skill in ["Python", "pytest", "Selenium"]:
       // W3Schools Topic 2 — Comments
       // ═══════════════════════════════════════════════════════════════════════
       { type: 'heading', text: 'Comments', difficulty: '🟢 Beginner' },
-      { type: 'simple-box', emoji: '💬', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: 'Yorum, kodun içine "not" bırakmak gibi. Python bu satırları çalıştırmaz — sadece sen ve ekibindekiler okur.', en: "A comment is like a sticky note inside your code. Python ignores it completely — it\'s just for humans to read." } },
+      { type: 'simple-box', emoji: '💬', content: { tr: 'Yorum, kodun içine "not" bırakmak gibi. Python bu satırları çalıştırmaz — sadece sen ve ekibindekiler okur.', en: "A comment is like a sticky note inside your code. Python ignores it completely — it\'s just for humans to read." } },
       { type: 'text', content: { tr: "Java\'da // tek satır, /* */ çok satır yorum. Python\'da # tek satır, \"\"\" \"\"\" (docstring) çok satır yorum için kullanılır. Teknik terim değişmez ama sözdizimi farklı.", en: 'Java uses // for single-line and /* */ for multi-line comments. Python uses # for single-line and triple quotes """ for multi-line (docstrings).' } },
       { type: 'code', language: 'python', code: `# Single-line comment — Python ignores this
 name = "Alice"  # Inline comment — also ignored
@@ -208,7 +208,7 @@ print("Pass rate:", pass_rate, "%")` },
       // W3Schools Topic 3 — Variables
       // ═══════════════════════════════════════════════════════════════════════
       { type: 'heading', text: 'Variables', difficulty: '🟢 Beginner' },
-      { type: 'simple-box', emoji: '🏷️', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: 'Değişken, içine bir şey koyabileceğin etiketlenmiş bir kutu. "isim = \'Ali\'" diyince "isim" etiketli kutuya \'Ali\' koymuş olursun. İstediğin zaman açıp bakabilirsin.', en: 'A variable is a labeled box. When you write name = "Ali", you put "Ali" in a box labeled "name". You can check it anytime.' } },
+      { type: 'simple-box', emoji: '🏷️', content: { tr: 'Değişken, içine bir şey koyabileceğin etiketlenmiş bir kutu. "isim = \'Ali\'" diyince "isim" etiketli kutuya \'Ali\' koymuş olursun. İstediğin zaman açıp bakabilirsin.', en: 'A variable is a labeled box. When you write name = "Ali", you put "Ali" in a box labeled "name". You can check it anytime.' } },
       { type: 'text', content: { tr: "Java\'da değişken tipi açıkça yazılır: int x = 5. Python\'da sadece x = 5 yazılır — Python tipi otomatik anlar. Bu \"dinamik tipleme\" olarak adlandırılır.", en: 'Java requires explicit type: int x = 5. Python just needs x = 5 — the type is inferred automatically. This is called dynamic typing.' } },
       { type: 'code', language: 'python', code: `# Python Variables — no type declaration needed
 name = "Alice"          # str (string)
@@ -254,7 +254,7 @@ print("Type of passed:", type(passed))` },
       // W3Schools Topic 4 — Data Types
       // ═══════════════════════════════════════════════════════════════════════
       { type: 'heading', text: 'Data Types', difficulty: '🟢 Beginner' },
-      { type: 'simple-box', emoji: '🗂️', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: 'Veri tipleri, farklı "çekmece" türleri gibi. Sayılar, yazılar, listeler, doğru/yanlış — her veri türü için ayrı bir çekmece var.', en: 'Data types are like different drawer types. Numbers, text, lists, true/false — each kind of data has its own drawer.' } },
+      { type: 'simple-box', emoji: '🗂️', content: { tr: 'Veri tipleri, farklı "çekmece" türleri gibi. Sayılar, yazılar, listeler, doğru/yanlış — her veri türü için ayrı bir çekmece var.', en: 'Data types are like different drawer types. Numbers, text, lists, true/false — each kind of data has its own drawer.' } },
       { type: 'text', content: { tr: "Java\'da primitive tipler (int, double, boolean) ve Object tipleri ayrıdır. Python\'da her şey bir object\'tir — int, str, list, dict hepsi birer sınıf örneğidir.", en: 'Java separates primitives (int, double, boolean) from Objects. In Python, everything is an object — int, str, list, dict are all class instances.' } },
       { type: 'table', headers: ['Python Type', 'Example', 'Java Equivalent', 'Mutable?'], rows: [
         ['str', '"hello"', 'String', 'No'],
@@ -285,7 +285,7 @@ for var in [x, y, s, b, lst, tpl, d, st]:
       // W3Schools Topic 5 — Numbers
       // ═══════════════════════════════════════════════════════════════════════
       { type: 'heading', text: 'Numbers', difficulty: '🟢 Beginner' },
-      { type: 'simple-box', emoji: '🔢', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: "Python\'da üç tür sayı var: tam sayılar (3, 100), ondalıklı sayılar (3.14), ve karmaşık sayılar (2+3j). Günlük kodlamada çoğunlukla ilk ikisini kullanırsın.", en: 'Python has three number types: integers (3, 100), floats (3.14), and complex (2+3j). In daily coding you mostly use the first two.' } },
+      { type: 'simple-box', emoji: '🔢', content: { tr: "Python\'da üç tür sayı var: tam sayılar (3, 100), ondalıklı sayılar (3.14), ve karmaşık sayılar (2+3j). Günlük kodlamada çoğunlukla ilk ikisini kullanırsın.", en: 'Python has three number types: integers (3, 100), floats (3.14), and complex (2+3j). In daily coding you mostly use the first two.' } },
       { type: 'text', content: { tr: "Java\'da int sınırlı büyüklüktedir (max ~2 milyar). Python\'da int sınırsız büyüyebilir — memory yettikçe. float ise Java\'daki double\'a eşdeğerdir.", en: "Java\'s int has a fixed limit (~2 billion). Python\'s int can grow infinitely — limited only by memory. Python\'s float is equivalent to Java\'s double." } },
       { type: 'code', language: 'python', code: `# Python Numbers
 x = 10          # int
@@ -327,7 +327,7 @@ print("Is 100% pass:", pass_rate == 100)` },
       // W3Schools Topic 6 — Casting
       // ═══════════════════════════════════════════════════════════════════════
       { type: 'heading', text: 'Casting (Type Conversion)', difficulty: '🟢 Beginner' },
-      { type: 'simple-box', emoji: '🔄', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: 'Casting, bir şeyi farklı bir şekle dönüştürmek gibi. Suyu buz yapıyorsun ama H₂O aynı kalıyor. "5" yazısını 5 sayısına çeviriyorsun — ama artık matematiksel işlem yapabilirsin.', en: 'Casting is like transforming something into a different form. "5" is a text, 5 is a number. Casting turns one into the other so you can do math.' } },
+      { type: 'simple-box', emoji: '🔄', content: { tr: 'Casting, bir şeyi farklı bir şekle dönüştürmek gibi. Suyu buz yapıyorsun ama H₂O aynı kalıyor. "5" yazısını 5 sayısına çeviriyorsun — ama artık matematiksel işlem yapabilirsin.', en: 'Casting is like transforming something into a different form. "5" is a text, 5 is a number. Casting turns one into the other so you can do math.' } },
       { type: 'code', language: 'python', code: `# Python Casting — converting between types
 x = int("5")         # str → int  : 5
 y = float(5)         # int → float: 5.0
@@ -369,7 +369,7 @@ for v in values:
       // W3Schools Topic 7 — Strings
       // ═══════════════════════════════════════════════════════════════════════
       { type: 'heading', text: 'Strings', difficulty: '🟢 Beginner' },
-      { type: 'simple-box', emoji: '📝', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: "String, harflerden oluşan bir dize — \"merhaba\" gibi. Python'da stringleri tek (''), çift (\"\") veya üçlü (\"\"\") tırnak içinde yazabilirsin.", en: 'A string is a sequence of characters — like "hello". In Python you can write strings with single, double, or triple quotes.' } },
+      { type: 'simple-box', emoji: '📝', content: { tr: "String, harflerden oluşan bir dize — \"merhaba\" gibi. Python'da stringleri tek (''), çift (\"\") veya üçlü (\"\"\") tırnak içinde yazabilirsin.", en: 'A string is a sequence of characters — like "hello". In Python you can write strings with single, double, or triple quotes.' } },
       { type: 'text', content: { tr: "Java\'da String.charAt(), substring(), indexOf() gibi metodlar kullanılır. Python\'da aynı işler için daha kısa ve okunabilir sözdizimi var: s[0], s[1:5], \"hello\" in s gibi.", en: 'Java uses String.charAt(), substring(), indexOf(). Python has shorter, more readable syntax: s[0], s[1:5], "hello" in s.' } },
       { type: 'code', language: 'python', code: `# Python Strings
 s = "Hello, World!"
@@ -425,7 +425,7 @@ print("Replace:", url.replace("api", "v2"))` },
       // W3Schools Topic 8 — Booleans
       // ═══════════════════════════════════════════════════════════════════════
       { type: 'heading', text: 'Booleans', difficulty: '🟢 Beginner' },
-      { type: 'simple-box', emoji: '✅', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: 'Boolean, sadece iki değer alır: True veya False (doğru veya yanlış). "Test geçti mi?" sorusunun cevabı gibi — ya evet ya hayır.', en: 'A Boolean has only two values: True or False. Like the answer to "Did the test pass?" — only yes or no.' } },
+      { type: 'simple-box', emoji: '✅', content: { tr: 'Boolean, sadece iki değer alır: True veya False (doğru veya yanlış). "Test geçti mi?" sorusunun cevabı gibi — ya evet ya hayır.', en: 'A Boolean has only two values: True or False. Like the answer to "Did the test pass?" — only yes or no.' } },
       { type: 'text', content: { tr: "Java\'da boolean küçük harfle (true/false) yazılır. Python\'da büyük harfle (True/False). Ayrıca Python\'da her değer True ya da False gibi davranır — boş liste, 0, None hepsi False sayılır.", en: 'Java writes boolean lowercase (true/false). Python uses uppercase (True/False). Python also has "truthy/falsy" — empty list, 0, None all behave as False.' } },
       { type: 'code', language: 'python', code: `# Python Booleans
 print(True)          # True
@@ -481,7 +481,7 @@ else:
       // W3Schools Topic 9 — Operators
       // ═══════════════════════════════════════════════════════════════════════
       { type: 'heading', text: 'Operators', difficulty: '🟢 Beginner' },
-      { type: 'simple-box', emoji: '⚙️', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: 'Operatörler, işlem sembolleri. Toplama (+), çıkarma (-), karşılaştırma (>, <), ve mantık (and, or) — bunların hepsi operatör. Matematik dersindeki sembollerin kod versiyonu.', en: 'Operators are action symbols. Addition (+), comparison (>, <), logic (and, or) — all operators. Think of them as the math symbols from school, but for code.' } },
+      { type: 'simple-box', emoji: '⚙️', content: { tr: 'Operatörler, işlem sembolleri. Toplama (+), çıkarma (-), karşılaştırma (>, <), ve mantık (and, or) — bunların hepsi operatör. Matematik dersindeki sembollerin kod versiyonu.', en: 'Operators are action symbols. Addition (+), comparison (>, <), logic (and, or) — all operators. Think of them as the math symbols from school, but for code.' } },
       { type: 'code', language: 'python', code: `# Python Operators — complete reference
 
 # Arithmetic
@@ -559,7 +559,7 @@ print("Method allowed:", method in allowed_methods)` },
       // W3Schools Topic 10 — Lists
       // ═══════════════════════════════════════════════════════════════════════
       { type: 'heading', text: 'Lists', difficulty: '🟡 Intermediate' },
-      { type: 'simple-box', emoji: '🛒', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: 'Liste, sıralı bir alışveriş listesi gibi. Her maddenin bir numarası (index) var. İstediğin yere ekleyebilir, istediğini silebilirsin.', en: 'A list is like a numbered shopping list. Each item has an index. You can add anywhere, remove anything.' } },
+      { type: 'simple-box', emoji: '🛒', content: { tr: 'Liste, sıralı bir alışveriş listesi gibi. Her maddenin bir numarası (index) var. İstediğin yere ekleyebilir, istediğini silebilirsin.', en: 'A list is like a numbered shopping list. Each item has an index. You can add anywhere, remove anything.' } },
       { type: 'text', content: { tr: "Java\'daki ArrayList\'in karşılığı Python\'daki list\'tir. Ama hiçbir import gerekmez, generic tip yazmak gerekmez. [1, 2, 3] yeterli. Farklı tipte elemanlar da tutabilir.", en: "Python list is Java\'s ArrayList. No import needed, no generic types. [1, 2, 3] is all you need. Lists can hold mixed types." } },
       { type: 'code', language: 'python', code: `# Python Lists — most used data structure
 tests = ["login", "checkout", "search"]  # Create
@@ -618,7 +618,7 @@ print("After fix:", failed_tests)` },
       // W3Schools Topic 11 — Tuples
       // ═══════════════════════════════════════════════════════════════════════
       { type: 'heading', text: 'Tuples', difficulty: '🟡 Intermediate' },
-      { type: 'simple-box', emoji: '📦', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: 'Tuple, açılamaz, değiştirilemez bir kutu gibi. İçine koyduklarını sonsuza kadar öyle kalır. GPS koordinatları gibi — (lat, lon) değişmez.', en: "A tuple is a sealed box — you can\'t change what\'s inside. Like GPS coordinates (lat, lon) — fixed and permanent." } },
+      { type: 'simple-box', emoji: '📦', content: { tr: 'Tuple, açılamaz, değiştirilemez bir kutu gibi. İçine koyduklarını sonsuza kadar öyle kalır. GPS koordinatları gibi — (lat, lon) değişmez.', en: "A tuple is a sealed box — you can\'t change what\'s inside. Like GPS coordinates (lat, lon) — fixed and permanent." } },
       { type: 'text', content: { tr: "Java\'da değiştirilemez liste için List.of() veya Collections.unmodifiableList() kullanırsınız. Python\'da tuple bu işi görür. Tuple() sözdizimi ile [] yerine () kullanılır. Fonksiyondan birden fazla değer döndürmek için ideal.", en: "Java uses List.of() or unmodifiableList() for immutable lists. Python\'s tuple does this. Use () instead of []. Ideal for returning multiple values from a function." } },
       { type: 'code', language: 'python', code: `# Python Tuples — immutable sequences
 point = (10, 20)         # x, y coordinates
@@ -673,7 +673,7 @@ if result[0] == "PASS":
       // W3Schools Topic 12 — Sets
       // ═══════════════════════════════════════════════════════════════════════
       { type: 'heading', text: 'Sets', difficulty: '🟡 Intermediate' },
-      { type: 'simple-box', emoji: '🎯', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: 'Set, tekrarsız bir koleksiyon. Bir sınıftaki öğrenci isimlerini listeliyor ama aynı isim birden fazla kez yazılmışsa — set kullanırsan sadece bir tane kalır.', en: 'A set is a collection with no duplicates. List student names but someone appears twice — a set keeps only one.' } },
+      { type: 'simple-box', emoji: '🎯', content: { tr: 'Set, tekrarsız bir koleksiyon. Bir sınıftaki öğrenci isimlerini listeliyor ama aynı isim birden fazla kez yazılmışsa — set kullanırsan sadece bir tane kalır.', en: 'A set is a collection with no duplicates. List student names but someone appears twice — a set keeps only one.' } },
       { type: 'text', content: { tr: "Java\'daki HashSet\'in karşılığı Python\'daki set\'tir. İçe aktarma gerekmez. {1, 2, 3} ile oluşturulur. Sıralama garantisi yoktur.", en: "Python set is Java\'s HashSet. No import needed. Created with {1, 2, 3}. No guaranteed order." } },
       { type: 'code', language: 'python', code: `# Python Sets — unique, unordered
 browsers = {"Chrome", "Firefox", "Safari"}
@@ -712,7 +712,7 @@ print("Not tested:", not_tested)` },
       // W3Schools Topic 13 — Dictionaries
       // ═══════════════════════════════════════════════════════════════════════
       { type: 'heading', text: 'Dictionaries', difficulty: '🟡 Intermediate' },
-      { type: 'simple-box', emoji: '📖', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: "Dictionary, telefon rehberi gibi. İsim (key) yazıyorsun, numarayı (value) alıyorsun. {\"Ali\": \"555-1234\"} — Ali\'ye bak, numarasını al.", en: 'A dictionary is like a phone book. Look up a name (key), get the number (value). {"Ali": "555-1234"} — look up Ali, get his number.' } },
+      { type: 'simple-box', emoji: '📖', content: { tr: "Dictionary, telefon rehberi gibi. İsim (key) yazıyorsun, numarayı (value) alıyorsun. {\"Ali\": \"555-1234\"} — Ali\'ye bak, numarasını al.", en: 'A dictionary is like a phone book. Look up a name (key), get the number (value). {"Ali": "555-1234"} — look up Ali, get his number.' } },
       { type: 'text', content: { tr: 'Java\'daki HashMap<K,V>\'nin karşılığı Python\'daki dict\'tir. İçe aktarma gerekmez. {"key": value} ile oluşturulur. Python 3.7\'den itibaren ekleme sırasını korur.', en: "Python dict is Java\'s HashMap<K,V>. No import. Created with {\"key\": value}. Since Python 3.7, dicts preserve insertion order." } },
       { type: 'code', language: 'python', code: `# Python Dictionaries
 test = {
@@ -778,7 +778,7 @@ for key in required_keys:
       // W3Schools Topic 14 — If...Else
       // ═══════════════════════════════════════════════════════════════════════
       { type: 'heading', text: 'If...Else (Conditions)', difficulty: '🟡 Intermediate' },
-      { type: 'simple-box', emoji: '🚦', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: 'If-else, trafik ışığı gibi. Yeşil → git, kırmızı → dur, sarı → yavaşla. Kod da aynı şekilde karar verir: "Bu durum mu? O zaman şunu yap."', en: 'If-else is like a traffic light. Green → go, red → stop, yellow → slow down. Code makes decisions the same way: "Is this true? Then do this."' } },
+      { type: 'simple-box', emoji: '🚦', content: { tr: 'If-else, trafik ışığı gibi. Yeşil → git, kırmızı → dur, sarı → yavaşla. Kod da aynı şekilde karar verir: "Bu durum mu? O zaman şunu yap."', en: 'If-else is like a traffic light. Green → go, red → stop, yellow → slow down. Code makes decisions the same way: "Is this true? Then do this."' } },
       { type: 'code', language: 'python', code: `# Python If...Else
 score = 87
 
@@ -850,7 +850,7 @@ print(validate_response(503, {}))` },
       // W3Schools Topic 15 — While Loops
       // ═══════════════════════════════════════════════════════════════════════
       { type: 'heading', text: 'While Loops', difficulty: '🟡 Intermediate' },
-      { type: 'simple-box', emoji: '🔁', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: 'While döngüsü, "koşul doğru olduğu sürece tekrar et" demek. Alarm saati çalana kadar uyumaya devam etmek gibi.', en: 'A while loop means "keep doing this as long as condition is true." Like sleeping until your alarm rings.' } },
+      { type: 'simple-box', emoji: '🔁', content: { tr: 'While döngüsü, "koşul doğru olduğu sürece tekrar et" demek. Alarm saati çalana kadar uyumaya devam etmek gibi.', en: 'A while loop means "keep doing this as long as condition is true." Like sleeping until your alarm rings.' } },
       { type: 'code', language: 'python', code: `# Python While Loop
 count = 0
 while count < 5:
@@ -902,7 +902,7 @@ else:
       // W3Schools Topic 16 — For Loops
       // ═══════════════════════════════════════════════════════════════════════
       { type: 'heading', text: 'For Loops', difficulty: '🟡 Intermediate' },
-      { type: 'simple-box', emoji: '🎢', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: 'For döngüsü, listedeki her şey için sırayla bir işlem yapar. "Her test için çalıştır" gibi — liste bitince döngü de biter.', en: 'A for loop does something for each item in a sequence. "Run for every test" — the loop ends when the list ends.' } },
+      { type: 'simple-box', emoji: '🎢', content: { tr: 'For döngüsü, listedeki her şey için sırayla bir işlem yapar. "Her test için çalıştır" gibi — liste bitince döngü de biter.', en: 'A for loop does something for each item in a sequence. "Run for every test" — the loop ends when the list ends.' } },
       { type: 'text', content: { tr: "Java\'da for-each: \"for (String s : list)\". Python\'da: \"for s in list:\". Çok benzer ama Python\'da index olmaz — index lazımsa enumerate() kullan.", en: 'Java for-each: "for (String s : list)". Python: "for s in list:". Very similar but Python has no index — if you need one, use enumerate().' } },
       { type: 'code', language: 'python', code: `# Python For Loops
 tests = ["login", "checkout", "search"]
@@ -959,7 +959,7 @@ print(f"\nTotal: {len(results)}, Failed: {len(failures)}")` },
       // W3Schools Topic 17 — Functions
       // ═══════════════════════════════════════════════════════════════════════
       { type: 'heading', text: 'Functions', difficulty: '🟡 Intermediate' },
-      { type: 'simple-box', emoji: '🔧', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: 'Fonksiyon, bir tarif gibi. "Çay yap" tarifi: su kaynat, demle, koy. Her çay yapmak istediğinde aynı adımları tekrar yazmana gerek yok — tarifi çağırırsın.', en: "A function is like a recipe. \"Make tea\": boil water, steep, pour. You don\'t rewrite the steps every time — you call the recipe." } },
+      { type: 'simple-box', emoji: '🔧', content: { tr: 'Fonksiyon, bir tarif gibi. "Çay yap" tarifi: su kaynat, demle, koy. Her çay yapmak istediğinde aynı adımları tekrar yazmana gerek yok — tarifi çağırırsın.', en: "A function is like a recipe. \"Make tea\": boil water, steep, pour. You don\'t rewrite the steps every time — you call the recipe." } },
       { type: 'text', content: { tr: "Java\'da metod tanımlarken erişim belirleyici, dönüş tipi yazılır: public String greet(String name). Python\'da sadece \"def\" yeterli: def greet(name):. Tip ipuçları opsiyonel ama önerilen.", en: 'Java methods need access modifier and return type: public String greet(String name). Python just needs "def": def greet(name):. Type hints are optional but recommended.' } },
       { type: 'code', language: 'python', code: `# Python Functions
 # Basic function
@@ -1026,7 +1026,7 @@ print(f"Pass rate: {calculate_pass_rate(0, 50)}%")` },
       // W3Schools Topic 18 — Lambda
       // ═══════════════════════════════════════════════════════════════════════
       { type: 'heading', text: 'Lambda Functions', difficulty: '🟡 Intermediate' },
-      { type: 'simple-box', emoji: '⚡', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: 'Lambda, tek satırlık isimsiz bir fonksiyon. "Sadece bir kez kullanacağım, isim koymaya değmez" dediğinde kullanılır. Hesap makinesi gibi: sadece basarsın, sonucu alırsın.', en: 'A lambda is a one-line nameless function. Use it when "I only need this once, not worth naming." Like a quick calculator.' } },
+      { type: 'simple-box', emoji: '⚡', content: { tr: 'Lambda, tek satırlık isimsiz bir fonksiyon. "Sadece bir kez kullanacağım, isim koymaya değmez" dediğinde kullanılır. Hesap makinesi gibi: sadece basarsın, sonucu alırsın.', en: 'A lambda is a one-line nameless function. Use it when "I only need this once, not worth naming." Like a quick calculator.' } },
       { type: 'text', content: { tr: "Java\'da lambda: x -> x * 2. Python\'da: lambda x: x * 2. Çok benzer! Python lambda\'sı tek ifade ile sınırlıdır — birden fazla satıra ihtiyaç varsa normal def kullanılır.", en: 'Java lambda: x -> x * 2. Python: lambda x: x * 2. Very similar! Python lambda is limited to one expression — need multiple lines? Use def instead.' } },
       { type: 'code', language: 'python', code: `# Python Lambda Functions
 # Basic lambda — anonymous function
@@ -1103,7 +1103,7 @@ print("\nFailures:", [r["test"] for r in failures])` },
       // W3Schools Topic 19 — Classes / Objects
       // ═══════════════════════════════════════════════════════════════════════
       { type: 'heading', text: 'Classes / Objects', difficulty: '🔴 Advanced' },
-      { type: 'simple-box', emoji: '🏗️', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: "Class, bir nesne şablonu gibi. Araba şablonunda renk, hız, model var — her araba bu şablondan yaratılır ama hepsinin rengi farklı olabilir. Class = şablon, nesne (object) = şablondan üretilen şey.", en: "A class is a blueprint. The car blueprint has color, speed, model — every car is made from it but each can have a different color. Class = blueprint, object = thing made from it." } },
+      { type: 'simple-box', emoji: '🏗️', content: { tr: "Class, bir nesne şablonu gibi. Araba şablonunda renk, hız, model var — her araba bu şablondan yaratılır ama hepsinin rengi farklı olabilir. Class = şablon, nesne (object) = şablondan üretilen şey.", en: "A class is a blueprint. The car blueprint has color, speed, model — every car is made from it but each can have a different color. Class = blueprint, object = thing made from it." } },
       { type: 'text', content: { tr: "Java'da constructor açıkça yazılır: public Car(String color) {...}. Python'da __init__ metodu constructor görevi görür. Python'daki 'self', Java'daki 'this' gibidir — ama Python'da her metoda açıkça yazılmalıdır.", en: "Java constructors are explicit: public Car(String color) {}. Python uses __init__ as the constructor. Python's 'self' is like Java's 'this' — but must be written explicitly in every method." } },
       { type: 'code', language: 'python', code: `# Python Classes — QA Engineer Example
 class TestResult:
@@ -1167,7 +1167,7 @@ acc.withdraw(2000)` },
       // W3Schools Topic 20 — Inheritance
       // ═══════════════════════════════════════════════════════════════════════
       { type: 'heading', text: 'Inheritance', difficulty: '🔴 Advanced' },
-      { type: 'simple-box', emoji: '🧬', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: "Kalıtım, miras gibi. Ebeveynin özellikleri çocuğa geçer. Araba şablonundan 'Elektrikli Araba' şablonu türetilirse, arabanın tüm özellikleri artık elektrikli arabada da var — üstüne pil kapasitesi ekleniyor.", en: "Inheritance is like a family trait. A child class gets all properties of the parent. ElectricCar inherits from Car — gets all car features plus adds battery capacity." } },
+      { type: 'simple-box', emoji: '🧬', content: { tr: "Kalıtım, miras gibi. Ebeveynin özellikleri çocuğa geçer. Araba şablonundan 'Elektrikli Araba' şablonu türetilirse, arabanın tüm özellikleri artık elektrikli arabada da var — üstüne pil kapasitesi ekleniyor.", en: "Inheritance is like a family trait. A child class gets all properties of the parent. ElectricCar inherits from Car — gets all car features plus adds battery capacity." } },
       { type: 'text', content: { tr: "Java'da 'extends' keyword'ü kullanılır: class Dog extends Animal. Python'da parantez içinde yazılır: class Dog(Animal). Her iki dilde de 'super()' ile parent constructor çağrılır.", en: "Java uses 'extends': class Dog extends Animal. Python puts the parent in parentheses: class Dog(Animal). Both languages use super() to call the parent constructor." } },
       { type: 'code', language: 'python', code: `# Python Inheritance — Test Framework Example
 class BaseTest:
@@ -1234,7 +1234,7 @@ for a in animals:
       // W3Schools Topic 21 — Scope
       // ═══════════════════════════════════════════════════════════════════════
       { type: 'heading', text: 'Scope', difficulty: '🔴 Advanced' },
-      { type: 'simple-box', emoji: '🔭', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: "Scope, değişkenin görünebildiği alan. Odanın içinde tanımladığın bir şey odanın dışından görünmez — tıpkı bir fonksiyon içindeki değişkenin dışarıdan erişilememesi gibi.", en: "Scope is the area where a variable can be seen. Something defined inside a room can't be seen from outside — just like a variable inside a function can't be accessed from outside." } },
+      { type: 'simple-box', emoji: '🔭', content: { tr: "Scope, değişkenin görünebildiği alan. Odanın içinde tanımladığın bir şey odanın dışından görünmez — tıpkı bir fonksiyon içindeki değişkenin dışarıdan erişilememesi gibi.", en: "Scope is the area where a variable can be seen. Something defined inside a room can't be seen from outside — just like a variable inside a function can't be accessed from outside." } },
       { type: 'text', content: { tr: "Python LEGB kuralını kullanır: Local → Enclosing → Global → Built-in. Java'da benzer kural: yerel değişken → metod → sınıf → paket. 'global' keyword'ü ile Python'da global değişkene yazılabilir — ama bu pratikte kaçınılması gereken bir pattern.", en: "Python uses the LEGB rule: Local → Enclosing → Global → Built-in. Java has a similar rule. The 'global' keyword allows writing to a global variable — but this pattern is generally avoided in practice." } },
       { type: 'code', language: 'python', code: `# Python Scope — LEGB Rule
 x = "global"                    # Global scope — visible everywhere
@@ -1291,7 +1291,7 @@ print(f"Total: {total}")        # Should print 10` },
       // W3Schools Topic 22 — Modules
       // ═══════════════════════════════════════════════════════════════════════
       { type: 'heading', text: 'Modules', difficulty: '🔴 Advanced' },
-      { type: 'simple-box', emoji: '📦', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: "Module, araç kutusu gibi. Matematiksel işlemler için 'math' kutusunu aç, tarih işlemleri için 'datetime' kutusunu. Her kutuda hazır araçlar var — sıfırdan yazman gerekmiyor.", en: "A module is like a toolbox. Open the 'math' toolbox for math operations, 'datetime' for date work. Each box has ready-made tools — you don't need to build them from scratch." } },
+      { type: 'simple-box', emoji: '📦', content: { tr: "Module, araç kutusu gibi. Matematiksel işlemler için 'math' kutusunu aç, tarih işlemleri için 'datetime' kutusunu. Her kutuda hazır araçlar var — sıfırdan yazman gerekmiyor.", en: "A module is like a toolbox. Open the 'math' toolbox for math operations, 'datetime' for date work. Each box has ready-made tools — you don't need to build them from scratch." } },
       { type: 'text', content: { tr: "Java'da import java.util.List gibi paket import edilir. Python'da import math veya from math import sqrt. Python'da kendi modülünü yazmak da çok kolay — .py dosyası oluştur, import et.", en: "Java imports packages like import java.util.List. Python uses import math or from math import sqrt. Writing your own module in Python is simple — just create a .py file and import it." } },
       { type: 'code', language: 'python', code: `import os                       # operating system interface
 import sys                      # system-specific parameters
@@ -1337,7 +1337,7 @@ for i in range(3):
       // W3Schools Topic 23 — Try...Except (Error Handling)
       // ═══════════════════════════════════════════════════════════════════════
       { type: 'heading', text: 'Try...Except', difficulty: '🔴 Advanced' },
-      { type: 'simple-box', emoji: '🛡️', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: "Try-except, kalkan gibi. 'Dene, çalışmazsa şu planı uygula.' Bisiklet sürerken düşebilirsin — ama kaskın varsa ciddi bir şey olmaz. Kod patlarsa except bloğu devreye girer.", en: "Try-except is like a safety helmet. 'Try this, if it breaks do this instead.' You might fall off a bike — but with a helmet, nothing serious happens. If code crashes, except catches it." } },
+      { type: 'simple-box', emoji: '🛡️', content: { tr: "Try-except, kalkan gibi. 'Dene, çalışmazsa şu planı uygula.' Bisiklet sürerken düşebilirsin — ama kaskın varsa ciddi bir şey olmaz. Kod patlarsa except bloğu devreye girer.", en: "Try-except is like a safety helmet. 'Try this, if it breaks do this instead.' You might fall off a bike — but with a helmet, nothing serious happens. If code crashes, except catches it." } },
       { type: 'text', content: { tr: "Java'da try-catch-finally kullanılır. Python'da da aynı yapı var: try-except-finally. Java'da Exception sınıfından türetme — Python'da da aynı. Fark: Python'da as keyword'ü ile exception nesnesine erişilir.", en: "Java uses try-catch-finally. Python has the same structure: try-except-finally. Both inherit from a base Exception class. Difference: Python uses the 'as' keyword to access the exception object." } },
       { type: 'code', language: 'python', code: `# Python Error Handling — QA Patterns
 def safe_divide(a, b):
@@ -1407,7 +1407,7 @@ print(get_user_age({"name": "Ali"}, "age"))       # KeyError` },
       // W3Schools Topic 24 — JSON
       // ═══════════════════════════════════════════════════════════════════════
       { type: 'heading', text: 'JSON', difficulty: '🔴 Advanced' },
-      { type: 'simple-box', emoji: '🔄', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: "JSON, evrensel dil gibi. Farklı dillerdeki programlar birbirleriyle konuşmak için JSON kullanır. Türkçe-İngilizce tercüman gibi — Python dict'ini JSON'a çevir, karşı taraf anlasın.", en: "JSON is like a universal language. Programs in different languages use JSON to talk to each other. Like a translator — convert Python dict to JSON, and any other language can understand it." } },
+      { type: 'simple-box', emoji: '🔄', content: { tr: "JSON, evrensel dil gibi. Farklı dillerdeki programlar birbirleriyle konuşmak için JSON kullanır. Türkçe-İngilizce tercüman gibi — Python dict'ini JSON'a çevir, karşı taraf anlasın.", en: "JSON is like a universal language. Programs in different languages use JSON to talk to each other. Like a translator — convert Python dict to JSON, and any other language can understand it." } },
       { type: 'text', content: { tr: "Java'da Jackson veya Gson kütüphanesi kullanılır. Python'da standart kütüphane 'json' modülü yeterli — import etmek yeterli. json.dumps() Python'u JSON string'e, json.loads() JSON string'i Python'a çevirir.", en: "Java requires Jackson or Gson library. Python's built-in 'json' module is sufficient — just import it. json.dumps() converts Python to JSON string, json.loads() converts JSON string back to Python." } },
       { type: 'code', language: 'python', code: `import json
 
@@ -1469,7 +1469,7 @@ if failed:
       // W3Schools Topic 25 — RegEx
       // ═══════════════════════════════════════════════════════════════════════
       { type: 'heading', text: 'RegEx', difficulty: '🔴 Advanced' },
-      { type: 'simple-box', emoji: '🔍', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: "Regex, metin arama için çok güçlü bir filtre. 'E-posta bul' gibi değil — '@' işareti olan, noktayla biten, belirli uzunlukta olan metinleri bul. QA'de form validation testlerinde çok kullanılır.", en: "Regex is a powerful text filter. Not just 'find email' — find text that has '@', ends with a dot, has a specific length. Very useful in QA for form validation testing." } },
+      { type: 'simple-box', emoji: '🔍', content: { tr: "Regex, metin arama için çok güçlü bir filtre. 'E-posta bul' gibi değil — '@' işareti olan, noktayla biten, belirli uzunlukta olan metinleri bul. QA'de form validation testlerinde çok kullanılır.", en: "Regex is a powerful text filter. Not just 'find email' — find text that has '@', ends with a dot, has a specific length. Very useful in QA for form validation testing." } },
       { type: 'code', language: 'python', code: `import re   # regular expressions module
 
 # Basic patterns:
@@ -1516,7 +1516,7 @@ for phone in phones:
       // W3Schools Topic 26 — Comprehensions
       // ═══════════════════════════════════════════════════════════════════════
       { type: 'heading', text: 'Comprehensions', difficulty: '🔴 Advanced' },
-      { type: 'simple-box', emoji: '⚡', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: "Comprehension, listeni tek satırda oluşturmanın kısa yolu. 'Sepetteki tüm meyvelerden sadece kırmızı olanları al' — bunu Python'da tek satırda yazabilirsin. Uzun for döngüsü yazmaya gerek yok.", en: "Comprehension is a shortcut to build lists in one line. 'From all fruits in basket, take only the red ones' — Python lets you write this in one line. No need for a long for loop." } },
+      { type: 'simple-box', emoji: '⚡', content: { tr: "Comprehension, listeni tek satırda oluşturmanın kısa yolu. 'Sepetteki tüm meyvelerden sadece kırmızı olanları al' — bunu Python'da tek satırda yazabilirsin. Uzun for döngüsü yazmaya gerek yok.", en: "Comprehension is a shortcut to build lists in one line. 'From all fruits in basket, take only the red ones' — Python lets you write this in one line. No need for a long for loop." } },
       { type: 'code', language: 'python', code: `# List Comprehension — [expression for item in iterable if condition]
 numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
@@ -1576,7 +1576,7 @@ print(f"Avg duration of passed tests: {avg:.0f}ms")` },
       // W3Schools Topic 27 — Iterators
       // ═══════════════════════════════════════════════════════════════════════
       { type: 'heading', text: 'Iterators', difficulty: '🔴 Advanced' },
-      { type: 'simple-box', emoji: '🎡', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: "Iterator, sıra bekleyen bir kuyruk gibi. Her defasında bir sonraki kişiyi verir. Dondurma kuyruğu — her çağırdığında sıradaki kişi gelir, kuyruğun hepsi hafızada değil.", en: "An iterator is like a queue. Each time you ask, it gives you the next one. An ice cream queue — each call gives the next person, not everyone in memory at once." } },
+      { type: 'simple-box', emoji: '🎡', content: { tr: "Iterator, sıra bekleyen bir kuyruk gibi. Her defasında bir sonraki kişiyi verir. Dondurma kuyruğu — her çağırdığında sıradaki kişi gelir, kuyruğun hepsi hafızada değil.", en: "An iterator is like a queue. Each time you ask, it gives you the next one. An ice cream queue — each call gives the next person, not everyone in memory at once." } },
       { type: 'code', language: 'python', code: `# Python Iterators and Generators
 # Iterator protocol: __iter__() and __next__()
 
@@ -1631,7 +1631,7 @@ for user in generate_test_users(5):
       // W3Schools Topic 28 — Decorators
       // ═══════════════════════════════════════════════════════════════════════
       { type: 'heading', text: 'Decorators', difficulty: '🔴 Advanced' },
-      { type: 'simple-box', emoji: '🎀', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: "Decorator, hediye paketleyici gibi. Çikolata güzel — ama paketleyince daha iyi görünüyor. Decorator, bir fonksiyonun etrafına ek davranış sarar — fonksiyonu değiştirmeden.", en: "A decorator is like a gift wrapper. Chocolate is great — but wrapped it looks even better. A decorator wraps a function with extra behavior — without changing the function itself." } },
+      { type: 'simple-box', emoji: '🎀', content: { tr: "Decorator, hediye paketleyici gibi. Çikolata güzel — ama paketleyince daha iyi görünüyor. Decorator, bir fonksiyonun etrafına ek davranış sarar — fonksiyonu değiştirmeden.", en: "A decorator is like a gift wrapper. Chocolate is great — but wrapped it looks even better. A decorator wraps a function with extra behavior — without changing the function itself." } },
       { type: 'text', content: { tr: "Java'da Aspect Oriented Programming (AOP) veya @annotation + proxy pattern ile benzer şeyler yapılır. Python'da decorator çok daha basit — sadece @ ile fonksiyon üstüne yaz. QA'de retry, timer, log gibi cross-cutting concerns için idealdir.", en: "Java does similar things with AOP or @annotation + proxy pattern. Python decorators are much simpler — just write @ above the function. In QA, ideal for cross-cutting concerns like retry, timer, and logging." } },
       { type: 'code', language: 'python', code: `import functools
 import time
@@ -1708,7 +1708,7 @@ print(f"Result: {result}")` },
       // W3Schools Topic 29 — Context Managers
       // ═══════════════════════════════════════════════════════════════════════
       { type: 'heading', text: 'Context Managers', difficulty: '🔴 Advanced' },
-      { type: 'simple-box', emoji: '🚪', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: "Context manager, otomatik kapı gibi. Kütüphaneye girince kapı açılır, çıkınca kapanır — sen manuel kapatmak zorunda değilsin. Dosya açınca aynı şey: 'with' ile açarsan, Python otomatik kapatır.", en: "A context manager is like an automatic door. It opens when you enter, closes when you leave — you don't need to close it manually. Same with files: use 'with' and Python closes it automatically." } },
+      { type: 'simple-box', emoji: '🚪', content: { tr: "Context manager, otomatik kapı gibi. Kütüphaneye girince kapı açılır, çıkınca kapanır — sen manuel kapatmak zorunda değilsin. Dosya açınca aynı şey: 'with' ile açarsan, Python otomatik kapatır.", en: "A context manager is like an automatic door. It opens when you enter, closes when you leave — you don't need to close it manually. Same with files: use 'with' and Python closes it automatically." } },
       { type: 'code', language: 'python', code: `from contextlib import contextmanager
 import time
 
@@ -1781,7 +1781,7 @@ with assert_raises(ValueError):
       // W3Schools Topic 30 — Type Hints
       // ═══════════════════════════════════════════════════════════════════════
       { type: 'heading', text: 'Type Hints', difficulty: '🔴 Advanced' },
-      { type: 'simple-box', emoji: '🏷️', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: "Type hint, adım adım tariften 'şekeri ölçerken bardakla değil, gramla koy' demek gibi. Zorunlu değil ama çok yardımcı — IDE sana yanlış tip verdiğinde uyarır, ekip arkadaşın kodu daha hızlı anlar.", en: "Type hints are like adding 'use grams not cups' to a recipe. Not required but very helpful — your IDE warns you about wrong types, and teammates understand the code faster." } },
+      { type: 'simple-box', emoji: '🏷️', content: { tr: "Type hint, adım adım tariften 'şekeri ölçerken bardakla değil, gramla koy' demek gibi. Zorunlu değil ama çok yardımcı — IDE sana yanlış tip verdiğinde uyarır, ekip arkadaşın kodu daha hızlı anlar.", en: "Type hints are like adding 'use grams not cups' to a recipe. Not required but very helpful — your IDE warns you about wrong types, and teammates understand the code faster." } },
       { type: 'text', content: { tr: "Java statically-typed — her değişkene tip belirtmek zorunlu: String name = 'Ali'. Python dynamically-typed — tip opsiyonel ama type hint ekleyebilirsin: name: str = 'Ali'. Çalışma zamanında fark yaratmaz, sadece IDE ve mypy gibi araçlar kullanır.", en: "Java is statically-typed — types are mandatory: String name = 'Ali'. Python is dynamically-typed — types are optional but you can add hints: name: str = 'Ali'. No runtime difference, only IDEs and tools like mypy use them." } },
       { type: 'code', language: 'python', code: `from typing import Optional, List, Dict, Union, Tuple, Callable
 
@@ -1863,7 +1863,7 @@ print(suite.get_test(99))   # Should return None` },
       // W3Schools Topic 31 — Polymorphism
       // ═══════════════════════════════════════════════════════════════════════
       { type: 'heading', text: 'Polymorphism', difficulty: '🔴 Advanced' },
-      { type: 'simple-box', emoji: '🎭', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: 'Polimorfizm, aynı komuta farklı nesnelerin farklı tepki vermesi. "Ses çıkar" dersen kedi miyavlar, köpek havlar, inek möö der. Aynı metod ismi, farklı davranışlar.', en: 'Polymorphism means the same command gets different responses from different objects. "Make sound" and a cat meows, a dog barks, a cow moos. Same method name, different behaviors.' } },
+      { type: 'simple-box', emoji: '🎭', content: { tr: 'Polimorfizm, aynı komuta farklı nesnelerin farklı tepki vermesi. "Ses çıkar" dersen kedi miyavlar, köpek havlar, inek möö der. Aynı metod ismi, farklı davranışlar.', en: 'Polymorphism means the same command gets different responses from different objects. "Make sound" and a cat meows, a dog barks, a cow moos. Same method name, different behaviors.' } },
       { type: 'text', content: { tr: "Java'da polimorfizm interface veya abstract class ile sağlanır. Python'da duck typing ile çalışır — bir nesne gerekli metodu sağladığı sürece tip önemli değildir: 'eğer ördek gibi yürüyorsa ve ördek gibi vaklıyorsa, o bir ördektir'.", en: "In Java, polymorphism uses interfaces or abstract classes. Python uses duck typing — if an object has the required method, its type doesn't matter: 'If it walks like a duck and quacks like a duck, it's a duck'." } },
       { type: 'code', language: 'python', code: `# Python Polymorphism — Duck Typing
 class Dog:
@@ -1936,7 +1936,7 @@ for runner in runners:
       // W3Schools Topic 32 — Arrays (array module)
       // ═══════════════════════════════════════════════════════════════════════
       { type: 'heading', text: 'Arrays (array module)', difficulty: '🟡 Intermediate' },
-      { type: 'simple-box', emoji: '📊', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: "Python'daki array modülü, sadece aynı tip sayıları tutan özel bir liste. Normal list her şeyi tutabilir ama array yalnızca int veya float gibi tek bir tip tutar — bu sayede daha az yer kaplar.", en: "Python's array module holds only one type of number. A regular list holds anything, but array holds only ints or only floats — uses less memory." } },
+      { type: 'simple-box', emoji: '📊', content: { tr: "Python'daki array modülü, sadece aynı tip sayıları tutan özel bir liste. Normal list her şeyi tutabilir ama array yalnızca int veya float gibi tek bir tip tutar — bu sayede daha az yer kaplar.", en: "Python's array module holds only one type of number. A regular list holds anything, but array holds only ints or only floats — uses less memory." } },
       { type: 'text', content: { tr: "Python'da normal list zaten dinamik ve esnek. array modülü çok sayısal veriyle çalışırken bellek optimizasyonu için kullanılır. QA'de büyük performans ölçümü verisi işlerken yararlı olabilir. Java'daki primitive array (int[]) kavramına yakın.", en: "Python's regular list is already flexible. The array module is for memory optimization when working with large numeric data. Useful in QA for processing large performance measurement datasets. Similar to Java's primitive arrays (int[])." } },
       { type: 'code', language: 'python', code: `import array
 
@@ -1992,7 +1992,7 @@ print("After append:", list(durations))` },
       // W3Schools Topic 33 — Dates (datetime module)
       // ═══════════════════════════════════════════════════════════════════════
       { type: 'heading', text: 'Dates (datetime module)', difficulty: '🟡 Intermediate' },
-      { type: 'simple-box', emoji: '📅', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: "Python'daki datetime modülü, tarih ve saat işlemleri için. 'Test ne zaman çalıştı?', 'Bu rapor ne kadar sürdü?', 'Bugünün tarihi nedir?' sorularını cevaplar.", en: "Python's datetime module handles date and time. 'When did the test run?', 'How long did the report take?', 'What is today's date?' — all answered here." } },
+      { type: 'simple-box', emoji: '📅', content: { tr: "Python'daki datetime modülü, tarih ve saat işlemleri için. 'Test ne zaman çalıştı?', 'Bu rapor ne kadar sürdü?', 'Bugünün tarihi nedir?' sorularını cevaplar.", en: "Python's datetime module handles date and time. 'When did the test run?', 'How long did the report take?', 'What is today's date?' — all answered here." } },
       { type: 'code', language: 'python', code: `from datetime import datetime, date, timedelta
 
 # Current date and time
@@ -2060,7 +2060,7 @@ print(is_recent(datetime.now().strftime("%Y-%m-%d")))  # True - today` },
       // W3Schools Topic 34 — Math (math module)
       // ═══════════════════════════════════════════════════════════════════════
       { type: 'heading', text: 'Math (math module)', difficulty: '🟢 Beginner' },
-      { type: 'simple-box', emoji: '🧮', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: "Python'ın math modülü, hesap makinenizdeki gelişmiş fonksiyonlar gibi: karekök, log, güç, yuvarlama. Normal +, -, *, / için gerekmiyor ama sqrt(25) veya pi sayısı için lazım.", en: "Python's math module is like your calculator's advanced functions: square root, log, power, rounding. Not needed for +, -, *, / but necessary for sqrt(25) or the pi constant." } },
+      { type: 'simple-box', emoji: '🧮', content: { tr: "Python'ın math modülü, hesap makinenizdeki gelişmiş fonksiyonlar gibi: karekök, log, güç, yuvarlama. Normal +, -, *, / için gerekmiyor ama sqrt(25) veya pi sayısı için lazım.", en: "Python's math module is like your calculator's advanced functions: square root, log, power, rounding. Not needed for +, -, *, / but necessary for sqrt(25) or the pi constant." } },
       { type: 'code', language: 'python', code: `import math
 
 # Constants
@@ -2124,7 +2124,7 @@ print(f"SLA violations: {len(violations)}")` },
       // W3Schools Topic 35 — PIP (Package Manager)
       // ═══════════════════════════════════════════════════════════════════════
       { type: 'heading', text: 'PIP — Python Package Manager', difficulty: '🟢 Beginner' },
-      { type: 'simple-box', emoji: '📦', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: "pip, Python'ın uygulama mağazası gibi. Başkalarının yazdığı kütüphaneleri indirir. 'pip install requests' yazarsın, her şey hazır! Java'daki Maven/Gradle'a benzer ama komut satırından.", en: "pip is like Python's app store. It downloads libraries others wrote. Type 'pip install requests' and everything is ready! Similar to Maven/Gradle in Java but from the command line." } },
+      { type: 'simple-box', emoji: '📦', content: { tr: "pip, Python'ın uygulama mağazası gibi. Başkalarının yazdığı kütüphaneleri indirir. 'pip install requests' yazarsın, her şey hazır! Java'daki Maven/Gradle'a benzer ama komut satırından.", en: "pip is like Python's app store. It downloads libraries others wrote. Type 'pip install requests' and everything is ready! Similar to Maven/Gradle in Java but from the command line." } },
       { type: 'code', language: 'python', code: `# PIP — Python Package Installer
 # ─────────────────────────────────────────
 # Install a package
@@ -2203,7 +2203,7 @@ for line in requirements_txt.strip().split("\\n"):
       // W3Schools Topic 36 — User Input
       // ═══════════════════════════════════════════════════════════════════════
       { type: 'heading', text: 'User Input', difficulty: '🟢 Beginner' },
-      { type: 'simple-box', emoji: '⌨️', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: "input() fonksiyonu, kullanıcıdan bilgi almak için. 'Adınızı girin:' yazarsın, kullanıcı yazar ve Enter'a basar. Python ne yazıldığını bir değişkende saklar. Dikkat: her zaman string döner!", en: "input() asks the user for information. You write 'Enter your name:' and the user types and presses Enter. Python stores what was typed in a variable. Important: it always returns a string!" } },
+      { type: 'simple-box', emoji: '⌨️', content: { tr: "input() fonksiyonu, kullanıcıdan bilgi almak için. 'Adınızı girin:' yazarsın, kullanıcı yazar ve Enter'a basar. Python ne yazıldığını bir değişkende saklar. Dikkat: her zaman string döner!", en: "input() asks the user for information. You write 'Enter your name:' and the user types and presses Enter. Python stores what was typed in a variable. Important: it always returns a string!" } },
       { type: 'code', language: 'python', code: `# Python User Input
 # input() always returns a STRING
 
@@ -2274,7 +2274,7 @@ print(f"\\nReady to run {config['workers']} parallel tests!")` },
       // W3Schools Topic 37 — String Formatting
       // ═══════════════════════════════════════════════════════════════════════
       { type: 'heading', text: 'String Formatting', difficulty: '🟢 Beginner' },
-      { type: 'simple-box', emoji: '🖨️', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: "String formatting, boşluk bırakılmış bir mektuba değer doldurmak gibi. 'Merhaba ___! Puanın: ___' şablonuna ad ve puan yazarsın. Python'da bunu yapmanın birkaç yolu var; en moderni f-string.", en: "String formatting is like filling out a form letter. 'Hello ___! Your score: ___' — you fill in the name and score. Python has several ways to do this; the most modern is f-strings." } },
+      { type: 'simple-box', emoji: '🖨️', content: { tr: "String formatting, boşluk bırakılmış bir mektuba değer doldurmak gibi. 'Merhaba ___! Puanın: ___' şablonuna ad ve puan yazarsın. Python'da bunu yapmanın birkaç yolu var; en moderni f-string.", en: "String formatting is like filling out a form letter. 'Hello ___! Your score: ___' — you fill in the name and score. Python has several ways to do this; the most modern is f-strings." } },
       { type: 'code', language: 'python', code: `# Python String Formatting — 4 methods (newest to oldest)
 
 name = "Alice"
@@ -2343,7 +2343,7 @@ for r in test_results:
       // W3Schools Topic 38 — File Handling
       // ═══════════════════════════════════════════════════════════════════════
       { type: 'heading', text: 'File Handling', difficulty: '🟡 Intermediate' },
-      { type: 'simple-box', emoji: '📁', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: "Dosya işleme, Python ile bilgisayardaki dosyaları okumak ve yazmak. 'open()' fonksiyonu dosyayı açar, 'with' otomatik kapatır. QA'de test verilerini CSV'den okumak ve rapor kaydetmek için çok kullanılır.", en: "File handling means reading and writing files on your computer using Python. 'open()' opens a file, 'with' closes it automatically. In QA, heavily used for reading CSV test data and saving reports." } },
+      { type: 'simple-box', emoji: '📁', content: { tr: "Dosya işleme, Python ile bilgisayardaki dosyaları okumak ve yazmak. 'open()' fonksiyonu dosyayı açar, 'with' otomatik kapatır. QA'de test verilerini CSV'den okumak ve rapor kaydetmek için çok kullanılır.", en: "File handling means reading and writing files on your computer using Python. 'open()' opens a file, 'with' closes it automatically. In QA, heavily used for reading CSV test data and saving reports." } },
       { type: 'code', language: 'python', code: `# Python File Handling — Read, Write, Append, Delete
 
 # WRITE — create or overwrite a file
@@ -2428,7 +2428,7 @@ print(f"\\nTotal: {passed + failed}, Passed: {passed}, Failed: {failed}")` },
       // QA Topic — Dataclasses
       // ═══════════════════════════════════════════════════════════════════════
       { type: 'heading', text: 'Dataclasses (@dataclass)', difficulty: '🔴 Advanced' },
-      { type: 'simple-box', emoji: '🏗️', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: "@dataclass, veri tutmak için class yazmayı kolaylaştıran bir dekoratör. Normalde __init__, __repr__, __eq__ metodlarını tek tek yazman gerekirdi — @dataclass bunları otomatik oluşturur. QA'de test verisi modellemek için mükemmel.", en: "@dataclass is a decorator that makes writing data-holding classes easy. Normally you'd write __init__, __repr__, __eq__ manually — @dataclass generates them automatically. Perfect for modeling test data in QA." } },
+      { type: 'simple-box', emoji: '🏗️', content: { tr: "@dataclass, veri tutmak için class yazmayı kolaylaştıran bir dekoratör. Normalde __init__, __repr__, __eq__ metodlarını tek tek yazman gerekirdi — @dataclass bunları otomatik oluşturur. QA'de test verisi modellemek için mükemmel.", en: "@dataclass is a decorator that makes writing data-holding classes easy. Normally you'd write __init__, __repr__, __eq__ manually — @dataclass generates them automatically. Perfect for modeling test data in QA." } },
       { type: 'code', language: 'python', code: `from dataclasses import dataclass, field
 from typing import List, Optional
 
@@ -2516,7 +2516,7 @@ for case in cases:
       // QA Topic — argparse (CLI Arguments)
       // ═══════════════════════════════════════════════════════════════════════
       { type: 'heading', text: 'argparse — CLI Arguments', difficulty: '🔴 Advanced' },
-      { type: 'simple-box', emoji: '🖥️', title: { tr: 'Bunu 10 yaşındaki birine anlatalım:', en: 'Simply put:' }, content: { tr: "argparse, komut satırından programına parametre göndermeni sağlar. 'python run_tests.py --browser chromium --headless --env staging' gibi. QA scriptlerini esnek ve CI/CD ile uyumlu hale getirir.", en: "argparse lets you pass parameters to your script from the command line. Like 'python run_tests.py --browser chromium --headless --env staging'. Makes QA scripts flexible and CI/CD compatible." } },
+      { type: 'simple-box', emoji: '🖥️', content: { tr: "argparse, komut satırından programına parametre göndermeni sağlar. 'python run_tests.py --browser chromium --headless --env staging' gibi. QA scriptlerini esnek ve CI/CD ile uyumlu hale getirir.", en: "argparse lets you pass parameters to your script from the command line. Like 'python run_tests.py --browser chromium --headless --env staging'. Makes QA scripts flexible and CI/CD compatible." } },
       { type: 'code', language: 'python', code: `import argparse
 
 # Create the argument parser
@@ -4081,6 +4081,25 @@ class LoginPage(BasePage, Loggable):  # extends + implements!
           ['Inheritance', 'extends Base', 'class X(Base):', 'Parantez içinde'],
         ],
       },
+      { type: 'glossary-section', terms: [
+        { term: 'Assertion', definition: { tr: 'Test sonucunu dogrulayan ifade. pytest de assert anahtar kelimesi kullanilir.', en: 'A statement that verifies a test result. pytest uses the assert keyword.' } },
+        { term: 'conftest.py', definition: { tr: 'pytest in fixture ve hook lari paylasilan dosyasi. Bir dizindeki tum test dosyalari bu dosyadaki fixture lara erisebilir.', en: 'The file where pytest fixtures and hooks are shared. All test files in a directory can access fixtures defined here.' } },
+        { term: 'Context Manager', definition: { tr: 'with ifadesi ile kullanilan, kaynak acma/kapama islemlerini yoneten nesne. Python daki try-finally e esittir.', en: 'An object used with the with statement to manage resource open/close. Equivalent to try-finally in Python.' } },
+        { term: 'Decorator', definition: { tr: 'Bir fonksiyonu veya sinifi saran ve davranisini degistiren @ sozi dizimi. pytest.mark.parametrize, @fixture gibi.', en: 'A @ syntax that wraps a function or class to modify its behaviour. Examples: pytest.mark.parametrize, @fixture.' } },
+        { term: 'f-string', definition: { tr: 'f\"...{variable}...\" ile tanimlanan Python string interpolasyon sozdizimi. Java String.format() veya + birlestirisine alternatiftir.', en: 'Python string interpolation syntax: f"...{variable}...". Alternative to Java String.format() or + concatenation.' } },
+        { term: 'fixture', definition: { tr: 'pytest de @pytest.fixture ile tanimlanan, testler icin kurulum/yikim saglayan yeniden kullanilabilir fonksiyon.', en: 'A reusable function defined with @pytest.fixture in pytest that provides setup/teardown for tests.' } },
+        { term: 'GIL (Global Interpreter Lock)', definition: { tr: 'Python interpreter in ayni anda yalnizca bir thread in bytecode calistirmasina izin veren mutex. CPU-bound paralel isler icin sinirlamadirdir.', en: 'A mutex that prevents the Python interpreter from running more than one thread at a time. Limits CPU-bound parallelism.' } },
+        { term: 'Generator', definition: { tr: 'yield anahtar kelimesi ile deger ureten ve tum listeyi bellegte saklamayan fonksiyon. Buyuk veri kumeleri icin verimlidir.', en: 'A function that produces values with yield without storing the entire list in memory. Efficient for large data sets.' } },
+        { term: 'List Comprehension', definition: { tr: '[ifade for x in iterable if kosul] sozdizimi ile liste olusturma. Java Streams.filter().map() e benzer ama daha kisadir.', en: '[expression for x in iterable if condition] syntax for creating lists. Similar to Java Streams.filter().map() but more concise.' } },
+        { term: 'locator', definition: { tr: 'Playwright de page.locator(\"CSS veya XPath\") ile tanimlanan, bir UI elementini secen nesne.', en: 'In Playwright, an object defined with page.locator("CSS or XPath") that selects a UI element.' } },
+        { term: 'parametrize', definition: { tr: '@pytest.mark.parametrize dekoratoru ile bir testi birden fazla veri kumesiyle calistirma ozelligi.', en: 'The ability to run a test with multiple data sets using the @pytest.mark.parametrize decorator.' } },
+        { term: 'pip', definition: { tr: 'Python paket yukleyici. pip install pytest, pip install playwright. Java Maven pom.xml e esittir.', en: 'Python package installer. pip install pytest, pip install playwright. Equivalent to Java Maven pom.xml.' } },
+        { term: 'pytest', definition: { tr: 'Python un standart test cercevesi. Test kesfini, fixture leri, parametrizasyonu ve raporlamayi saglar.', en: 'The standard Python testing framework. Provides test discovery, fixtures, parametrization, and reporting.' } },
+        { term: 'requirements.txt', definition: { tr: 'Proje bagimliliklarini listeleyen dosya. pip install -r requirements.txt ile yuklenir. Java pom.xml e karsili.', en: 'A file listing project dependencies. Install with pip install -r requirements.txt. Java pom.xml equivalent.' } },
+        { term: 'Selenium', definition: { tr: 'Tarayici otomasyonu icin kullanilan Python kutuphanesi. WebDriver API ile tarayiciyi kontrol eder.', en: 'A Python library for browser automation. Controls the browser via the WebDriver API.' } },
+        { term: 'type hint', definition: { tr: 'def func(x: int) -> str: sozdizimi ile Python fonksiyon parametrelerine tip bilgisi ekleme. Java generics e benzer.', en: 'Adding type information to Python function parameters with def func(x: int) -> str: syntax. Similar to Java generics.' } },
+        { term: 'virtual environment (venv)', definition: { tr: 'python -m venv .venv ile olusturulan, proje bagimliliklarini global Python dan izole eden klasor yapisi.', en: 'A folder structure created with python -m venv .venv that isolates project dependencies from the global Python.' } },
+      ]},
     ],
   },
 ]

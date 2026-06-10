@@ -60,25 +60,24 @@ Transactions | EXPLAIN/Query Plan | Window Functions | CTEs | Subqueries
 
 ---
 
-## KURAL 2 — 10 Yaş Anlatım Prensibi (Her Konuda Zorunlu)
+## KURAL 2 — Sade Anlatım Prensibi (Her Konuda Zorunlu)
 
 Her konunun başında sarı/turuncu arka planlı bir "info box" olmalı.  
-Bu box'ta konu günlük hayat örneğiyle çok basit açıklanmalı.
+Bu box'ta konu günlük hayat örneğiyle çok basit, **başlıksız** olarak açıklanmalı.
 
 **Block formatı (data dosyasında):**
 ```js
 {
   type: 'simple-box',
-  emoji: '🧒',
-  bgColor: '#fef3c7',   // sarı
-  borderColor: '#f59e0b',
-  title: 'Bunu 10 yaşındaki bir çocuğa anlatırsak:',
+  emoji: '📦',
   content: {
     tr: 'Liste, sıralı bir alışveriş listesi gibidir. Her madde bir numaralı sıraya sahiptir ve sonuna yeni madde ekleyebilirsin.',
     en: 'A list is like a numbered shopping list. Each item has a position and you can add new items to the end.'
   }
 }
 ```
+
+> ⚠️ `title` field KULLANILMAZ — TopicPage.jsx render etmiyor. Sadece `emoji` + `content`.
 
 **Kurallar:**
 - Benzetme somut ve günlük olmalı (okul, yemek, oyun, spor gibi)
