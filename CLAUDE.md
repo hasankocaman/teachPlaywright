@@ -180,3 +180,29 @@ npm run build
 - ❌ Java karşılaştırması yapmadan Python/TS konusu anlatma
 - ❌ W3Schools'daki bir konuyu atlama (Python/TS/SQL için)
 - ❌ Sayfayı ayrı HTML dosyasına çıkarma (React component kalmalı)
+
+---
+
+## 11. Mobile Responsive Kuralları (ZORUNLU)
+
+Tüm bileşenler iOS, Android (telefon + tablet) dahil her platformda web ile aynı kalitede görüntülenmelidir.
+
+### Temel Kurallar
+
+- **Responsive padding/margin:** `px-3 py-2 md:px-6 md:py-4` örüntüsünü takip et. Mobilde büyük padding kullanma.
+- **Responsive font:** Başlıklar için `text-xl md:text-4xl`, alt başlıklar `text-sm md:text-xl`.
+- **Nav scroll:** Çok sayıda button içeren navlar mobilde `overflow-x-auto scrollbar-hide` ile yatay kaydırılabilir olmalı, `flex-wrap` ile alt satıra taşmamalı.
+- **Touch target:** Her buton ve link min `36px` yüksekliğinde olmalı (WCAG 2.5.5).
+- **iOS input:** `input`, `select`, `textarea` — `font-size: 16px` zorunlu (iOS zoom bug önlenir).
+- **Horizontal overflow:** `html, body { overflow-x: hidden }` global kural — yatay kaydırma olmamalı.
+- **Dark mode button:** Mobilde (`< md`) ikon-only göster, label `hidden md:inline`.
+- **Kod blokları:** `overflow-x-auto` ile horizontal scroll, `max-width: 100%`.
+- **Grid:** `grid-cols-N` kullanırken mobil breakpoint ekle: `grid-cols-1 md:grid-cols-2`.
+- **Touch action:** `touch-action: manipulation` — butonlarda 300ms gecikme engeli.
+
+### `index.css`'de Mevcut Mobile Altyapı
+
+- `.scrollbar-hide` — scrollbar gizleme utility class'ı
+- `@media (max-width: 768px)` — input font-size, min touch target, pre max-width
+- `touch-action: manipulation` — tüm button/link'lere global
+- `overflow-x: hidden` — html/body'de tanımlı

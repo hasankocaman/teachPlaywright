@@ -413,3 +413,51 @@ img {
   display: block;
   max-width: 100%;
 }
+
+/* ── 12. MOBILE FIRST RESPONSIVE — Global ───────────────────────── */
+
+/* Prevent horizontal overflow on all screens */
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+/* iOS tap highlight removal */
+* { -webkit-tap-highlight-color: transparent; }
+
+/* Touch optimization — prevents 300ms delay on iOS */
+button, a, [role="button"] {
+  touch-action: manipulation;
+}
+
+/* Momentum scrolling for iOS in horizontal-scroll containers */
+.overflow-x-auto {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Hide scrollbar on nav scroll areas (keeps functionality) */
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Minimum touch target size (WCAG 2.5.5 — 44×44px ideal) */
+@media (max-width: 768px) {
+  button, a {
+    min-height: 36px;
+  }
+
+  /* Prevent iOS font-size auto-boost on inputs */
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+
+  /* Code blocks full-width on mobile */
+  pre {
+    max-width: 100%;
+    font-size: 0.75rem;
+  }
+
+  /* Compact section cards on mobile */
+  .section-card {
+    padding: 0.875rem;
+  }
+}

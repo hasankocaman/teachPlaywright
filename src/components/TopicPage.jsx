@@ -261,7 +261,7 @@ function JoinDiagram({ block, darkMode }) {
                 </div>
             </div>
 
-            <div className="grid grid-cols-3 gap-3 items-start">
+            <div className="grid grid-cols-3 gap-2 md:gap-3 items-start overflow-x-auto">
                 <div>
                     <div className={`text-xs font-bold mb-2 text-center px-2 py-1.5 rounded-lg ${darkMode ? 'bg-blue-900/50 text-blue-300' : 'bg-blue-100 text-blue-700'}`}>
                         📋 {block.leftTable.name}
@@ -828,8 +828,8 @@ function HomeButton() {
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             title="Başa dön / Back to top"
             style={{
-                position: 'fixed', bottom: '24px', right: '24px',
-                width: '48px', height: '48px', borderRadius: '50%',
+                position: 'fixed', bottom: '16px', right: '16px',
+                width: '44px', height: '44px', borderRadius: '50%',
                 background: '#7c3aed', color: '#fff', border: 'none',
                 cursor: 'pointer', fontSize: '22px', zIndex: 999,
                 boxShadow: '0 4px 16px rgba(124,58,237,0.5)',
@@ -1303,25 +1303,25 @@ function TopicPage({ data, gradient, bgLight, extraBanner }) {
             <HomeButton />
             <TopicHeader darkMode={darkMode} setDarkMode={setDarkMode} />
 
-            <main className="container mx-auto px-4 md:px-6 py-8 max-w-5xl">
+            <main className="container mx-auto px-3 py-4 md:px-6 md:py-8 max-w-5xl">
                 {/* Hero */}
-                <div className={`rounded-2xl p-8 mb-6 bg-gradient-to-r ${gradient} text-white shadow-xl`}>
-                    <h1 className="text-4xl font-bold mb-2">{hero.title}</h1>
-                    <p className="text-xl opacity-90">{hero.subtitle}</p>
-                    <p className="mt-3 opacity-80 max-w-3xl text-sm leading-relaxed">{hero.intro}</p>
+                <div className={`rounded-xl md:rounded-2xl p-4 md:p-8 mb-4 md:mb-6 bg-gradient-to-r ${gradient} text-white shadow-xl`}>
+                    <h1 className="text-xl md:text-4xl font-bold mb-1 md:mb-2">{hero.title}</h1>
+                    <p className="text-sm md:text-xl opacity-90">{hero.subtitle}</p>
+                    <p className="mt-2 md:mt-3 opacity-80 max-w-3xl text-xs md:text-sm leading-relaxed hidden sm:block">{hero.intro}</p>
                 </div>
 
                 {/* Extra Banner (e.g. resource link) */}
                 {extraBanner}
 
                 {/* Tabs */}
-                <div className={`sticky top-0 z-30 rounded-xl mb-6 p-1.5 shadow-md ${darkMode ? 'bg-gray-800' : 'bg-white border border-gray-200'}`}>
-                    <div className="flex overflow-x-auto gap-1 pb-0.5">
+                <div className={`sticky top-0 z-30 rounded-xl mb-4 md:mb-6 p-1 md:p-1.5 shadow-md ${darkMode ? 'bg-gray-800' : 'bg-white border border-gray-200'}`}>
+                    <div className="flex overflow-x-auto gap-1 pb-0.5 scrollbar-hide">
                         {tabs.map((tab, i) => (
                             <button
                                 key={i}
                                 onClick={() => setActiveTab(i)}
-                                className={`flex-shrink-0 px-4 py-2.5 rounded-lg font-semibold text-sm transition-all duration-200 whitespace-nowrap ${activeTab === i
+                                className={`flex-shrink-0 px-3 py-2 md:px-4 md:py-2.5 rounded-lg font-semibold text-xs md:text-sm transition-all duration-200 whitespace-nowrap ${activeTab === i
                                     ? `bg-gradient-to-r ${gradient} text-white shadow-md scale-105`
                                     : darkMode
                                         ? 'text-gray-400 hover:text-white hover:bg-gray-700'
