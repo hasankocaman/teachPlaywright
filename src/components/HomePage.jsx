@@ -256,6 +256,25 @@ function HomePage() {
                 <span>{t('buttons.preparedBy')}&nbsp;</span>
                 <span>Hasan Kocaman</span>
             </a>
+
+            {/* Fixed Home Button — bottom-right, always visible */}
+            <button
+                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                title={t('buttons.homeTooltip') || 'Başa dön'}
+                style={{
+                    position: 'fixed', bottom: '16px', right: '16px',
+                    width: '44px', height: '44px', borderRadius: '50%',
+                    background: '#7c3aed', color: '#fff', border: 'none',
+                    cursor: 'pointer', fontSize: '22px', zIndex: 999,
+                    boxShadow: '0 4px 16px rgba(124,58,237,0.5)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    transition: 'transform 0.2s, box-shadow 0.2s',
+                }}
+                onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.1)'; e.currentTarget.style.boxShadow = '0 6px 20px rgba(124,58,237,0.7)' }}
+                onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 4px 16px rgba(124,58,237,0.5)' }}
+            >
+                🏠
+            </button>
         </div>
     )
 }
