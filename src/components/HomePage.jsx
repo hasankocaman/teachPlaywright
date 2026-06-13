@@ -181,6 +181,11 @@ function HomePage() {
                             <span className="sm:hidden">🐳 Docker</span>
                             <span className="hidden sm:inline">{language === 'tr' ? '🐳 Docker Öğren' : '🐳 Learn Docker'}</span>
                         </button>
+                        <button onClick={() => navigate('/rest-assured')} data-testid="nav-rest-assured"
+                            className={`px-2 py-1.5 md:px-6 md:py-3 rounded-lg font-semibold text-xs md:text-base whitespace-nowrap transition-all duration-300 ${darkMode ? 'bg-gray-700 text-emerald-300 hover:bg-emerald-900 hover:text-emerald-200' : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100'}`}>
+                            <span className="sm:hidden">🧪 REST Assured</span>
+                            <span className="hidden sm:inline">{language === 'tr' ? '🧪 REST Assured Öğren' : '🧪 Learn REST Assured'}</span>
+                        </button>
 
                         {/* Ayırıcı */}
                         <div className={`w-full md:hidden h-px ${darkMode ? 'bg-gray-700' : 'bg-gray-200'}`} />

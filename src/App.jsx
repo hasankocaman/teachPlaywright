@@ -8,6 +8,7 @@ import TestFrameworksPage from './components/TestFrameworksPage'
 import PostmanPage from './components/PostmanPage'
 import JenkinsPage from './components/JenkinsPage'
 import DockerPage from './components/DockerPage'
+import RestAssuredPage from './components/RestAssuredPage'
 
 function App() {
     return (
@@ -21,6 +22,7 @@ function App() {
             <Route path="/postman" element={<PostmanPage />} />
             <Route path="/jenkins" element={<JenkinsPage />} />
             <Route path="/docker" element={<DockerPage />} />
+            <Route path="/rest-assured" element={<RestAssuredPage />} />
         </Routes>
     )
 }

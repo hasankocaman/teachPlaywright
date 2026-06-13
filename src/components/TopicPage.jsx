@@ -83,6 +83,71 @@ function ExerciseBlock({ block, darkMode }) {
     )
 }
 
+// ─── PostmanCompareBlock ──────────────────────────────────────────────────────
+
+function PostmanCompareBlock({ block, darkMode, language }) {
+    const [show, setShow] = useState(false)
+    const isTr = language === 'tr'
+    return (
+        <div className="mt-6">
+            <button
+                onClick={() => setShow(!show)}
+                className={`w-full flex items-center justify-between px-5 py-4 rounded-xl font-bold text-sm transition-all duration-300 ${show
+                    ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg'
+                    : darkMode
+                        ? 'bg-orange-900/20 text-orange-300 border-2 border-orange-700 hover:bg-orange-900/40'
+                        : 'bg-orange-50 text-orange-700 border-2 border-orange-300 hover:bg-orange-100'
+                }`}
+            >
+                <span className="flex items-center gap-3">
+                    <span className="text-xl">📮</span>
+                    <span>{isTr ? 'Postman\'da böyle yapılır → REST Assured karşılığı göster' : 'How it\'s done in Postman → Show REST Assured equivalent'}</span>
+                </span>
+                <span className={`flex-shrink-0 text-xs px-2 py-1 rounded-full ${show ? 'bg-white/20 text-white' : darkMode ? 'bg-orange-900/40 text-orange-300' : 'bg-orange-200 text-orange-700'}`}>
+                    {show ? (isTr ? '▲ Gizle' : '▲ Hide') : (isTr ? '▼ Göster' : '▼ Show')}
+                </span>
+            </button>
+            {show && (
+                <div className="mt-4 space-y-4">
+                    {block.comparisons?.map((comp, idx) => (
+                        <div key={idx} className={`rounded-xl overflow-hidden border-2 ${darkMode ? 'border-gray-700' : 'border-gray-200'}`}>
+                            <div className={`px-4 py-2 text-xs font-bold uppercase tracking-widest flex items-center gap-2 ${darkMode ? 'bg-gray-700 text-gray-200' : 'bg-gray-100 text-gray-700'}`}>
+                                <span>🔀</span> {comp.scenario}
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2">
+                                <div className={`p-4 border-r-0 md:border-r border-b md:border-b-0 ${darkMode ? 'border-gray-700' : 'border-gray-200'}`}>
+                                    <div className="flex items-center gap-2 mb-3">
+                                        <span className="text-base">📮</span>
+                                        <span className="text-xs font-bold text-orange-400">Postman</span>
+                                    </div>
+                                    <div className={`text-sm leading-relaxed space-y-1.5 ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                                        {(comp.postman || '').split('\n').map((line, l) => (
+                                            <div key={l} className={`flex items-start gap-2 ${line.startsWith('→') ? 'ml-3 opacity-70' : ''}`}>
+                                                {!line.startsWith('→') && !line.startsWith(' ') && line.trim() && (
+                                                    <span className="text-orange-400 flex-shrink-0 mt-0.5">•</span>
+                                                )}
+                                                <span className={line.startsWith('→') ? 'text-xs' : ''}>{line.replace(/^→\s*/, '')}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                                <div>
+                                    <div className="px-4 py-2 text-xs font-bold flex items-center gap-2" style={{ background: '#1a1b26', color: '#7aa2f7' }}>
+                                        <span>☕</span> REST Assured (Java)
+                                    </div>
+                                    <div className="p-4 overflow-x-auto" style={{ background: '#1a1b26' }}>
+                                        <pre className="font-mono text-xs leading-relaxed whitespace-pre" style={{ color: '#c0caf5' }}>{comp.restAssured}</pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
+        </div>
+    )
+}
+
 // ─── QuizBlock ────────────────────────────────────────────────────────────────
 
 function QuizBlock({ block, darkMode, language = 'en' }) {
@@ -1097,8 +1162,8 @@ function renderBlock(block, i, darkMode, language = 'en') {
                     {block.items.map((item, j) => (
                         <div key={j} className={`p-4 rounded-xl border text-sm ${darkMode ? 'bg-gray-750 border-gray-600' : 'bg-gray-50 border-gray-200'}`}>
                             {item.icon && <div className="text-2xl mb-2">{item.icon}</div>}
-                            <div className={`font-bold mb-1 ${darkMode ? 'text-white' : 'text-gray-800'}`}>{item.label}</div>
-                            {item.desc && <div className={darkMode ? 'text-gray-400' : 'text-gray-500'}>{item.desc}</div>}
+                            <div className={`font-bold mb-1 ${darkMode ? 'text-white' : 'text-gray-800'}`}>{tx(item.label, language)}</div>
+                            {item.desc && <div className={darkMode ? 'text-gray-400' : 'text-gray-500'}>{tx(item.desc, language)}</div>}
                         </div>
                     ))}
                 </div>
@@ -1138,6 +1203,9 @@ function renderBlock(block, i, darkMode, language = 'en') {
             return <CalloutBlock key={i} block={block} darkMode={darkMode} />
         case 'java-compare':
             return <JavaCompareBlock key={i} block={block} darkMode={darkMode} />
+
+        case 'postman-compare':
+            return <PostmanCompareBlock key={i} block={block} darkMode={darkMode} language={language} />
 
         case 'editor':
             if (block.lang === 'typescript')
@@ -1303,7 +1371,7 @@ function TopicPage({ data, gradient, bgLight, extraBanner }) {
             <HomeButton />
             <TopicHeader darkMode={darkMode} setDarkMode={setDarkMode} />
 
-            <main className="container mx-auto px-3 py-4 md:px-6 md:py-8 max-w-5xl">
+            <main className="container mx-auto px-3 py-4 md:px-4 md:py-8 max-w-7xl">
                 {/* Hero */}
                 <div className={`rounded-xl md:rounded-2xl p-4 md:p-8 mb-4 md:mb-6 bg-gradient-to-r ${gradient} text-white shadow-xl`}>
                     <h1 className="text-xl md:text-4xl font-bold mb-1 md:mb-2">{hero.title}</h1>
@@ -1314,52 +1382,63 @@ function TopicPage({ data, gradient, bgLight, extraBanner }) {
                 {/* Extra Banner (e.g. resource link) */}
                 {extraBanner}
 
-                {/* Tabs */}
-                <div className={`sticky top-0 z-30 rounded-xl mb-4 md:mb-6 p-1 md:p-1.5 shadow-md ${darkMode ? 'bg-gray-800' : 'bg-white border border-gray-200'}`}>
-                    <div className="flex overflow-x-auto gap-1 pb-0.5 scrollbar-hide">
-                        {tabs.map((tab, i) => (
-                            <button
-                                key={i}
-                                onClick={() => setActiveTab(i)}
-                                className={`flex-shrink-0 px-3 py-2 md:px-4 md:py-2.5 rounded-lg font-semibold text-xs md:text-sm transition-all duration-200 whitespace-nowrap ${activeTab === i
-                                    ? `bg-gradient-to-r ${gradient} text-white shadow-md scale-105`
-                                    : darkMode
-                                        ? 'text-gray-400 hover:text-white hover:bg-gray-700'
-                                        : 'text-gray-500 hover:text-gray-800 hover:bg-gray-100'
-                                    }`}
-                            >
-                                {tab}
-                            </button>
-                        ))}
+                {/* Sidebar + Content layout */}
+                <div className="flex gap-3 md:gap-5 items-start">
+
+                    {/* Vertical Sidebar Tabs */}
+                    <div className={`flex-shrink-0 w-10 md:w-52 self-start sticky top-3 rounded-xl p-1 md:p-2 shadow-md ${darkMode ? 'bg-gray-800' : 'bg-white border border-gray-200'}`}>
+                        <div className="flex flex-col gap-0.5 md:gap-1">
+                            {tabs.map((tab, i) => (
+                                <button
+                                    key={i}
+                                    onClick={() => setActiveTab(i)}
+                                    title={tab}
+                                    className={`w-full text-left rounded-lg font-semibold transition-all duration-200 ${activeTab === i
+                                        ? `bg-gradient-to-r ${gradient} text-white shadow-md`
+                                        : darkMode
+                                            ? 'text-gray-400 hover:text-white hover:bg-gray-700'
+                                            : 'text-gray-500 hover:text-gray-800 hover:bg-gray-100'
+                                        } px-1.5 py-2 md:px-3 md:py-2.5`}
+                                >
+                                    {/* Mobile: emoji only */}
+                                    <span className="md:hidden text-base text-center block leading-none">{[...tab][0]}</span>
+                                    {/* Desktop: full label */}
+                                    <span className="hidden md:block text-xs leading-snug">{tab}</span>
+                                </button>
+                            ))}
+                        </div>
                     </div>
-                </div>
 
-                {/* Content */}
-                <div className={`rounded-2xl p-6 md:p-8 shadow-md ${darkMode ? 'bg-gray-800' : 'bg-white'}`}>
-                    <h2 className={`text-2xl font-bold mb-6 ${darkMode ? 'text-white' : 'text-gray-800'}`}>
-                        {sections[activeTab]?.title}
-                    </h2>
-                    {sections[activeTab]?.blocks?.map((block, i) => renderBlock(block, i, darkMode, language))}
-                </div>
+                    {/* Main content + pagination */}
+                    <div className="flex-1 min-w-0">
+                        {/* Content */}
+                        <div className={`rounded-2xl p-4 md:p-8 shadow-md ${darkMode ? 'bg-gray-800' : 'bg-white'}`}>
+                            <h2 className={`text-xl md:text-2xl font-bold mb-4 md:mb-6 ${darkMode ? 'text-white' : 'text-gray-800'}`}>
+                                {tx(sections[activeTab]?.title, language)}
+                            </h2>
+                            {sections[activeTab]?.blocks?.map((block, i) => renderBlock(block, i, darkMode, language))}
+                        </div>
 
-                {/* Pagination */}
-                <div className="flex justify-between mt-6 gap-4">
-                    {activeTab > 0 && (
-                        <button
-                            onClick={() => setActiveTab(activeTab - 1)}
-                            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-sm transition-all ${darkMode ? 'bg-gray-800 text-gray-300 hover:bg-gray-700' : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'}`}
-                        >
-                            ← {tabs[activeTab - 1]}
-                        </button>
-                    )}
-                    {activeTab < tabs.length - 1 && (
-                        <button
-                            onClick={() => setActiveTab(activeTab + 1)}
-                            className={`ml-auto flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-sm transition-all bg-gradient-to-r ${gradient} text-white hover:shadow-lg`}
-                        >
-                            {tabs[activeTab + 1]} →
-                        </button>
-                    )}
+                        {/* Pagination */}
+                        <div className="flex justify-between mt-4 md:mt-6 gap-4">
+                            {activeTab > 0 && (
+                                <button
+                                    onClick={() => setActiveTab(activeTab - 1)}
+                                    className={`flex items-center gap-2 px-3 py-2 md:px-4 md:py-2.5 rounded-xl font-semibold text-xs md:text-sm transition-all ${darkMode ? 'bg-gray-800 text-gray-300 hover:bg-gray-700' : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'}`}
+                                >
+                                    ← {tabs[activeTab - 1]}
+                                </button>
+                            )}
+                            {activeTab < tabs.length - 1 && (
+                                <button
+                                    onClick={() => setActiveTab(activeTab + 1)}
+                                    className={`ml-auto flex items-center gap-2 px-3 py-2 md:px-4 md:py-2.5 rounded-xl font-semibold text-xs md:text-sm transition-all bg-gradient-to-r ${gradient} text-white hover:shadow-lg`}
+                                >
+                                    {tabs[activeTab + 1]} →
+                                </button>
+                            )}
+                        </div>
+                    </div>
                 </div>
             </main>
         </div>
